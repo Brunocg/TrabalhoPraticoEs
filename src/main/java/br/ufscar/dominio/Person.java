@@ -10,6 +10,7 @@ public class Person {
         new GrowthList();
         String teste;
         String teste2;
+        String teste3;
     }
 
     public String getName() {
