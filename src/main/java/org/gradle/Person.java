@@ -9,6 +9,7 @@ public class Person {
         this.name = name;
         new GrowthList();
         String teste;
+        String teste2;
     }
 
     public String getName() {
