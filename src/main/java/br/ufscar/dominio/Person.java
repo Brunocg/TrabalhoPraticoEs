@@ -1,4 +1,4 @@
-package org.gradle;
+package br.ufscar.dominio;
 
 import org.apache.commons.collections.list.GrowthList;
 

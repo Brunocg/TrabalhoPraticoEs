@@ -1,6 +1,8 @@
-package org.gradle;
+package br.ufscar.test.dominio;
 
 import org.junit.Test;
+
+import br.ufscar.dominio.Person;
 import static org.junit.Assert.*;
 
 public class PersonTest {
