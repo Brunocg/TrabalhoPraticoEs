@@ -8,6 +8,7 @@ public class Person {
     public Person(String name) {
         this.name = name;
         new GrowthList();
+        String teste;
     }
 
     public String getName() {
