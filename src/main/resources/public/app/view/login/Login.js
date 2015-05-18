@@ -30,10 +30,16 @@ Ext.define("TrabalhoPraticoEsApp.view.login.Login",{
         }, {
             xtype: 'displayfield',
             hideEmptyLabel: false,
-            value: 'Enter any non-blank password'
+            value: 'Entre com qualquer senha.'
         }],
         buttons: [{
             text: 'Login',
+            formBind: true,
+            listeners: {
+                click: 'onLoginClick'
+            }
+        },{
+            text: 'Cadastrar colaborador',
             formBind: true,
             listeners: {
                 click: 'onLoginClick'

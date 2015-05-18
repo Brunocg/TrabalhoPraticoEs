@@ -8,8 +8,6 @@ Ext.application({
 
     extend: 'TrabalhoPraticoEsApp.Application',
     
-    autoCreateViewport: 'TrabalhoPraticoEsApp.view.main.Main'
-	
     //-------------------------------------------------------------------------
     // Most customizations should be made to TrabalhoPraticoEsApp.Application. If you need to
     // customize this file, doing so below this section reduces the likelihood
