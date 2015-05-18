@@ -19,13 +19,13 @@ Ext.define("TrabalhoPraticoEsApp.view.login.Login",{
         items: [{
             xtype: 'textfield',
             name: 'username',
-            fieldLabel: 'Username',
+            fieldLabel: 'Usuário',
             allowBlank: false
         }, {
             xtype: 'textfield',
             name: 'password',
             inputType: 'password',
-            fieldLabel: 'Password',
+            fieldLabel: 'Senha',
             allowBlank: false
         }, {
             xtype: 'displayfield',
