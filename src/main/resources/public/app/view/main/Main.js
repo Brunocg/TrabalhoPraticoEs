@@ -27,7 +27,7 @@ Ext.define('TrabalhoPraticoEsApp.view.main.Main', {
         width: 250,
         split: true,
         tbar: [{
-            text: 'Button',
+            text: 'Sair',
             handler: 'onClickButton'
         }]
     },{
