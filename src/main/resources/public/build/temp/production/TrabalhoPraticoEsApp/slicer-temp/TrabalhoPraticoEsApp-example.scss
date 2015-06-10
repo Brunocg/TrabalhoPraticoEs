@@ -1,5 +1,6 @@
 $image-search-path: '/Users/Bruno/Desktop/Desenvolvimento/EclipseWorkspace/TrabalhoPraticoEs/src/main/resources/public/build/production/TrabalhoPraticoEsApp/resources';
 $theme-name:  'ext-theme-neptune' !default;
+$include-appcliente-view-user-usermodel: true;
 $include-ext-abstractcomponent: true;
 $include-ext-abstractcontainer: true;
 $include-ext-abstractmanager: true;
@@ -908,11 +909,13 @@ $include-extthemeneptune-resizer-splitter: true;
 $include-extthemeneptune-toolbar-paging: true;
 $include-extthemeneptune-toolbar-toolbar: true;
 $include-trabalhopraticoesapp-application: true;
+$include-trabalhopraticoesapp-model-main-mainmodel: true;
 $include-trabalhopraticoesapp-view-login-login: true;
 $include-trabalhopraticoesapp-view-login-logincontroller: true;
 $include-trabalhopraticoesapp-view-main-main: true;
 $include-trabalhopraticoesapp-view-main-maincontroller: true;
-$include-trabalhopraticoesapp-view-main-mainmodel: true;
+$include-trabalhopraticoesapp-view-user-user: true;
+$include-trabalhopraticoesapp-view-user-usercontroller: true;
 /* including package ext-theme-base */
 @import '../../../../../ext/packages/ext-theme-base/sass/etc/all';
 /* including package ext-theme-neutral */

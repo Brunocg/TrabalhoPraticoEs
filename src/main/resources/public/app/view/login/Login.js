@@ -1,6 +1,7 @@
 Ext.define("TrabalhoPraticoEsApp.view.login.Login",{
     extend: 'Ext.window.Window',
-        xtype: 'login',
+    alias: 'view.login',
+    xtype: 'login',
 
     requires: [
         'TrabalhoPraticoEsApp.view.login.LoginController',
@@ -36,13 +37,12 @@ Ext.define("TrabalhoPraticoEsApp.view.login.Login",{
             text: 'Login',
             formBind: true,
             listeners: {
-                click: 'onLoginClick'
+                click: 'onSignInClick'
             }
         },{
-            text: 'Cadastrar colaborador',
-            formBind: true,
+            text: 'Cadastrar usuário',
             listeners: {
-                click: 'onLoginClick'
+                click: 'onSignUpClick'
             }
         }]
     }
