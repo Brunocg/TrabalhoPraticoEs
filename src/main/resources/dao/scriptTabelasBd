@@ -1,0 +1,317 @@
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`Endereco` (
+  `idEndereco` INT NOT NULL AUTO_INCREMENT ,
+  `rua` VARCHAR(254) NULL ,
+  `bairro` VARCHAR(150) NULL ,
+  `numero` INT NULL ,
+  `cidade` VARCHAR(150) NULL ,
+  `uf` VARCHAR(3) NULL ,
+  `pais` VARCHAR(50) NULL ,
+  `cep` VARCHAR(12) NULL ,
+  `estado` TINYINT(1) NULL ,
+  `ts` TIMESTAMP NULL ,
+  PRIMARY KEY (`idEndereco`) )
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`Pessoa` (
+  `idPessoa` INT NOT NULL AUTO_INCREMENT ,
+  `nome` VARCHAR(254) NULL ,
+  `sitCivil` VARCHAR(2) NULL ,
+  `sexo` VARCHAR(2) NULL ,
+  `dataNascimento` DATE NULL ,
+  `CPF` VARCHAR(15) NULL ,
+  `RG` VARCHAR(15) NULL ,
+  `telefone` VARCHAR(15) NULL ,
+  `celular` VARCHAR(15) NULL ,
+  `email` VARCHAR(254) NULL ,
+  `pagPessoal` VARCHAR(254) NULL ,
+  `msgInst` VARCHAR(254) NULL ,
+  `estado` TINYINT(1) NULL ,
+  `ts` TIMESTAMP NULL ,
+  PRIMARY KEY (`idPessoa`) )
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`EnderecoPessoa` (
+  `idEndereco` INT NOT NULL ,
+  `idPessoa` INT NOT NULL ,
+  `ts` TIMESTAMP NULL ,
+  INDEX `fk_EnderecoPessoa_Endereco` (`idEndereco` ASC) ,
+  PRIMARY KEY (`idEndereco`, `idPessoa`) ,
+  INDEX `fk_EnderecoPessoa_Pessoa1` (`idPessoa` ASC) ,
+  CONSTRAINT `fk_EnderecoPessoa_Endereco`
+    FOREIGN KEY (`idEndereco` )
+    REFERENCES `trabalhoES`.`Endereco` (`idEndereco` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_EnderecoPessoa_Pessoa1`
+    FOREIGN KEY (`idPessoa` )
+    REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`Usuario` (
+  `idUsuario` INT NOT NULL AUTO_INCREMENT ,
+  `aprovadoPor` INT NOT NULL ,
+  `login` VARCHAR(254) NULL ,
+  `senha` VARCHAR(254) NULL ,
+  `usuarioTipo` ENUM('Administrador','Gerente','Moderador','Colaborador') NULL ,
+  `ultimoLogin` TIMESTAMP NULL ,
+  `estado` TINYINT(1) NULL ,
+  `ts` TIMESTAMP NULL ,
+  PRIMARY KEY (`idUsuario`) ,
+  INDEX `fk_Usuario_Pessoa1` (`aprovadoPor` ASC) ,
+  CONSTRAINT `fk_Usuario_Pessoa1`
+    FOREIGN KEY (`aprovadoPor` )
+    REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`UsuarioAcesso` (
+  `idUsuarioAcesso` INT NOT NULL AUTO_INCREMENT ,
+  `descricao` VARCHAR(100) NULL ,
+  `niveisDeAcesso` VARCHAR(25) NULL ,
+  PRIMARY KEY (`idUsuarioAcesso`) )
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`CompetenciaCategoria` (
+  `idCompetenciaCategoria` INT NOT NULL AUTO_INCREMENT ,
+  `aprovadoPor` INT NOT NULL ,
+  `nome` VARCHAR(150) NULL ,
+  `estado` TINYINT(1) NULL ,
+  `ts` TIMESTAMP NULL ,
+  PRIMARY KEY (`idCompetenciaCategoria`) ,
+  INDEX `fk_CompetenciaCategoria_Pessoa1` (`aprovadoPor` ASC) ,
+  CONSTRAINT `fk_CompetenciaCategoria_Pessoa1`
+    FOREIGN KEY (`aprovadoPor` )
+    REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`Competencia` (
+  `idCompetencia` INT NOT NULL AUTO_INCREMENT ,
+  `aprovadoPor` INT NOT NULL ,
+  `nome` VARCHAR(150) NULL ,
+  `estado` TINYINT(1) NULL ,
+  `ts` TIMESTAMP NULL ,
+  `idCategoria` INT NOT NULL ,
+  PRIMARY KEY (`idCompetencia`) ,
+  INDEX `fk_Competencia_Pessoa1` (`aprovadoPor` ASC) ,
+  INDEX `fk_Competencia_CompetenciaCategoria1` (`idCategoria` ASC) ,
+  CONSTRAINT `fk_Competencia_Pessoa1`
+    FOREIGN KEY (`aprovadoPor` )
+    REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Competencia_CompetenciaCategoria1`
+    FOREIGN KEY (`idCategoria` )
+    REFERENCES `trabalhoES`.`CompetenciaCategoria` (`idCompetenciaCategoria` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`CompetenciaExeperiencia` (
+  `idCompetenciaExeperiencia` INT NOT NULL AUTO_INCREMENT ,
+  `idPessoa` INT NOT NULL ,
+  `idCompetencia` INT NOT NULL ,
+  `nivel` INT NULL ,
+  `tempoExp` INT NULL ,
+  `observacoes` TEXT NULL ,
+  `estado` TINYINT(1) NULL ,
+  `ts` TIMESTAMP NULL ,
+  PRIMARY KEY (`idCompetenciaExeperiencia`) ,
+  INDEX `fk_CompetenciaExeperiencia_Pessoa1` (`idPessoa` ASC) ,
+  INDEX `fk_CompetenciaExeperiencia_Competencia1` (`idCompetencia` ASC) ,
+  CONSTRAINT `fk_CompetenciaExeperiencia_Pessoa1`
+    FOREIGN KEY (`idPessoa` )
+    REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_CompetenciaExeperiencia_Competencia1`
+    FOREIGN KEY (`idCompetencia` )
+    REFERENCES `trabalhoES`.`Competencia` (`idCompetencia` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`CompetenciaSubCategoria` (
+  `idCategoria` INT NOT NULL ,
+  `idSubCategoria` INT NOT NULL ,
+  INDEX `fk_CompetenciaSubCategoria_CompetenciaCategoria1` (`idCategoria` ASC) ,
+  INDEX `fk_CompetenciaSubCategoria_CompetenciaCategoria2` (`idSubCategoria` ASC) ,
+  PRIMARY KEY (`idCategoria`, `idSubCategoria`) ,
+  CONSTRAINT `fk_CompetenciaSubCategoria_CompetenciaCategoria1`
+    FOREIGN KEY (`idCategoria` )
+    REFERENCES `trabalhoES`.`CompetenciaCategoria` (`idCompetenciaCategoria` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_CompetenciaSubCategoria_CompetenciaCategoria2`
+    FOREIGN KEY (`idSubCategoria` )
+    REFERENCES `trabalhoES`.`CompetenciaCategoria` (`idCompetenciaCategoria` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`CompetenciaPorCategoria` (
+  `idCategoria` INT NOT NULL ,
+  `idCompetencia` INT NOT NULL ,
+  INDEX `fk_CompetenciaPorCategoria_CompetenciaCategoria1` (`idCategoria` ASC) ,
+  INDEX `fk_CompetenciaPorCategoria_Competencia1` (`idCompetencia` ASC) ,
+  PRIMARY KEY (`idCategoria`, `idCompetencia`) ,
+  CONSTRAINT `fk_CompetenciaPorCategoria_CompetenciaCategoria1`
+    FOREIGN KEY (`idCategoria` )
+    REFERENCES `trabalhoES`.`CompetenciaCategoria` (`idCompetenciaCategoria` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_CompetenciaPorCategoria_Competencia1`
+    FOREIGN KEY (`idCompetencia` )
+    REFERENCES `trabalhoES`.`Competencia` (`idCompetencia` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`Projeto` (
+  `idProjeto` INT NOT NULL AUTO_INCREMENT ,
+  `nome` VARCHAR(150) NULL ,
+  `tipo` INT NULL ,
+  `prazo` DATE NULL ,
+  `observacoes` TEXT NULL ,
+  `status` INT NULL ,
+  `estado` TINYINT(1) NULL ,
+  `ts` TIMESTAMP NULL ,
+  PRIMARY KEY (`idProjeto`) )
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`ProjetoAtividade` (
+  `idProjetoAtividade` INT NOT NULL AUTO_INCREMENT ,
+  `nome` VARCHAR(150) NULL ,
+  `descricao` TEXT NULL ,
+  `tipo` INT NULL ,
+  `prazo` DATE NULL ,
+  `status` INT NULL ,
+  `estado` TINYINT(1) NULL ,
+  `ts` TIMESTAMP NULL ,
+  PRIMARY KEY (`idProjetoAtividade`) )
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`Feedback` (
+  `idFeedback` INT NOT NULL AUTO_INCREMENT ,
+  `feedbackDe` INT NOT NULL ,
+  `feedbackPara` INT NOT NULL ,
+  `idProjetoAtividade` INT NOT NULL ,
+  `avaliacao` INT NULL ,
+  `tpFeedback` INT NULL ,
+  `observacoes` TEXT NULL ,
+  `estado` TINYINT(1) NULL ,
+  `ts` TIMESTAMP NULL ,
+  PRIMARY KEY (`idFeedback`) ,
+  INDEX `fk_Feedback_Pessoa1` (`feedbackDe` ASC) ,
+  INDEX `fk_Feedback_Pessoa2` (`feedbackPara` ASC) ,
+  INDEX `fk_Feedback_ProjetoAtividade1` (`idProjetoAtividade` ASC) ,
+  CONSTRAINT `fk_Feedback_Pessoa1`
+    FOREIGN KEY (`feedbackDe` )
+    REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Feedback_Pessoa2`
+    FOREIGN KEY (`feedbackPara` )
+    REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Feedback_ProjetoAtividade1`
+    FOREIGN KEY (`idProjetoAtividade` )
+    REFERENCES `trabalhoES`.`ProjetoAtividade` (`idProjetoAtividade` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`ProjetoAtividades` (
+  `idProjeto` INT NOT NULL ,
+  `idAtividade` INT NOT NULL ,
+  INDEX `fk_ProjetoAtividades_Projeto1` (`idProjeto` ASC) ,
+  INDEX `fk_ProjetoAtividades_ProjetoAtividade1` (`idAtividade` ASC) ,
+  PRIMARY KEY (`idProjeto`, `idAtividade`) ,
+  CONSTRAINT `fk_ProjetoAtividades_Projeto1`
+    FOREIGN KEY (`idProjeto` )
+    REFERENCES `trabalhoES`.`Projeto` (`idProjeto` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ProjetoAtividades_ProjetoAtividade1`
+    FOREIGN KEY (`idAtividade` )
+    REFERENCES `trabalhoES`.`ProjetoAtividade` (`idProjetoAtividade` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`ProjetoAtividadeCompetencias` (
+  `idProjetoAtividade` INT NOT NULL ,
+  `idCompetencia` INT NOT NULL ,
+  INDEX `fk_ProjetoAtividadeCompetencias_ProjetoAtividade1` (`idProjetoAtividade` ASC) ,
+  INDEX `fk_ProjetoAtividadeCompetencias_Competencia1` (`idCompetencia` ASC) ,
+  PRIMARY KEY (`idProjetoAtividade`, `idCompetencia`) ,
+  CONSTRAINT `fk_ProjetoAtividadeCompetencias_ProjetoAtividade1`
+    FOREIGN KEY (`idProjetoAtividade` )
+    REFERENCES `trabalhoES`.`ProjetoAtividade` (`idProjetoAtividade` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ProjetoAtividadeCompetencias_Competencia1`
+    FOREIGN KEY (`idCompetencia` )
+    REFERENCES `trabalhoES`.`Competencia` (`idCompetencia` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`ProjetoResponsaveis` (
+  `idProjeto` INT NOT NULL ,
+  `idPessoa` INT NOT NULL ,
+  PRIMARY KEY (`idProjeto`, `idPessoa`) ,
+  INDEX `fk_ProjetoResponsaveis_Projeto1` (`idProjeto` ASC) ,
+  INDEX `fk_ProjetoResponsaveis_Pessoa1` (`idPessoa` ASC) ,
+  CONSTRAINT `fk_ProjetoResponsaveis_Projeto1`
+    FOREIGN KEY (`idProjeto` )
+    REFERENCES `trabalhoES`.`Projeto` (`idProjeto` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ProjetoResponsaveis_Pessoa1`
+    FOREIGN KEY (`idPessoa` )
+    REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`ProjetoAtividadeResponsaveis` (
+  `idProjetoAtividade` INT NOT NULL ,
+  `idPessoa` INT NOT NULL ,
+  INDEX `fk_ProjetoAtividadeResponsaveis_ProjetoAtividade1` (`idProjetoAtividade` ASC) ,
+  INDEX `fk_ProjetoAtividadeResponsaveis_Pessoa1` (`idPessoa` ASC) ,
+  PRIMARY KEY (`idProjetoAtividade`, `idPessoa`) ,
+  CONSTRAINT `fk_ProjetoAtividadeResponsaveis_ProjetoAtividade1`
+    FOREIGN KEY (`idProjetoAtividade` )
+    REFERENCES `trabalhoES`.`ProjetoAtividade` (`idProjetoAtividade` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ProjetoAtividadeResponsaveis_Pessoa1`
+    FOREIGN KEY (`idPessoa` )
+    REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`ProjetoFeedbacks` (
+  `idProjeto` INT NOT NULL ,
+  `idFeedback` INT NOT NULL ,
+  PRIMARY KEY (`idProjeto`, `idFeedback`) ,
+  INDEX `fk_ProjetoFeedbacks_Projeto1` (`idProjeto` ASC) ,
+  INDEX `fk_ProjetoFeedbacks_Feedback1` (`idFeedback` ASC) ,
+  CONSTRAINT `fk_ProjetoFeedbacks_Projeto1`
+    FOREIGN KEY (`idProjeto` )
+    REFERENCES `trabalhoES`.`Projeto` (`idProjeto` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ProjetoFeedbacks_Feedback1`
+    FOREIGN KEY (`idFeedback` )
+    REFERENCES `trabalhoES`.`Feedback` (`idFeedback` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;

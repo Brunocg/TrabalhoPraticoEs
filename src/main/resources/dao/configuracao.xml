@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<trabalhoES>
+    <!-- Informacoes sobre o banco de dados e a conexao -->
+    <db>
+	  <host>localhost</host>
+	  <nomeBanco>trabalhoES</nomeBanco>
+      <porta>3306</porta>
+ 	  <usuario>root</usuario>
+      <senha>123456</senha>
+    </db>
+    
+</trabalhoES>
