@@ -1,12 +1,11 @@
-package br.ufscar.persistencia;
+package br.ufscar.persistencia.mySql;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.awt.print.Pageable;
 
 import br.ufscar.dominio.Usuario;
-import br.ufscar.dominio.UsuarioRepository;
+import br.ufscar.persistencia.interfaces.IPessoaRepository;
 
-public class UsuarioRepositoryMySQL implements UsuarioRepository {
+public class PessoaRepositoryMySQL implements IPessoaRepository {
 
 	@Override
 	public int novoId() {

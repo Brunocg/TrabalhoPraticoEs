@@ -1,9 +1,11 @@
-package br.ufscar.dominio;
+package br.ufscar.persistencia.interfaces;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface UsuarioRepository {
+import br.ufscar.dominio.Usuario;
+
+public interface IPessoaRepository {
 
 	int novoId();
 	Usuario buscarPorId(int usuarioId);
