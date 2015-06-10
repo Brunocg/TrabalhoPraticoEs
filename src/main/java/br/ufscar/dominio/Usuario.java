@@ -35,8 +35,8 @@ public class Usuario {
 	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
 
 
-	public boolean validaLogin(String usuario, String senha){
-		return true;
+	public boolean validaLogin(String senha){
+		return getSenha().equals(senha);
 	}
 	
 	public void atualizaUltimoLogin(Date novaData){

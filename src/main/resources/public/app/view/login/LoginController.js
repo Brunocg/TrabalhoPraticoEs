@@ -3,11 +3,11 @@ Ext.define('TrabalhoPraticoEsApp.view.login.LoginController', {
     alias: 'controller.login',
 
     onSignInClick: function(){        
-        localStorage.setItem("TutorialLoggedIn", true);
+        localStorage.setItem("LoggedIn", true);
 
         this.getView().destroy();
 
-        Ext.widget('app-main');
+        Ext.widget('main');
     },
 
 	onSignUpClick: function(){        

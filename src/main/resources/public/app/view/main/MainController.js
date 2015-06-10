@@ -3,7 +3,7 @@ Ext.define('TrabalhoPraticoEsApp.view.main.MainController', {
     alias: 'controller.main',
 
     onClickButton: function () {
-        localStorage.removeItem('TutorialLoggedIn');
+        localStorage.removeItem('LoggedIn');
 
         this.getView().destroy();
 

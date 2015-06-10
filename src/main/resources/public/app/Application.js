@@ -22,7 +22,7 @@ Ext.define('TrabalhoPraticoEsApp.Application', {
 
         loggedIn = localStorage.getItem("TutorialLoggedIn");
 
-        Ext.widget(loggedIn ? 'app-main' : 'login');
+        Ext.widget(loggedIn ? 'main' : 'login');
 
     }
 });

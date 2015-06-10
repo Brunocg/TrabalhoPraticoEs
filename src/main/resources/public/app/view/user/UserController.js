@@ -2,8 +2,6 @@ Ext.define('TrabalhoPraticoEsApp.view.user.UserController', {
     extend: 'Ext.app.ViewController',  
     alias: 'controller.user',
 
-    requires: ['TrabalhoPraticoEsApp.view.user.User'],
-    
     onClickCarregar: function(btn, e, eOpts) {
     	var store = btn.up('grid').getStore('clienteStore');
     	store.load({params:{start:0, limit:10}});

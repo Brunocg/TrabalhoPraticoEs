@@ -3,7 +3,8 @@ Ext.define('TrabalhoPraticoEsApp.view.main.Main', {
     alias: 'widget.main',
 
     requires: [
-        'TrabalhoPraticoEsApp.model.main.MainModel',
+        'TrabalhoPraticoEsApp.view.main.MainViewModel',
+        'TrabalhoPraticoEsApp.view.user.UserController',
         'Ext.menu.Menu',
         'Ext.menu.Item'
     ],
