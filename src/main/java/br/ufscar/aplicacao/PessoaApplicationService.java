@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import br.ufscar.consulta.EnderecoData;
@@ -20,6 +21,7 @@ import br.ufscar.dominio.interfaces.IPessoaRepository;
 
 
 @Service
+@Component
 public class PessoaApplicationService {
 	
 	@Autowired

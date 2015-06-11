@@ -10,7 +10,7 @@ Ext.define('TrabalhoPraticoEsApp.view.user.UserViewModel',{
             };
 
             Ext.Ajax.request({
-                url:'usuario/login',
+                url:'pessoa/usuario/login',
                 method:'POST',
                 timeout: 120000,
                 jsonData:Ext.encode([data]),

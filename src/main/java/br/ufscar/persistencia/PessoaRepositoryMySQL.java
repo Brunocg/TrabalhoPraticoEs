@@ -1,10 +1,12 @@
 package br.ufscar.persistencia;
 
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Repository;
 
 import br.ufscar.dominio.Pessoa;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
+@Repository
 public class PessoaRepositoryMySQL implements IPessoaRepository {
 
 	@Override

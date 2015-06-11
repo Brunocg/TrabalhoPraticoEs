@@ -53,7 +53,7 @@ public class PessoaController {
 		return servico.obterDataPeloId(pessoaId);
 	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/usuario/login", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean login(@RequestBody LoginData pessoa){
 		return servico.loginValido(pessoa);
