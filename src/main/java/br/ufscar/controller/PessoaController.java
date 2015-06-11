@@ -10,53 +10,53 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.ufscar.aplicacao.UsuarioApplicationService;
+import br.ufscar.aplicacao.PessoaApplicationService;
 import br.ufscar.consulta.LoginData;
-import br.ufscar.consulta.UsuarioData;
+import br.ufscar.consulta.PessoaData;
 
 @RestController
-@RequestMapping("/usuario")
-public class UsuarioController {
+@RequestMapping("/pessoa")
+public class PessoaController {
 	
 	@Autowired
-	private UsuarioApplicationService servico;
+	private PessoaApplicationService servico;
 	
 	@RequestMapping(value = "/inserir", method = RequestMethod.POST)
 	@ResponseBody 
-	public UsuarioData inserir(@RequestBody UsuarioData usuario){
-		int usuarioId = servico.inserir(usuario);
-		return servico.obterDataPeloId(usuarioId);
+	public PessoaData inserir(@RequestBody PessoaData pessoa){
+		int pessoaId = servico.inserir(pessoa);
+		return servico.obterDataPeloId(pessoaId);
 	}
 	
 	@RequestMapping("/obter")
 	@ResponseBody 
-	public UsuarioData obter(@RequestParam("id") String usuarioId){
-		return servico.obterDataPeloId(Integer.valueOf(usuarioId));
+	public PessoaData obter(@RequestParam("id") String pessoaId){
+		return servico.obterDataPeloId(Integer.valueOf(pessoaId));
 	}
 	
 	@RequestMapping(value = "/listar", method=RequestMethod.GET)
 	@ResponseBody 
-	public Page<UsuarioData> listar(Pageable pageable){
+	public Page<PessoaData> listar(Pageable pageable){
 		return servico.listar(pageable);
 	}
 	
 	@RequestMapping(value = "/excluir", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean excluir(@RequestParam("id") String usuarioId){
-		return servico.excluir(Integer.valueOf(usuarioId));
+	public boolean excluir(@RequestParam("id") String pessoaId){
+		return servico.excluir(Integer.valueOf(pessoaId));
 	}
 	
 	@RequestMapping(value = "/editar", method = RequestMethod.POST)
 	@ResponseBody
-	public UsuarioData editar(@RequestBody UsuarioData usuario){
-		int usuarioId = servico.editar(usuario);
-		return servico.obterDataPeloId(usuarioId);
+	public PessoaData editar(@RequestBody PessoaData pessoa){
+		int pessoaId = servico.editar(pessoa);
+		return servico.obterDataPeloId(pessoaId);
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean login(@RequestBody LoginData usuario){
-		return servico.loginValido(usuario);
+	public boolean login(@RequestBody LoginData pessoa){
+		return servico.loginValido(pessoa);
 		
 	}	
 

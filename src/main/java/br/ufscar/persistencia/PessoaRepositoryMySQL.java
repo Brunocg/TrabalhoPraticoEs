@@ -1,9 +1,9 @@
-package br.ufscar.persistencia.mySql;
+package br.ufscar.persistencia;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Page;
 
-import br.ufscar.dominio.Usuario;
-import br.ufscar.persistencia.interfaces.IPessoaRepository;
+import br.ufscar.dominio.Pessoa;
+import br.ufscar.dominio.interfaces.IPessoaRepository;
 
 public class PessoaRepositoryMySQL implements IPessoaRepository {
 
@@ -14,39 +14,38 @@ public class PessoaRepositoryMySQL implements IPessoaRepository {
 	}
 
 	@Override
-	public Usuario buscarPorId(int usuarioId) {
+	public Pessoa buscarPorId(int pessoaId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Usuario buscarPorLogin(String login) {
+	public Pessoa buscarPorLogin(String login) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void inserir(Usuario usuario) {
+	public void inserir(Pessoa pessoa) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void editar(Usuario usuario) {
+	public void editar(Pessoa pessoa) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public boolean excluir(Usuario usuario) {
+	public boolean excluir(Pessoa pessoa) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public Page<Usuario> listar(Pageable pageable) {
+	public Page<Pessoa> listar(org.springframework.data.domain.Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
