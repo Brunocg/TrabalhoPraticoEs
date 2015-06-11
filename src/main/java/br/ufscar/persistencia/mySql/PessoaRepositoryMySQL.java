@@ -1,4 +1,4 @@
-package br.ufscar.persistencia;
+package br.ufscar.persistencia.mySql;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
