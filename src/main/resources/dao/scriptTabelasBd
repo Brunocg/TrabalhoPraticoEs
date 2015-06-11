@@ -51,6 +51,7 @@ ENGINE = InnoDB;
 
 CREATE  TABLE IF NOT EXISTS `trabalhoES`.`Usuario` (
   `idUsuario` INT NOT NULL AUTO_INCREMENT ,
+  `usuarioDe` INT NOT NULL ,
   `aprovadoPor` INT NOT NULL ,
   `login` VARCHAR(254) NULL ,
   `senha` VARCHAR(254) NULL ,
@@ -60,8 +61,14 @@ CREATE  TABLE IF NOT EXISTS `trabalhoES`.`Usuario` (
   `ts` TIMESTAMP NULL ,
   PRIMARY KEY (`idUsuario`) ,
   INDEX `fk_Usuario_Pessoa1` (`aprovadoPor` ASC) ,
+  INDEX `fk_Usuario_Pessoa2` (`usuarioDe` ASC) ,
   CONSTRAINT `fk_Usuario_Pessoa1`
     FOREIGN KEY (`aprovadoPor` )
+    REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Usuario_Pessoa2`
+    FOREIGN KEY (`usuarioDe` )
     REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
