@@ -118,8 +118,8 @@ CREATE  TABLE IF NOT EXISTS `trabalhoES`.`Competencia` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE  TABLE IF NOT EXISTS `trabalhoES`.`CompetenciaExeperiencia` (
-  `idCompetenciaExeperiencia` INT NOT NULL AUTO_INCREMENT ,
+CREATE  TABLE IF NOT EXISTS `trabalhoES`.`CompetenciaExperiencia` (
+  `idCompetenciaExperiencia` INT NOT NULL AUTO_INCREMENT ,
   `idPessoa` INT NOT NULL ,
   `idCompetencia` INT NOT NULL ,
   `nivel` INT NULL ,
@@ -127,7 +127,7 @@ CREATE  TABLE IF NOT EXISTS `trabalhoES`.`CompetenciaExeperiencia` (
   `observacoes` TEXT NULL ,
   `estado` TINYINT(1) NULL ,
   `ts` TIMESTAMP NULL ,
-  PRIMARY KEY (`idCompetenciaExeperiencia`) ,
+  PRIMARY KEY (`idCompetenciaExperiencia`) ,
   INDEX `fk_CompetenciaExeperiencia_Pessoa1` (`idPessoa` ASC) ,
   INDEX `fk_CompetenciaExeperiencia_Competencia1` (`idCompetencia` ASC) ,
   CONSTRAINT `fk_CompetenciaExeperiencia_Pessoa1`
