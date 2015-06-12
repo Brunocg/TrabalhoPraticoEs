@@ -55,9 +55,8 @@ public class PessoaController {
 	
 	@RequestMapping(value = "/usuario/login", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean login(@RequestBody LoginData pessoa){
-		return servico.loginValido(pessoa);
-		
+	public boolean login(@RequestBody LoginData login){
+		return servico.loginValido(login);		
 	}	
 
 }
