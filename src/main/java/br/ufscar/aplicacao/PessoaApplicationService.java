@@ -116,7 +116,7 @@ public class PessoaApplicationService {
 		
 		Pessoa pessoa = getPessoa(pessoaData);
 		
-		repositorio.inserir(pessoa);
+		repositorio.gravaPessoa(pessoa);
 		
 		return pessoa.getIdPessoa();
 	}
