@@ -24,8 +24,8 @@ public interface IPessoaRepository {
 	public boolean gravaUsuario(Pessoa pessoa, Usuario usuario) throws SQLException;
 	public boolean gravaExperiencias(Pessoa pessoa,	List<CompetenciaExperiencia> competenciasExperiencia) throws SQLException;
 	public boolean gravaExperiencias(Pessoa pessoa, CompetenciaExperiencia competenciaExperiencia) throws SQLException;
-	public boolean gravaEmderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) throws SQLException;
-	public boolean gravaEmderecosPessoa(Pessoa pessoa, Endereco endereco) throws SQLException;
+	public boolean gravaEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) throws SQLException;
+	public boolean gravaEnderecosPessoa(Pessoa pessoa, Endereco endereco) throws SQLException;
 	public List<Endereco> gravaEndereco(List<Endereco> enderecos) throws SQLException;
 	public int gravaEndereco(Endereco endereco) throws SQLException;
 }

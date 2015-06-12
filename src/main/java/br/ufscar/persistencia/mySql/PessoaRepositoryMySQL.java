@@ -22,7 +22,7 @@ import br.ufscar.dominio.Usuario;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
 
-@Repository
+//@Repository
 public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	private static final String GRAVAR_PESSOA = "INSERT INTO Pessoa (nome,sitCivil,sexo,dataNascimento,CPF,RG,telefone,celular,email,pagPessoal,msgInst,estado,ts) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
@@ -67,7 +67,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 			ps.executeUpdate();
 
-			//parte que pega o que foi incluído no bd... no caso o campo id
+			//parte que pega o que foi incluï¿½do no bd... no caso o campo id
 			rs = ps.getGeneratedKeys(); 
 			if(rs.next()){  
 				idPessoa = rs.getInt(1);  
@@ -80,7 +80,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 				gravado = false;
 			}else{
 
-				if(gravaEmderecosPessoa(pessoa, enderecos)){
+				if(gravaEnderecosPessoa(pessoa, enderecos)){
 
 					if(gravaExperiencias(pessoa, pessoa.getCompetenciasExperiencia())){
 						
@@ -210,11 +210,11 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean gravaEmderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) throws SQLException {
+	public boolean gravaEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) throws SQLException {
 		boolean gravado = false;
 
 		for (Endereco endereco : enderecos) {
-			gravado = gravaEmderecosPessoa(pessoa,endereco);
+			gravado = gravaEnderecosPessoa(pessoa,endereco);
 
 			if(!gravado){
 				break;
@@ -224,7 +224,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean gravaEmderecosPessoa(Pessoa pessoa, Endereco endereco) throws SQLException {
+	public boolean gravaEnderecosPessoa(Pessoa pessoa, Endereco endereco) throws SQLException {
 
 		boolean gravado = false;
 
@@ -303,7 +303,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 			ps.executeUpdate();
 
-			//parte que pega o que foi incluído no bd... no caso o campo id
+			//parte que pega o que foi incluï¿½do no bd... no caso o campo id
 			rs = ps.getGeneratedKeys(); 
 			if(rs.next()){  
 				idEndereco = rs.getInt(1);  

@@ -7,10 +7,21 @@ Ext.define('TrabalhoPraticoEsApp.view.login.LoginController', {
         TrabalhoPraticoEsApp.view.login.LoginViewModel.efetuarLogin(
 	        vm.get('login'), 
 	        vm.get('senha'), 
-	        function(){
-	            localStorage.setItem('LoggedIn', true);
-	            this.getView().destroy();
-	            Ext.widget('main');
+	        function(conn, response, options, eOpts) {
+	        	
+	        	var result = Ext.JSON.decode(conn.responseText, true);
+	        	
+	        	if (result.success) {
+		            localStorage.setItem('LoggedIn', true);
+		            this.getView().destroy();
+		            Ext.widget('main');
+	        	}else
+					  Ext.Msg.show({
+					        title:'Erro!',
+					        msg: 'Usuário ou senha está incorreto.',
+					        icon: Ext.Msg.ERROR,
+					        buttons: Ext.Msg.OK
+					  });
 	        },
 	        function(){
 	        	console.log('fail');

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ufscar.aplicacao.PessoaApplicationService;
 import br.ufscar.consulta.LoginData;
 import br.ufscar.consulta.PessoaData;
+import br.ufscar.util.SimpleResponse;
 
 @RestController
 @RequestMapping("/pessoa")
@@ -55,8 +56,8 @@ public class PessoaController {
 	
 	@RequestMapping(value = "/usuario/login", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean login(@RequestBody LoginData login){
-		return servico.loginValido(login);		
+	public SimpleResponse login(@RequestBody LoginData login){
+		return new SimpleResponse(servico.loginValido(login));		
 	}	
 
 }
