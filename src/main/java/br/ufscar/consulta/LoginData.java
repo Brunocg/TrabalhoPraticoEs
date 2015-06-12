@@ -5,10 +5,9 @@ public class LoginData {
 	private String login;
 	private String senha;
 
-
+	public LoginData() {}
+	
 	public LoginData(String login, String senha) {
-		super();
-
 		this.login = login;
 		this.senha = senha;
 	}
