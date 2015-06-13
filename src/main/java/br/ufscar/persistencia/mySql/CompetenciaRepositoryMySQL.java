@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,16 +15,25 @@ import br.ufscar.dao.ConnectionManager;
 import br.ufscar.dominio.Competencia;
 import br.ufscar.dominio.CompetenciaCategoria;
 import br.ufscar.dominio.Responsavel;
+import br.ufscar.dominio.interfaces.ICompetenciaRepository;
 
 @Repository
-public class CompetenciaRepositoryMySQL {
+public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 
-	private static final String GRAVA_COMPETENCIA = "INSERT INTO Competencia (nome,estado,ts,idCategoria) VALUES (?,?,CURRENT_TIMESTAMP,?)";
-	private static final String VERIFICA_EXISTENCIA_COMPETENCIA = "SELECT COUNT(*) FROM Competencia WHERE nome = ? AND idCategoria = ?";
-	private static final String RECUPERA_PELO_NOME_CATEGORIA = "SELECT idCompetencia, aprovadoPor nome, estado, ts, idCategoria FROM Competencia C WHERE nome = ? AND idCategoria = ?";
-	private static final String RECUPERA_COMPETENCIA_PELA_CATEGORIA = "SELECT idCompetencia, aprovadoPor nome, estado, ts, idCategoria FROM Competencia C INNER JOIN CompetenciaPorCategoria CPC WHERE CPC.idCategoria = ? AND C.estado = true";
+	private static final String GRAVA_COMPETENCIA = "INSERT INTO Competencia (aprovadoPor,nome,estado,ts,idCategoria) VALUES (?,?,?,CURRENT_TIMESTAMP,?)";
+	private static final String VERIFICA_EXISTENCIA_COMPETENCIA = "SELECT COUNT(*) FROM Competencia WHERE nome = ?";
+	private static final String RECUPERA_CATEGORIA_PELO_NOME_CATEGORIA = "SELECT idCompetenciaCategoria, aprovadoPor, nome, estado, ts FROM CompetenciaCategoria C WHERE nome = ?";
+	private static final String RECUPERA_COMPETENCIA_PELO_NOME_CATEGORIA = "SELECT idCompetencia, aprovadoPor, nome, estado, ts, idCategoria FROM Competencia C WHERE nome = ? AND idCategoria = ?";
+	private static final String RECUPERA_COMPETENCIA_PELA_CATEGORIA = "SELECT C.idCompetencia, C.aprovadoPor, C.nome, C.estado, C.ts, C.idCategoria FROM Competencia C INNER JOIN CompetenciaPorCategoria CPC WHERE CPC.idCategoria = ? AND C.estado = true";
 	private static final String VERIFICA_EXISTENCIA_CATEGORIA = "SELECT COUNT(*) FROM CompetenciaCategoria WHERE nome = ?";
+	private static final String GRAVA_COMPETENCIA_CATEGORIA = "INSERT INTO CompetenciaCategoria (aprovadoPor,nome,estado,ts) VALUES (?,?,?,CURRENT_TIMESTAMP)";
+	private static final String GRAVAR_RELACAO_CATEGORIA_SUB_CATEGORIA = "INSERT INTO CompetenciaSubCategoria (idCategoria,idSubCategoria) VALUES (?,?)";
+	private static final String GRAVAR_RELACAO_CATEGORIA_COMPETENCIA = "INSERT INTO CompetenciaPorCategoria (idCategoria,idCompetencia) VALUES (?,?)";
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#verificaExostenciaCompetencia(br.ufscar.dominio.Competencia)
+	 */
+	@Override
 	public boolean verificaExostenciaCompetencia(Competencia competencia) {
 		boolean existe = false;
 		Connection 			mySQLConnection = null;
@@ -34,7 +44,6 @@ public class CompetenciaRepositoryMySQL {
 			ps = mySQLConnection.prepareStatement(VERIFICA_EXISTENCIA_COMPETENCIA);
 			ps.clearParameters();
 			ps.setString(1, competencia.getNome());
-			ps.setInt(2, competencia.getCompetenciaCategoria().getIdCategoria());
 			rs = ps.executeQuery();
 			if(rs.next()){
 				int qtd = rs.getInt(1);
@@ -51,28 +60,26 @@ public class CompetenciaRepositoryMySQL {
 		return existe;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#gravaCompetencia(br.ufscar.dominio.Competencia)
+	 */
+	@Override
 	public boolean gravaCompetencia(Competencia competencia){
-		
+
 		Connection 			mySQLConnection = null;
 		PreparedStatement 	ps = null;
 		boolean gravado = false; 
 
 		try {
 
-//			if(!verificaExostenciaCompetenciaCategoria(competencia.getCompetenciaCategoria())){
-//				if(gravaCompetenciaCategoria(competencia.getCompetenciaCategoria())){
-//					CompetenciaCategoria cat = recuperarCategoriaPeloNome(competencia.getNome());
-//					competencia.setCompetenciaCategoria(cat);
-//				}
-//			}
-			
 			mySQLConnection = ConnectionManager.getConexao();
 			ps = mySQLConnection.prepareStatement(GRAVA_COMPETENCIA);
 			ps.clearParameters();
 
-			ps.setString(1, competencia.getNome());
-			ps.setBoolean(2, false);
-			ps.setInt(3, competencia.getCompetenciaCategoria().getIdCategoria());
+			ps.setInt(1, competencia.getAprovadorPor() == null ? 0 : competencia.getAprovadorPor().getIdPessoa());
+			ps.setString(2, competencia.getNome());
+			ps.setBoolean(3, false);
+			ps.setInt(4, competencia.getCompetenciaCategoria().getIdCategoria());
 
 			ps.executeUpdate();
 
@@ -87,6 +94,215 @@ public class CompetenciaRepositoryMySQL {
 		return gravado;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#gravaCompetenciaCategoria(br.ufscar.dominio.CompetenciaCategoria)
+	 */
+	@Override
+	public boolean gravaCompetenciaCategoria(
+			CompetenciaCategoria competenciaCategoria) {
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet rs = null;
+		int idCategoria = 0;
+		boolean gravado = false; 
+
+		try {
+
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(GRAVA_COMPETENCIA_CATEGORIA, Statement.RETURN_GENERATED_KEYS);
+			ps.clearParameters();
+
+			ps.setInt(1, competenciaCategoria.getAprovadoPor() == null ? 0 : competenciaCategoria.getAprovadoPor().getIdPessoa());
+			ps.setString(2, competenciaCategoria.getNome());
+			ps.setBoolean(3, false);
+
+			ps.executeUpdate();
+
+			//parte que pega o que foi incluído no bd... no caso o campo id
+			rs = ps.getGeneratedKeys(); 
+			if(rs.next()){  
+				idCategoria = rs.getInt(1);  
+			}
+
+			competenciaCategoria.setIdCategoria(idCategoria);
+
+			if(gravaSubCategorias(competenciaCategoria, competenciaCategoria.getSubCategorias())){
+
+				gravado = gravaCompetencias(competenciaCategoria, competenciaCategoria.getCompetencias());
+
+			}else{
+				gravado = false;
+			}
+
+			if(gravado){
+				//Chama commit no final do processo
+				mySQLConnection.commit();
+				//Habilita auto comit novamente
+				mySQLConnection.setAutoCommit(true);
+			}else{
+				ConnectionManager.rollBack();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			gravado = false;
+			ConnectionManager.rollBack();	
+		}finally	{
+			ConnectionManager.closeAll(ps, rs);
+		}
+		return gravado;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#gravaCompetencias(br.ufscar.dominio.CompetenciaCategoria, java.util.List)
+	 */
+	@Override
+	public boolean gravaCompetencias(
+			CompetenciaCategoria competenciaCategoria,
+			List<Competencia> competencias) throws SQLException {
+		boolean gravado = false;
+
+		if(competencias == null || competencias.isEmpty()){
+			gravado = true;
+		}else{
+			for (Competencia competencia : competencias) {
+				competencia.setCompetenciaCategoria(competenciaCategoria);
+				if(verificaExostenciaCompetencia(competencia)){
+					competencia = recuperarCompetenciaPeloNomeECategoria(competencia.getNome(), competenciaCategoria);
+					gravado = gravaRelacaoCategoriaCompetencia(competencia,competenciaCategoria);
+					if(!gravado){
+						gravado = false;
+						break;
+					}
+				}else if(gravaCompetencia(competencia)){
+					competencia = recuperarCompetenciaPeloNomeECategoria(competencia.getNome(), competenciaCategoria);
+					gravado = gravaRelacaoCategoriaCompetencia(competencia,competenciaCategoria);
+					if(!gravado){
+						gravado = false;
+						break;
+					}
+				}else{
+					gravado = false;
+					break;
+				}
+			}
+		}
+
+		return gravado;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#gravaRelacaoCategoriaCompetencia(br.ufscar.dominio.Competencia, br.ufscar.dominio.CompetenciaCategoria)
+	 */
+	@Override
+	public boolean gravaRelacaoCategoriaCompetencia(Competencia competencia,
+			CompetenciaCategoria competenciaCategoria) throws SQLException {
+		boolean gravado = false;
+
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(GRAVAR_RELACAO_CATEGORIA_COMPETENCIA);
+			ps.clearParameters();
+
+			ps.setInt(1,competenciaCategoria.getIdCategoria());
+			ps.setInt(2,competencia.getIdCompetencia());
+
+			ps.executeUpdate();
+
+			gravado = true;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return gravado;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#gravaSubCategorias(br.ufscar.dominio.CompetenciaCategoria, java.util.List)
+	 */
+	@Override
+	public boolean gravaSubCategorias(
+			CompetenciaCategoria competenciaCategoria,
+			List<CompetenciaCategoria> subCategorias) throws SQLException {
+		boolean gravado = false;
+
+		if(subCategorias == null || subCategorias.isEmpty()){
+			gravado = true;
+		}else{
+			for (CompetenciaCategoria subCategoria : subCategorias) {
+				if(verificaExostenciaCompetenciaCategoria(subCategoria)){
+					subCategoria = recuperarCategoriaPeloNome(subCategoria.getNome());
+					gravado = gravaRelacaoCategoriSubCategoria(competenciaCategoria,subCategoria);
+					if(!gravado){
+						gravado = false;
+						break;
+					}
+				}else if(gravaCompetenciaCategoria(subCategoria)){
+					subCategoria = recuperarCategoriaPeloNome(subCategoria.getNome());
+					gravado = gravaRelacaoCategoriSubCategoria(competenciaCategoria,subCategoria);
+					if(!gravado){
+						gravado = false;
+						break;
+					}
+				}else{
+					gravado = false;
+					break;
+				}
+			}
+		}
+
+		return gravado;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#gravaRelacaoCategoriSubCategoria(br.ufscar.dominio.CompetenciaCategoria, br.ufscar.dominio.CompetenciaCategoria)
+	 */
+	@Override
+	public boolean gravaRelacaoCategoriSubCategoria(
+			CompetenciaCategoria competenciaCategoria,
+			CompetenciaCategoria subCategoria) throws SQLException {
+		boolean gravado = false;
+
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(GRAVAR_RELACAO_CATEGORIA_SUB_CATEGORIA);
+			ps.clearParameters();
+
+			ps.setInt(1,competenciaCategoria.getIdCategoria());
+			ps.setInt(2,subCategoria.getIdCategoria());
+
+			ps.executeUpdate();
+
+			gravado = true;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return gravado;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#recuperarCategoriaPeloNome(java.lang.String)
+	 */
+	@Override
 	public CompetenciaCategoria recuperarCategoriaPeloNome(String nome) {
 		CompetenciaCategoria categoria = null;
 		Connection 			mySQLConnection = null;
@@ -94,7 +310,7 @@ public class CompetenciaRepositoryMySQL {
 		ResultSet 			rs = null;
 		try {
 			mySQLConnection = ConnectionManager.getConexao();
-			ps = mySQLConnection.prepareStatement(RECUPERA_PELO_NOME_CATEGORIA);
+			ps = mySQLConnection.prepareStatement(RECUPERA_CATEGORIA_PELO_NOME_CATEGORIA);
 			ps.clearParameters();
 			ps.setString(1, nome);
 			rs = ps.executeQuery();
@@ -104,10 +320,10 @@ public class CompetenciaRepositoryMySQL {
 				boolean estado = rs.getBoolean("estado");
 				Date ts = rs.getDate("ts");
 				Responsavel aprovadoPor = new Responsavel();
-				aprovadoPor.setIdPessoa(rs.getInt("aprovadorPor"));
-				
+				aprovadoPor.setIdPessoa(rs.getInt("aprovadoPor"));
+
 				categoria = new CompetenciaCategoria(idCategoria, nome, estado, ts, null, null, aprovadoPor);
-				
+
 				List<Competencia> competencias = recuperarCompetenciasPorCategoria(categoria);
 				List<CompetenciaCategoria> subCategorias = recuperarSubCategoriasPorCategoria(categoria);
 				categoria.setCompetencias(competencias);
@@ -122,9 +338,13 @@ public class CompetenciaRepositoryMySQL {
 		return categoria;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#recuperarSubCategoriasPorCategoria(br.ufscar.dominio.CompetenciaCategoria)
+	 */
+	@Override
 	public List<CompetenciaCategoria> recuperarSubCategoriasPorCategoria(
 			CompetenciaCategoria categoria) {
-		
+
 		List<CompetenciaCategoria> subCategorias = new ArrayList<CompetenciaCategoria>();
 		Connection 			mySQLConnection = null;
 		PreparedStatement 	ps = null;
@@ -137,20 +357,20 @@ public class CompetenciaRepositoryMySQL {
 			rs = ps.executeQuery();
 			while(rs.next()){
 
-				int idCategoria = rs.getInt("idCategoria");
-				String nome = rs.getString("nome");
-				boolean estado = rs.getBoolean("estado");
-				Date ts = rs.getDate("ts");
+				int idCategoria = rs.getInt("C.idCategoria");
+				String nome = rs.getString("C.nome");
+				boolean estado = rs.getBoolean("C.estado");
+				Date ts = rs.getDate("C.ts");
 				Responsavel aprovadoPor = new Responsavel();
-				aprovadoPor.setIdPessoa(rs.getInt("aprovadorPor"));
-				
+				aprovadoPor.setIdPessoa(rs.getInt("C.aprovadorPor"));
+
 				CompetenciaCategoria subCategoria = new CompetenciaCategoria(idCategoria, nome, estado, ts, null, null, aprovadoPor);
-				
+
 				List<Competencia> competencias = recuperarCompetenciasPorCategoria(subCategoria);
 				List<CompetenciaCategoria> subCat = recuperarSubCategoriasPorCategoria(subCategoria);
 				subCategoria.setCompetencias(competencias);
 				subCategoria.setSubCategorias(subCat);
-				
+
 				subCategorias.add(subCategoria);
 			}
 		} catch (SQLException e) {
@@ -162,9 +382,13 @@ public class CompetenciaRepositoryMySQL {
 		return subCategorias;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#recuperarCompetenciasPorCategoria(br.ufscar.dominio.CompetenciaCategoria)
+	 */
+	@Override
 	public List<Competencia> recuperarCompetenciasPorCategoria(
 			CompetenciaCategoria categoria) {
-		
+
 		List<Competencia> competencias = new ArrayList<Competencia>();
 		Connection 			mySQLConnection = null;
 		PreparedStatement 	ps = null;
@@ -194,6 +418,10 @@ public class CompetenciaRepositoryMySQL {
 		return competencias;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#verificaExostenciaCompetenciaCategoria(br.ufscar.dominio.CompetenciaCategoria)
+	 */
+	@Override
 	public boolean verificaExostenciaCompetenciaCategoria(
 			CompetenciaCategoria competenciaCategoria) {
 		boolean existe = false;
@@ -221,7 +449,11 @@ public class CompetenciaRepositoryMySQL {
 		return existe;
 	}
 
-	public Competencia recuperarPeloNomeECategoria(String nome,
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.teste#recuperarCompetenciaPeloNomeECategoria(java.lang.String, br.ufscar.dominio.CompetenciaCategoria)
+	 */
+	@Override
+	public Competencia recuperarCompetenciaPeloNomeECategoria(String nome,
 			CompetenciaCategoria competenciaCategoria) {
 		Competencia competencia = null;
 		Connection 			mySQLConnection = null;
@@ -229,7 +461,7 @@ public class CompetenciaRepositoryMySQL {
 		ResultSet 			rs = null;
 		try {
 			mySQLConnection = ConnectionManager.getConexao();
-			ps = mySQLConnection.prepareStatement(RECUPERA_PELO_NOME_CATEGORIA);
+			ps = mySQLConnection.prepareStatement(RECUPERA_COMPETENCIA_PELO_NOME_CATEGORIA);
 			ps.clearParameters();
 			ps.setString(1, nome);
 			ps.setInt(2, competenciaCategoria.getIdCategoria());
