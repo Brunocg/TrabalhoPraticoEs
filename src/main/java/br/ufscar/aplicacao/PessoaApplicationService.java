@@ -112,7 +112,6 @@ public class PessoaApplicationService {
 	} 
 
 	public int inserir(PessoaData pessoaData) {
-		pessoaData.setIdPessoa(repositorio.novoId());
 		
 		Pessoa pessoa = getPessoa(pessoaData);
 		

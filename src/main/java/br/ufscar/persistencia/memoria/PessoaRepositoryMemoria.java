@@ -68,12 +68,6 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	}
 
 	@Override
-	public int novoId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public Pessoa buscarPorId(int pessoaId) {
 		// TODO Auto-generated method stub
 		return null;
@@ -101,6 +95,12 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	public Page<Pessoa> listar(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean gravaPessoaBasico(Pessoa pessoa) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -25,12 +25,69 @@ import br.ufscar.dominio.interfaces.IPessoaRepository;
 public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	private static final String GRAVAR_PESSOA = "INSERT INTO Pessoa (nome,sitCivil,sexo,dataNascimento,CPF,RG,telefone,celular,email,pagPessoal,msgInst,estado,ts) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
+	private static final String GRAVAR_PESSOA_BASICO = "INSERT INTO Pessoa (nome,dataNascimento,CPF,RG,email,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_ENDERECO = "INSERT INTO Endereco (rua,bairro,numero,cidade,uf,pais,cep,estado,ts) VALUES (?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_ENDERECO_PESSOA = "INSERT INTO EnderecoPessoa (idEndereco,idPessoa,ts) VALUES (?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_EXPERIENCIA = "INSERT INTO CompetenciaExperiencia (idPessoa, idCompetencia, nivel, tempoExp,observacoes,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_USUARIO = "INSERT INTO Usuario (usuarioDe,login,senha,usuarioTipo,estado,ts) VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)";
 
+	@Override
+	public boolean gravaPessoaBasico(Pessoa pessoa){
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 
+		int idPessoa = 0;
+		boolean gravado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(GRAVAR_PESSOA_BASICO, Statement.RETURN_GENERATED_KEYS);
+			ps.clearParameters();
+
+			ps.setString(1,pessoa.getNome());
+			ps.setDate(2,(Date) pessoa.getDataNascimento());
+			ps.setString(3,pessoa.getCpf());
+			ps.setString(4,pessoa.getRg());
+			ps.setString(5,pessoa.getEmail());
+			ps.setBoolean(6,true);
+
+			ps.executeUpdate();
+
+			//parte que pega o que foi inclu�do no bd... no caso o campo id
+			rs = ps.getGeneratedKeys(); 
+			if(rs.next()){  
+				idPessoa = rs.getInt(1);  
+			}
+
+			pessoa.setIdPessoa(idPessoa);
+
+			gravado = gravaUsuario(pessoa,pessoa.getUsuario());
+					
+
+			if(gravado){
+				//Chama commit no final do processo
+				mySQLConnection.commit();
+				//Habilita auto comit novamente
+				mySQLConnection.setAutoCommit(true);
+			}else{
+				ConnectionManager.rollBack();
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			gravado = false;
+			ConnectionManager.rollBack();		
+		}finally{
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return gravado;
+	}
+	
 	@Override
 	public boolean gravaPessoa(Pessoa pessoa){
 
@@ -301,12 +358,6 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		}
 
 		return idEndereco;
-	}
-
-	@Override
-	public int novoId() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
