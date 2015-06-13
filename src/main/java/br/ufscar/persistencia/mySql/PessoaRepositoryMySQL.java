@@ -13,10 +13,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 //import org.springframework.stereotype.Repository;
 
+
+
 import br.ufscar.dao.ConnectionManager;
+import br.ufscar.dominio.Competencia;
+import br.ufscar.dominio.CompetenciaCategoria;
 import br.ufscar.dominio.CompetenciaExperiencia;
 import br.ufscar.dominio.Endereco;
 import br.ufscar.dominio.Pessoa;
+import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.Usuario;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
@@ -30,6 +35,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String GRAVAR_ENDERECO_PESSOA = "INSERT INTO EnderecoPessoa (idEndereco,idPessoa,ts) VALUES (?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_EXPERIENCIA = "INSERT INTO CompetenciaExperiencia (idPessoa, idCompetencia, nivel, tempoExp,observacoes,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_USUARIO = "INSERT INTO Usuario (usuarioDe,login,senha,usuarioTipo,estado,ts) VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)";
+	private static final String BUSCAR_PESSOA_POR_LOGIN = "SELECT usuarioDe FROM Usuario U WHERE login = ?";
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -367,9 +373,29 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public Pessoa buscarPorLogin(String login) {
-		// TODO Auto-generated method stub
-		return null;
+	public Pessoa recuperarPessoaPorLogin(String login) {
+		Pessoa pessoa = null;
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_PESSOA_POR_LOGIN);
+			ps.clearParameters();
+			ps.setString(1, login);
+			rs = ps.executeQuery();
+			if(rs.next()){
+
+				pessoa = buscarPorId(rs.getInt("usuarioDe"));
+				
+			}
+		} catch (SQLException e) {
+			pessoa = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+		return pessoa;
 	}
 
 	@Override

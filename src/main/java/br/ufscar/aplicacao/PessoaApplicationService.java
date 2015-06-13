@@ -145,7 +145,7 @@ public class PessoaApplicationService {
 	}
 
 	public boolean loginValido(LoginData login) {
-		Usuario usuario = repositorio.buscarPorLogin(login.getLogin()).getUsuario();
+		Usuario usuario = repositorio.recuperarPessoaPorLogin(login.getLogin()).getUsuario();
 		return (usuario != null)?usuario.validaLogin(login.getSenha()):false;
 	}
 

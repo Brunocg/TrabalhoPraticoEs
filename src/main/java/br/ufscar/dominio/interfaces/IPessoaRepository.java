@@ -14,9 +14,12 @@ import br.ufscar.dominio.Usuario;
 public interface IPessoaRepository {
 
 	public abstract Pessoa buscarPorId(int pessoaId);
-	public abstract Pessoa buscarPorLogin(String login);
+	public abstract Pessoa recuperarPessoaPorLogin(String login);
+	
 	public abstract void editar(Pessoa pessoa);
+	
 	public abstract boolean excluir(Pessoa pessoa);
+	
 	public abstract Page<Pessoa> listar(Pageable pageable);
 	
 	public abstract boolean gravaPessoa(Pessoa pessoa);
