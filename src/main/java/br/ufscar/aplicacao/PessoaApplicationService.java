@@ -108,7 +108,7 @@ public class PessoaApplicationService {
 	}
 	
 	public PessoaData obterDataPeloId(int pessoaId) {
-	    return getPessoaData(repositorio.buscarPorId(pessoaId));
+	    return getPessoaData(repositorio.recuperarPessoaPorId(pessoaId));
 	} 
 
 	public int inserir(PessoaData pessoaData) {
@@ -133,7 +133,7 @@ public class PessoaApplicationService {
 	}
 
 	public boolean excluir(int pessoaId) {
-		return repositorio.excluir(repositorio.buscarPorId(pessoaId));
+		return repositorio.excluir(repositorio.recuperarPessoaPorId(pessoaId));
 	}
 
 	public int editar(PessoaData pessoaData) {
