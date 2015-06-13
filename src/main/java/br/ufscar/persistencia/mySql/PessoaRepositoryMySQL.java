@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 //import org.springframework.stereotype.Repository;
 
 import br.ufscar.dao.ConnectionManager;
-import br.ufscar.dominio.Competencia;
 import br.ufscar.dominio.CompetenciaExperiencia;
 import br.ufscar.dominio.Endereco;
 import br.ufscar.dominio.Pessoa;
@@ -31,7 +30,6 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String GRAVAR_EXPERIENCIA = "INSERT INTO CompetenciaExperiencia (idPessoa, idCompetencia, nivel, tempoExp,observacoes,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_USUARIO = "INSERT INTO Usuario (usuarioDe,login,senha,usuarioTipo,estado,ts) VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)";
 
-	private CompetenciaRepositoryMySQL _competenciaRepositoryMySQL = new CompetenciaRepositoryMySQL();
 
 	@Override
 	public boolean gravaPessoa(Pessoa pessoa){
@@ -152,16 +150,6 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		boolean gravado = false;
 
 		for (CompetenciaExperiencia competenciaExperiencia : competenciasExperiencia) {
-
-			if(!_competenciaRepositoryMySQL.verificaExostenciaCompetencia(competenciaExperiencia.getCompetencia())){
-
-				if(_competenciaRepositoryMySQL.gravaCompetencia(competenciaExperiencia.getCompetencia())){
-					Competencia comp = _competenciaRepositoryMySQL.recuperarPeloNomeECategoria(competenciaExperiencia.getCompetencia().getNome(), competenciaExperiencia.getCompetencia().getCompetenciaCategoria());
-					competenciaExperiencia.setCompetencia(comp);
-				}else{
-					break;
-				}
-			}
 
 			if(!gravaExperiencias(pessoa, competenciaExperiencia)){
 				gravado = false;
