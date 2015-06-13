@@ -8,7 +8,6 @@ public class Competencia {
 	private String nome;
 	private boolean estado;
 	private Date ts;
-	private CompetenciaCategoria competenciaCategoria = null;
 	private Responsavel aprovadorPor = null;
 
 	public Competencia() {
@@ -16,14 +15,12 @@ public class Competencia {
 	}
 
 	public Competencia(int idCompetencia, String nome, boolean estado,
-			Date ts, CompetenciaCategoria competenciaCategoria,
-			Responsavel aprovadorPor) {
+			Date ts, Responsavel aprovadorPor) {
 		super();
 		this.idCompetencia = idCompetencia;
 		this.nome = nome;
 		this.estado = estado;
 		this.ts = ts;
-		this.competenciaCategoria = competenciaCategoria;
 		this.aprovadorPor = aprovadorPor;
 	}
 	
@@ -73,14 +70,6 @@ public class Competencia {
 
 	public void setAprovadorPor(Responsavel aprovadorPor) {
 		this.aprovadorPor = aprovadorPor;
-	}
-
-	public CompetenciaCategoria getCompetenciaCategoria() {
-		return competenciaCategoria;
-	}
-
-	public void setCompetenciaCategoria(CompetenciaCategoria competenciaCategoria) {
-		this.competenciaCategoria = competenciaCategoria;
 	}
 
 }
