@@ -102,18 +102,11 @@ CREATE  TABLE IF NOT EXISTS `trabalhoES`.`Competencia` (
   `nome` VARCHAR(150) NULL ,
   `estado` TINYINT(1) NULL ,
   `ts` TIMESTAMP NULL ,
-  `idCategoria` INT NOT NULL ,
   PRIMARY KEY (`idCompetencia`) ,
   INDEX `fk_Competencia_Pessoa1` (`aprovadoPor` ASC) ,
-  INDEX `fk_Competencia_CompetenciaCategoria1` (`idCategoria` ASC) ,
   CONSTRAINT `fk_Competencia_Pessoa1`
     FOREIGN KEY (`aprovadoPor` )
     REFERENCES `trabalhoES`.`Pessoa` (`idPessoa` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Competencia_CompetenciaCategoria1`
-    FOREIGN KEY (`idCategoria` )
-    REFERENCES `trabalhoES`.`CompetenciaCategoria` (`idCompetenciaCategoria` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
