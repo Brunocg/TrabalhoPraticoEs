@@ -4,7 +4,6 @@ Ext.define('TrabalhoPraticoEsApp.view.main.Main', {
 
     requires: [
         'TrabalhoPraticoEsApp.view.main.MainViewModel',
-        'TrabalhoPraticoEsApp.view.user.UserController',
         'Ext.menu.Menu',
         'Ext.menu.Item'
     ],

@@ -8,7 +8,7 @@ Ext.define('TrabalhoPraticoEsApp.Application', {
     ],
     views: [
         'TrabalhoPraticoEsApp.view.login.Login',
-        'TrabalhoPraticoEsApp.view.user.User',
+        'TrabalhoPraticoEsApp.view.pessoa.Pessoa',
         'TrabalhoPraticoEsApp.view.main.Main'
     ],
     launch: function () {

@@ -1,2 +1,2 @@
 // @tag full-page
-// @require C:\Java\workspaceLuna\TrabalhoPraticoEs\src\main\resources\public\app.js
+// @require /Users/Bruno/Desktop/Desenvolvimento/EclipseWorkspace/TrabalhoPraticoEs/src/main/resources/public/app.js

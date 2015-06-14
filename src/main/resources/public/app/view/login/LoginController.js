@@ -31,6 +31,6 @@ Ext.define('TrabalhoPraticoEsApp.view.login.LoginController', {
     },
 
 	onSignUpClick: function(){        
-		Ext.create('TrabalhoPraticoEsApp.view.user.User').show();
+		Ext.create('TrabalhoPraticoEsApp.view.pessoa.Pessoa').show();
 	}
 });
