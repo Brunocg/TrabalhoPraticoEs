@@ -68,19 +68,13 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	}
 
 	@Override
-	public int novoId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Pessoa buscarPorId(int pessoaId) {
+	public Pessoa recuperarPessoaPorId(int pessoaId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Pessoa buscarPorLogin(String login) {
+	public Pessoa recuperarPessoaPorLogin(String login) {
 		// TODO Auto-generated method stub
 		return new Pessoa(0, login, login, login, null, login, login, null, login, login, login, login, login, new Usuario(0, "Bruno", "teste", null, false, null, null, null), false, null, null);
 	}
@@ -99,6 +93,37 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 
 	@Override
 	public Page<Pessoa> listar(Pageable pageable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean gravaPessoaBasico(Pessoa pessoa) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Endereco> recuperarEnderecosPorPessoa(int idPessoa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Pessoa> recuperarMoradoresEndereco(int idEndereco) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Usuario recuperarUsuarioPorPessoa(int idPessoa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<CompetenciaExperiencia> recuperarExperienciaPorPessoa(
+			int idPessoa) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -20,11 +20,11 @@ import br.ufscar.dominio.interfaces.ICompetenciaRepository;
 @Repository
 public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 
-	private static final String GRAVA_COMPETENCIA = "INSERT INTO Competencia (aprovadoPor,nome,estado,ts,idCategoria) VALUES (?,?,?,CURRENT_TIMESTAMP,?)";
+	private static final String GRAVA_COMPETENCIA = "INSERT INTO Competencia (aprovadoPor,nome,estado,ts) VALUES (?,?,?,CURRENT_TIMESTAMP)";
 	private static final String VERIFICA_EXISTENCIA_COMPETENCIA = "SELECT COUNT(*) FROM Competencia WHERE nome = ?";
 	private static final String RECUPERA_CATEGORIA_PELO_NOME_CATEGORIA = "SELECT idCompetenciaCategoria, aprovadoPor, nome, estado, ts FROM CompetenciaCategoria C WHERE nome = ?";
-	private static final String RECUPERA_COMPETENCIA_PELO_NOME_CATEGORIA = "SELECT idCompetencia, aprovadoPor, nome, estado, ts, idCategoria FROM Competencia C WHERE nome = ? AND idCategoria = ?";
-	private static final String RECUPERA_COMPETENCIA_PELA_CATEGORIA = "SELECT C.idCompetencia, C.aprovadoPor, C.nome, C.estado, C.ts, C.idCategoria FROM Competencia C INNER JOIN CompetenciaPorCategoria CPC WHERE CPC.idCategoria = ? AND C.estado = true";
+	private static final String RECUPERA_COMPETENCIA_PELO_NOME = "SELECT idCompetencia, aprovadoPor, nome, estado, ts FROM Competencia C WHERE nome = ?";
+	private static final String RECUPERA_COMPETENCIA_PELA_CATEGORIA = "SELECT C.idCompetencia, C.aprovadoPor, C.nome, C.estado, C.ts, C.idCategoria FROM Competencia C INNER JOIN CompetenciaPorCategoria CPC ON CPC.idCompetencia = C.idCompetencia WHERE CPC.idCategoria = ? AND C.estado = true";
 	private static final String VERIFICA_EXISTENCIA_CATEGORIA = "SELECT COUNT(*) FROM CompetenciaCategoria WHERE nome = ?";
 	private static final String GRAVA_COMPETENCIA_CATEGORIA = "INSERT INTO CompetenciaCategoria (aprovadoPor,nome,estado,ts) VALUES (?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_RELACAO_CATEGORIA_SUB_CATEGORIA = "INSERT INTO CompetenciaSubCategoria (idCategoria,idSubCategoria) VALUES (?,?)";
@@ -79,7 +79,6 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 			ps.setInt(1, competencia.getAprovadorPor() == null ? 0 : competencia.getAprovadorPor().getIdPessoa());
 			ps.setString(2, competencia.getNome());
 			ps.setBoolean(3, false);
-			ps.setInt(4, competencia.getCompetenciaCategoria().getIdCategoria());
 
 			ps.executeUpdate();
 
@@ -170,16 +169,15 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 			gravado = true;
 		}else{
 			for (Competencia competencia : competencias) {
-				competencia.setCompetenciaCategoria(competenciaCategoria);
 				if(verificaExostenciaCompetencia(competencia)){
-					competencia = recuperarCompetenciaPeloNomeECategoria(competencia.getNome(), competenciaCategoria);
+					competencia = recuperarCompetenciaPeloNome(competencia.getNome());
 					gravado = gravaRelacaoCategoriaCompetencia(competencia,competenciaCategoria);
 					if(!gravado){
 						gravado = false;
 						break;
 					}
 				}else if(gravaCompetencia(competencia)){
-					competencia = recuperarCompetenciaPeloNomeECategoria(competencia.getNome(), competenciaCategoria);
+					competencia = recuperarCompetenciaPeloNome(competencia.getNome());
 					gravado = gravaRelacaoCategoriaCompetencia(competencia,competenciaCategoria);
 					if(!gravado){
 						gravado = false;
@@ -406,7 +404,7 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 				Date ts = rs.getDate("ts");
 				Responsavel aprovadorPor = new Responsavel();
 				aprovadorPor.setIdPessoa(rs.getInt("aprovadoPor"));
-				Competencia competencia = new Competencia(idCompetencia, nome, estado, ts, categoria, aprovadorPor);
+				Competencia competencia = new Competencia(idCompetencia, nome, estado, ts, aprovadorPor);
 				competencias.add(competencia);
 			}
 		} catch (SQLException e) {
@@ -453,18 +451,16 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 	 * @see br.ufscar.persistencia.mySql.teste#recuperarCompetenciaPeloNomeECategoria(java.lang.String, br.ufscar.dominio.CompetenciaCategoria)
 	 */
 	@Override
-	public Competencia recuperarCompetenciaPeloNomeECategoria(String nome,
-			CompetenciaCategoria competenciaCategoria) {
+	public Competencia recuperarCompetenciaPeloNome(String nome) {
 		Competencia competencia = null;
 		Connection 			mySQLConnection = null;
 		PreparedStatement 	ps = null;
 		ResultSet 			rs = null;
 		try {
 			mySQLConnection = ConnectionManager.getConexao();
-			ps = mySQLConnection.prepareStatement(RECUPERA_COMPETENCIA_PELO_NOME_CATEGORIA);
+			ps = mySQLConnection.prepareStatement(RECUPERA_COMPETENCIA_PELO_NOME);
 			ps.clearParameters();
 			ps.setString(1, nome);
-			ps.setInt(2, competenciaCategoria.getIdCategoria());
 			rs = ps.executeQuery();
 			if(rs.next()){
 				int idCompetencia = rs.getInt("idCompetencia");
@@ -472,7 +468,36 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 				Date ts = rs.getDate("ts");
 				Responsavel aprovadorPor = new Responsavel();
 				aprovadorPor.setIdPessoa(rs.getInt("aprovadoPor"));
-				competencia = new Competencia(idCompetencia, nome, estado, ts, competenciaCategoria, aprovadorPor);
+				competencia = new Competencia(idCompetencia, nome, estado, ts, aprovadorPor);
+			}
+		} catch (SQLException e) {
+			competencia = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+		return competencia;
+	}
+	
+	@Override
+	public Competencia recuperarCompetenciaPeloId(int idCompetencia) {
+		Competencia competencia = null;
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(RECUPERA_COMPETENCIA_PELO_NOME);
+			ps.clearParameters();
+			ps.setInt(1, idCompetencia);
+			rs = ps.executeQuery();
+			if(rs.next()){
+				String nome = rs.getString("nome");
+				boolean estado = rs.getBoolean("estado");
+				Date ts = rs.getDate("ts");
+				Responsavel aprovadorPor = new Responsavel();
+				aprovadorPor.setIdPessoa(rs.getInt("aprovadoPor"));
+				competencia = new Competencia(idCompetencia, nome, estado, ts, aprovadorPor);
 			}
 		} catch (SQLException e) {
 			competencia = null;

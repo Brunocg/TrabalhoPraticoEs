@@ -108,11 +108,10 @@ public class PessoaApplicationService {
 	}
 	
 	public PessoaData obterDataPeloId(int pessoaId) {
-	    return getPessoaData(repositorio.buscarPorId(pessoaId));
+	    return getPessoaData(repositorio.recuperarPessoaPorId(pessoaId));
 	} 
 
 	public int inserir(PessoaData pessoaData) {
-		pessoaData.setIdPessoa(repositorio.novoId());
 		
 		Pessoa pessoa = getPessoa(pessoaData);
 		
@@ -134,7 +133,7 @@ public class PessoaApplicationService {
 	}
 
 	public boolean excluir(int pessoaId) {
-		return repositorio.excluir(repositorio.buscarPorId(pessoaId));
+		return repositorio.excluir(repositorio.recuperarPessoaPorId(pessoaId));
 	}
 
 	public int editar(PessoaData pessoaData) {
@@ -146,7 +145,7 @@ public class PessoaApplicationService {
 	}
 
 	public boolean loginValido(LoginData login) {
-		Usuario usuario = repositorio.buscarPorLogin(login.getLogin()).getUsuario();
+		Usuario usuario = repositorio.recuperarPessoaPorLogin(login.getLogin()).getUsuario();
 		return (usuario != null)?usuario.validaLogin(login.getSenha()):false;
 	}
 

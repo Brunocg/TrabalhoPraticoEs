@@ -69,7 +69,7 @@ public class CompetenciaTeste {
 		boolean estadoComp = false;
 		Date tsComp = new Date();
 		Responsavel aprovadorPor = null;
-		competencias.add(new Competencia(idCompetencia, nomeComp, estadoComp, tsComp, competenciaCategoria, aprovadorPor));
+		competencias.add(new Competencia(idCompetencia, nomeComp, estadoComp, tsComp, aprovadorPor));
 		
 		competenciaCategoria.setCompetencias(competencias);
 		
@@ -116,8 +116,8 @@ public class CompetenciaTeste {
 		subCategorias.add(new CompetenciaCategoria(2, "Categoria 2", false, new Date(), null, null, null));//existente
 		subCategorias.add(new CompetenciaCategoria(0, "Categoria 6", false, new Date(), null, null, null));//nova
 		
-		competencias.add(new Competencia(5, "Competencia 1", false, new Date(), null, null));//existente
-		competencias.add(new Competencia(0, "Competencia 2", false, new Date(), null, null));//nova
+		competencias.add(new Competencia(5, "Competencia 1", false, new Date(), null));//existente
+		competencias.add(new Competencia(0, "Competencia 2", false, new Date(), null));//nova
 		
 		competenciaCategoria.setSubCategorias(subCategorias);
 		competenciaCategoria.setCompetencias(competencias);

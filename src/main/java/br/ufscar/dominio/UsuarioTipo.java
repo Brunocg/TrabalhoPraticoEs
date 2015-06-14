@@ -52,4 +52,16 @@ public enum UsuarioTipo {
 		return descricao;
 	}
 
+	public static UsuarioTipo recuperaTipo(String tipoString) {
+		UsuarioTipo tipo = null;
+		
+		for (UsuarioTipo tp : UsuarioTipo.values()) {
+			if(tp.getDescricao().equalsIgnoreCase(tipoString)){
+				tipo = tp;
+				break;
+			}
+		}
+		return tipo;
+	}
+
 }
