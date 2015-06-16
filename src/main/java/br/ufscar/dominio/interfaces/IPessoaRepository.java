@@ -23,7 +23,7 @@ public interface IPessoaRepository {
 	
 	public abstract List<CompetenciaExperiencia> recuperarExperienciaPorPessoa(int idPessoa);
 
-	public abstract void editar(Pessoa pessoa);
+	public abstract boolean editarPessoa(Pessoa pessoa);
 	
 	public abstract boolean excluir(Pessoa pessoa);
 	

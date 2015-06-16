@@ -589,9 +589,82 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public void editar(Pessoa pessoa) {
-		// TODO Auto-generated method stub
-		
+	public boolean editarPessoa(Pessoa pessoa) {
+//		Connection mySQLConnection = null;
+//		PreparedStatement ps = null;
+//		ResultSet rs = null;
+//
+//		int idPessoa = 0;
+		boolean gravado = false;
+
+//		try{
+//			mySQLConnection = ConnectionManager.getConexao();
+//
+//			//Desabilita auto-commit
+//			mySQLConnection.setAutoCommit(false);
+//
+//			ps = mySQLConnection.prepareStatement(GRAVAR_PESSOA, Statement.RETURN_GENERATED_KEYS);
+//			ps.clearParameters();
+//
+//			ps.setString(1,pessoa.getNome());
+//			ps.setString(2,pessoa.getSitCivil());
+//			ps.setString(3,pessoa.getSexo());
+//			ps.setDate(4,(Date) pessoa.getDataNascimento());
+//			ps.setString(5,pessoa.getCpf());
+//			ps.setString(6,pessoa.getRg());
+//			ps.setString(7,pessoa.getTelefone());
+//			ps.setString(8,pessoa.getCelular());
+//			ps.setString(9,pessoa.getEmail());
+//			ps.setString(10,pessoa.getPagPessoal());
+//			ps.setString(11,pessoa.getMsgInst());
+//			ps.setBoolean(12,true);
+//
+//			ps.executeUpdate();
+//
+//			//parte que pega o que foi inclu�do no bd... no caso o campo id
+//			rs = ps.getGeneratedKeys(); 
+//			if(rs.next()){  
+//				idPessoa = rs.getInt(1);  
+//			}
+//
+//			pessoa.setIdPessoa(idPessoa);
+//
+//			List<Endereco> enderecos = gravaEndereco(pessoa.getEndereco());
+//			if(enderecos == null){
+//				gravado = false;
+//			}else{
+//
+//				if(gravaEnderecosPessoa(pessoa, enderecos)){
+//
+//					if(gravaExperiencias(pessoa, pessoa.getCompetenciasExperiencia())){
+//						
+//						gravado = gravaUsuario(pessoa,pessoa.getUsuario());
+//					
+//					}else{
+//						gravado = false;
+//					}
+//				}else{
+//					gravado = false;
+//				}
+//			}
+//
+//			if(gravado){
+//				//Chama commit no final do processo
+//				mySQLConnection.commit();
+//				//Habilita auto comit novamente
+//				mySQLConnection.setAutoCommit(true);
+//			}else{
+//				ConnectionManager.rollBack();
+//			}
+//		}catch(SQLException e){
+//			e.printStackTrace();
+//			gravado = false;
+//			ConnectionManager.rollBack();		
+//		}finally{
+//			ConnectionManager.closeAll(ps,rs);
+//		}
+
+		return gravado;
 	}
 
 	@Override

@@ -139,7 +139,7 @@ public class PessoaApplicationService {
 	public int editar(PessoaData pessoaData) {
 		Pessoa pessoa = getPessoa(pessoaData);
 		
-		repositorio.editar(pessoa);
+		repositorio.editarPessoa(pessoa);
 		
 		return pessoa.getIdPessoa();
 	}

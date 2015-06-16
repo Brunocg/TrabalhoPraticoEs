@@ -80,9 +80,9 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	}
 
 	@Override
-	public void editar(Pessoa pessoa) {
+	public boolean editarPessoa(Pessoa pessoa) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override
