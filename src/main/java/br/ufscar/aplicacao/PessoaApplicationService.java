@@ -123,7 +123,7 @@ public class PessoaApplicationService {
 	public Page<PessoaData> listar(Pageable pageable) {		
 		List<PessoaData> result = new ArrayList<PessoaData>();
 		
-		for (Pessoa pessoa : repositorio.listar(pageable)) {
+		for (Pessoa pessoa : repositorio.listarPessoas(pageable)) {
 			result.add(getPessoaData(pessoa));		
 		}
 		

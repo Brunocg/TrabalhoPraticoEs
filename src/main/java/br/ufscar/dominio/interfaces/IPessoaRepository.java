@@ -27,7 +27,7 @@ public interface IPessoaRepository {
 	
 	public abstract boolean excluir(Pessoa pessoa);
 	
-	public abstract Page<Pessoa> listar(Pageable pageable);
+	public abstract Page<Pessoa> listarPessoas(Pageable pageable);
 	
 	public abstract boolean gravaPessoa(Pessoa pessoa);
 	public abstract boolean gravaPessoaBasico(Pessoa pessoa);
