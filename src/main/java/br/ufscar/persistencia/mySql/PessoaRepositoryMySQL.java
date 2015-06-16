@@ -17,6 +17,10 @@ import org.springframework.data.domain.Pageable;
 
 
 
+
+
+
+
 import br.ufscar.dao.ConnectionManager;
 import br.ufscar.dominio.Competencia;
 import br.ufscar.dominio.CompetenciaExperiencia;
@@ -49,6 +53,14 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String BUSCAR_EXPERIENCIA_POR_PESSOA = "SELECT idCompetenciaExperiencia, idPessoa, idCompetencia, nivel, tempoExp, observacoes, estado, ts FROM CompetenciaExperiencia C WHERE idPessoa = ?";
 
 	private static final String BUSCAR_PESSOAS_PARA_LISTAR = "SELECT idPessoa FROM Pessoa P WHERE estado = true";
+
+	private static final String EDITA_PESSOA = "UPDATE Pessoa SET nome = ?, sitCivil = ?, sexo = ?, dataNascimento = ?, CPF = ?, RG = ?, telefone = ?, celular = ?, email = ?, pagPessoal = ?, msgInst = ?, estado = ? WHERE idPessoa = ?";
+
+	private static final String EXCLUIR_ENDERECO_PESSOA = "DELETE FROM EnderecoPessoa E WHERE idEndereco = ? AND idPessoa = ?";
+
+	private static final String EDITA_EXPERIENCIA = "UPDATE CompetenciaExperiencia SET idPessoa = ?, idCompetencia = ?, nivel = ?, tempoExp = ?,observacoes = ?,estado = ? WHERE idCompetenciaExperiencia = ?";
+
+	private static final String EDITA_USUARIO = "UPDATE Usuario SET usuarioDe = ?,login = ?,senha = ?,usuarioTipo = ?,estado = ? WHERE idUsuario = ?";
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -323,14 +335,19 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		List<Endereco> enderecosComId = new ArrayList<Endereco>();
 
 		for (Endereco endereco : enderecos) {
-			int idEndereco = gravaEndereco(endereco);
-
-			if(idEndereco != 0){
-				endereco.setIdEndereco(idEndereco);
+			if(endereco.getIdEndereco() > 0){//ja existe
 				enderecosComId.add(endereco);
 			}else{
-				enderecosComId = null;
-				break;
+				
+				int idEndereco = gravaEndereco(endereco);
+				
+				if(idEndereco != 0){
+					endereco.setIdEndereco(idEndereco);
+					enderecosComId.add(endereco);
+				}else{
+					enderecosComId = null;
+					break;
+				}
 			}
 		}
 
@@ -590,81 +607,203 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	@Override
 	public boolean editarPessoa(Pessoa pessoa) {
-//		Connection mySQLConnection = null;
-//		PreparedStatement ps = null;
-//		ResultSet rs = null;
-//
-//		int idPessoa = 0;
-		boolean gravado = false;
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
 
-//		try{
-//			mySQLConnection = ConnectionManager.getConexao();
-//
-//			//Desabilita auto-commit
-//			mySQLConnection.setAutoCommit(false);
-//
-//			ps = mySQLConnection.prepareStatement(GRAVAR_PESSOA, Statement.RETURN_GENERATED_KEYS);
-//			ps.clearParameters();
-//
-//			ps.setString(1,pessoa.getNome());
-//			ps.setString(2,pessoa.getSitCivil());
-//			ps.setString(3,pessoa.getSexo());
-//			ps.setDate(4,(Date) pessoa.getDataNascimento());
-//			ps.setString(5,pessoa.getCpf());
-//			ps.setString(6,pessoa.getRg());
-//			ps.setString(7,pessoa.getTelefone());
-//			ps.setString(8,pessoa.getCelular());
-//			ps.setString(9,pessoa.getEmail());
-//			ps.setString(10,pessoa.getPagPessoal());
-//			ps.setString(11,pessoa.getMsgInst());
-//			ps.setBoolean(12,true);
-//
-//			ps.executeUpdate();
-//
-//			//parte que pega o que foi inclu�do no bd... no caso o campo id
-//			rs = ps.getGeneratedKeys(); 
-//			if(rs.next()){  
-//				idPessoa = rs.getInt(1);  
-//			}
-//
-//			pessoa.setIdPessoa(idPessoa);
-//
-//			List<Endereco> enderecos = gravaEndereco(pessoa.getEndereco());
-//			if(enderecos == null){
-//				gravado = false;
-//			}else{
-//
-//				if(gravaEnderecosPessoa(pessoa, enderecos)){
-//
-//					if(gravaExperiencias(pessoa, pessoa.getCompetenciasExperiencia())){
-//						
-//						gravado = gravaUsuario(pessoa,pessoa.getUsuario());
-//					
-//					}else{
-//						gravado = false;
-//					}
-//				}else{
-//					gravado = false;
-//				}
-//			}
-//
-//			if(gravado){
-//				//Chama commit no final do processo
-//				mySQLConnection.commit();
-//				//Habilita auto comit novamente
-//				mySQLConnection.setAutoCommit(true);
-//			}else{
-//				ConnectionManager.rollBack();
-//			}
-//		}catch(SQLException e){
-//			e.printStackTrace();
-//			gravado = false;
-//			ConnectionManager.rollBack();		
-//		}finally{
-//			ConnectionManager.closeAll(ps,rs);
-//		}
+		boolean editado = false;
 
-		return gravado;
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(EDITA_PESSOA);
+			ps.clearParameters();
+
+			ps.setString(1,pessoa.getNome());
+			ps.setString(2,pessoa.getSitCivil());
+			ps.setString(3,pessoa.getSexo());
+			ps.setDate(4,(Date) pessoa.getDataNascimento());
+			ps.setString(5,pessoa.getCpf());
+			ps.setString(6,pessoa.getRg());
+			ps.setString(7,pessoa.getTelefone());
+			ps.setString(8,pessoa.getCelular());
+			ps.setString(9,pessoa.getEmail());
+			ps.setString(10,pessoa.getPagPessoal());
+			ps.setString(11,pessoa.getMsgInst());
+			ps.setBoolean(12,true);
+			ps.setInt(13,pessoa.getIdPessoa());
+
+			ps.executeUpdate();
+
+
+			List<Endereco> enderecos = gravaEndereco(pessoa.getEndereco());
+			if(enderecos == null){
+				editado = false;
+			}else{
+
+				if(excluiEnderecosPessoa(pessoa, enderecos) && gravaEnderecosPessoa(pessoa, enderecos)){
+
+					if(editarExperiencias(pessoa, pessoa.getCompetenciasExperiencia())){
+						
+						editado = editaUsuario(pessoa,pessoa.getUsuario());
+					
+					}else{
+						editado = false;
+					}
+				}else{
+					editado = false;
+				}
+			}
+
+			if(editado){
+				//Chama commit no final do processo
+				mySQLConnection.commit();
+				//Habilita auto comit novamente
+				mySQLConnection.setAutoCommit(true);
+			}else{
+				ConnectionManager.rollBack();
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			editado = false;
+			ConnectionManager.rollBack();		
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return editado;
+	}
+
+	@Override
+	public boolean editaUsuario(Pessoa pessoa, Usuario usuario) throws SQLException {
+		boolean editado = false;
+
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(EDITA_USUARIO);
+			ps.clearParameters();
+
+			ps.setInt(1,pessoa.getIdPessoa());
+			ps.setString(2,usuario.getLogin());
+			ps.setString(3,usuario.getSenha());
+			ps.setString(4,usuario.getTipo().getDescricao());
+			ps.setBoolean(5,true);
+			ps.setInt(6,usuario.getIdUsuario());
+
+			ps.executeUpdate();
+
+			editado = true;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return editado;
+	}
+
+	@Override
+	public boolean editarExperiencias(Pessoa pessoa,
+			List<CompetenciaExperiencia> competenciasExperiencia) throws SQLException {
+		boolean editado = false;
+
+		for (CompetenciaExperiencia competenciaExperiencia : competenciasExperiencia) {
+
+			if(!editaExperiencias(pessoa, competenciaExperiencia)){
+				editado = false;
+				break;
+			}
+
+			editado = true;
+		}
+
+		return editado;
+	}
+
+	@Override
+	public boolean editaExperiencias(Pessoa pessoa,
+			CompetenciaExperiencia competenciaExperiencia) throws SQLException {
+		boolean editado = false;
+
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(EDITA_EXPERIENCIA);
+			ps.clearParameters();
+
+			ps.setInt(1,pessoa.getIdPessoa());
+			ps.setInt(2,competenciaExperiencia.getCompetencia().getIdCompetencia());
+			ps.setInt(3,competenciaExperiencia.getNivel());
+			ps.setInt(4,competenciaExperiencia.getTempoExperiencia());
+			ps.setString(5,competenciaExperiencia.getObservacoes());
+			ps.setBoolean(6,true);
+			ps.setInt(7,competenciaExperiencia.getIdExperiencia());
+
+			ps.executeUpdate();
+
+			editado = true;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return editado;
+	}
+
+	@Override
+	public boolean excluiEnderecosPessoa(Pessoa pessoa,
+			List<Endereco> enderecos) throws SQLException {
+		boolean excluido = false;
+		
+		for (Endereco endereco : enderecos) {
+			excluido = excluiEnderecoPessoa(pessoa, endereco);
+			if(!excluido){
+				break;
+			}
+		}
+		
+		return excluido;
+	}
+
+	@Override
+	public boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco) throws SQLException {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean excluido = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(EXCLUIR_ENDERECO_PESSOA);
+			ps.clearParameters();
+
+			ps.setInt(1,endereco.getIdEndereco());
+			ps.setInt(2,pessoa.getIdPessoa());
+
+			ps.executeUpdate();
+
+			excluido = true;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return excluido;
 	}
 
 	@Override

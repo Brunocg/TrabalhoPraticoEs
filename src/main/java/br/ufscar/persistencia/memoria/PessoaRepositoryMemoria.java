@@ -128,4 +128,38 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 		return null;
 	}
 
+	@Override
+	public boolean excluiEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean editarExperiencias(Pessoa pessoa,
+			List<CompetenciaExperiencia> competenciasExperiencia)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean editaExperiencias(Pessoa pessoa,
+			CompetenciaExperiencia competenciaExperiencia) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean editaUsuario(Pessoa pessoa, Usuario usuario)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
