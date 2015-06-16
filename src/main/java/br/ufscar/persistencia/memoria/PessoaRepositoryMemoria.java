@@ -92,7 +92,7 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	}
 
 	@Override
-	public Page<Pessoa> listar(Pageable pageable) {
+	public Page<Pessoa> listarPessoas(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
