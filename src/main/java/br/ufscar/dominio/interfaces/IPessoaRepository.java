@@ -30,7 +30,7 @@ public interface IPessoaRepository {
 
 	public abstract boolean editaUsuario(Pessoa pessoa, Usuario usuario) throws SQLException;
 
-	public abstract boolean excluir(Pessoa pessoa);
+	public abstract boolean excluirPessoa(Pessoa pessoa);
 	
 	public abstract Page<Pessoa> listarPessoas(Pageable pageable);
 	

@@ -86,7 +86,7 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean excluir(Pessoa pessoa) {
+	public boolean excluirPessoa(Pessoa pessoa) {
 		// TODO Auto-generated method stub
 		return false;
 	}
