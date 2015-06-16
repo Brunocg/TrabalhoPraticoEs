@@ -21,20 +21,16 @@ Ext.define("TrabalhoPraticoEsApp.view.login.Login",{
     items: {
         xtype: 'form',
         reference: 'form',
+        url: 'pessoa/usuario/login',
+        jsonSubmit: true,
         items: [{
             xtype: 'textfield',
-            name: 'username',
-            bind: {
-            	value: '{login}'
-            },
+            name: 'login',
             fieldLabel: 'Usuário',
             allowBlank: false
         }, {
             xtype: 'textfield',
-            name: 'password',
-            bind: {
-            	value: '{senha}'
-            },
+            name: 'senha',
             inputType: 'password',
             fieldLabel: 'Senha',
             allowBlank: false

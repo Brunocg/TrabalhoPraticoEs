@@ -3,21 +3,18 @@ Ext.define('TrabalhoPraticoEsApp.view.pessoa.Pessoa', {
     alias: 'widget.pessoa',
 
     requires: [
+        'TrabalhoPraticoEsApp.view.pessoa.PessoaController',
         'TrabalhoPraticoEsApp.view.pessoa.PessoaViewModel',
         'Ext.form.Panel',
         'Ext.form.field.ComboBox',
-        'Ext.form.field.Date',
-        'Ext.grid.Panel',
-        'Ext.grid.column.Number',
-        'Ext.view.Table',
-        'Ext.toolbar.Toolbar',
-        'Ext.button.Button'
+        'Ext.form.field.Date'
     ],
-
+    
+    controller: 'pessoa',
     viewModel: {
         type: 'pessoa'
     },
-    width: 780,
+    width: 480,
     title: 'Cadastro de pessoa',
 
     dockedItems: [
@@ -27,28 +24,43 @@ Ext.define('TrabalhoPraticoEsApp.view.pessoa.Pessoa', {
             layout: 'auto',
             bodyPadding: 10,
             title: '',
+            url: 'pessoa/inserir',
+            jsonSubmit: true,
             items: [
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Nome'
+                    fieldLabel: 'Nome',
+                    name: 'nome'
                 },
                 {
                     xtype: 'combobox',
                     fieldLabel: 'Sit. Civil',
                     name: 'sitCivil',
-                    value: [
-                        'Casado',
-                        'Solteiro'
-                    ]
+                    store: Ext.create('Ext.data.Store', {
+                        fields: ['sitCivil', 'desc'],
+                        data : [
+                            {'sitCivil': 'C', 'desc': 'Casado'},
+                            {'sitCivil': 'S', 'desc': 'Solteiro'}
+                        ]
+                    }),
+                    queryMode: 'local',
+                    displayField: 'desc',
+                    valueField: 'sitCivil'
                 },
                 {
                     xtype: 'combobox',
                     fieldLabel: 'Sexo',
                     name: 'sexo',
-                    value: [
-                        'Masculino',
-                        'Feminino'
-                    ]
+                    store: Ext.create('Ext.data.Store', {
+                        fields: ['sexo', 'desc'],
+                        data : [
+                            {'sexo': 'M', 'desc': 'Masculino'},
+                            {'sexo': 'F', 'desc': 'Feminino'}
+                        ]
+                    }),
+                    queryMode: 'local',
+                    displayField: 'desc',
+                    valueField: 'sexo'
                 },
                 {
                     xtype: 'datefield',
@@ -57,162 +69,55 @@ Ext.define('TrabalhoPraticoEsApp.view.pessoa.Pessoa', {
                 },
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'CPF'
+                    fieldLabel: 'CPF',
+                    name: 'cpf'
                 },
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'RG'
+                    fieldLabel: 'RG',
+                    name:'rg'
                 },
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Telefone'
+                    fieldLabel: 'Telefone',
+                    name: 'telefone'
                 },
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Celular'
+                    fieldLabel: 'Celular',
+                    name: 'celular'
                 },
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Email'
+                    fieldLabel: 'Email',
+                    name: 'email'
                 },
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Pág. pessoal'
+                    fieldLabel: 'Pág. pessoal',
+                    name: 'pagPessoal'
                 },
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Msg. Inst.'
-                },
-                {
-                    xtype: 'gridpanel',
-                    height: '100%',
-                    title: 'Endereços',
-                    columns: [
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'Rua'
-                        },
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'Bairro'
-                        },
-                        {
-                            xtype: 'numbercolumn',
-                            dataIndex: 'number',
-                            text: 'Número'
-                        },
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'Cidade'
-                        },
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'UF'
-                        },
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'País'
-                        },
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'CEP'
-                        }
-                    ],
-                    dockedItems: [
-                        {
-                            xtype: 'toolbar',
-                            dock: 'top',
-                            items: [
-                                {
-                                    xtype: 'button',
-                                    text: 'Adicionar'
-                                },
-                                {
-                                    xtype: 'button',
-                                    text: 'Remover'
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    xtype: 'gridpanel',
-                    height: '100%',
-                    title: 'Competências',
-                    columns: [
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'Rua'
-                        },
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'Bairro'
-                        },
-                        {
-                            xtype: 'numbercolumn',
-                            dataIndex: 'number',
-                            text: 'Número'
-                        },
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'Cidade'
-                        },
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'UF'
-                        },
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'País'
-                        },
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'string',
-                            text: 'CEP'
-                        }
-                    ],
-                    dockedItems: [
-                        {
-                            xtype: 'toolbar',
-                            dock: 'top',
-                            items: [
-                                {
-                                    xtype: 'button',
-                                    text: 'Adicionar'
-                                },
-                                {
-                                    xtype: 'button',
-                                    text: 'Remover'
-                                }
-                            ]
-                        }
-                    ]
+                    fieldLabel: 'Msg. Inst.',
+                    name: 'msgInst'
                 }
+            ],
+            buttons: [
+	            {
+	                text: 'Gravar',
+	                formBind: true,
+	                listeners: {
+	                    click: 'onSaveClick'
+	                }
+	            },{
+	                text: 'Limpar',
+	                listeners: {
+	                    click: 'onClearClick'
+	                }
+	            }
             ]
         }
-    ],
-    buttons: [{
-        text: 'Login',
-        formBind: true,
-        listeners: {
-            click: 'onSignInClick'
-        }
-    },{
-        text: 'Cadastrar usuário',
-        listeners: {
-            click: 'onSignUpClick'
-        }
-    }]
+    ]
 
 });
