@@ -45,6 +45,24 @@ public class Responsavel extends br.ufscar.dominio.Pessoa {
 		this.feedbacksRecebidos = feedbacksRecebidos;
 		this.competenciasCategoriaAprovadas = competenciasCategoriaAprovadas;
 	}
+	
+	public Responsavel(Pessoa pessoa, List<Projeto> projeto,
+			List<ProjetoAtividade> projetoAtividades,
+			List<Usuario> usuariosAprovados,
+			List<Competencia> competenciasAprovadas,
+			List<Feedback> feedbackCriados, List<Feedback> feedbacksRecebidos,
+			List<CompetenciaCategoria> competenciasCategoriaAprovadas) {
+		super(pessoa.getIdPessoa(), pessoa.getNome(), pessoa.getSitCivil(), pessoa.getSexo(), pessoa.getDataNascimento(), pessoa.getCpf(), pessoa.getRg(), pessoa.getEndereco(),
+				pessoa.getTelefone(), pessoa.getCelular(), pessoa.getEmail(), pessoa.getPagPessoal(), pessoa.getMsgInst(), pessoa.getUsuario(), pessoa.isEstado(), pessoa.getTs(),
+				pessoa.getCompetenciasExperiencia());
+		this.projeto = projeto;
+		this.projetoAtividades = projetoAtividades;
+		this.usuariosAprovados = usuariosAprovados;
+		this.competenciasAprovadas = competenciasAprovadas;
+		this.feedbackCriados = feedbackCriados;
+		this.feedbacksRecebidos = feedbacksRecebidos;
+		this.competenciasCategoriaAprovadas = competenciasCategoriaAprovadas;
+	}
 
 	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
 

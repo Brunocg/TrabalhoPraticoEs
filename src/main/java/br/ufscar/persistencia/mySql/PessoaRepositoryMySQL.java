@@ -10,8 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 //import org.springframework.stereotype.Repository;
+
+
 
 
 import br.ufscar.dao.ConnectionManager;
@@ -44,6 +47,8 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String BUSCAR_USUARIO_POR_PESSOA = "SELECT idPessoa, usuarioDe, aprovadoPor, login, senha, usuarioTipo, ultimoLogin, estado, ts FROM Usuario U WHERE login = ?";
 
 	private static final String BUSCAR_EXPERIENCIA_POR_PESSOA = "SELECT idCompetenciaExperiencia, idPessoa, idCompetencia, nivel, tempoExp, observacoes, estado, ts FROM CompetenciaExperiencia C WHERE idPessoa = ?";
+
+	private static final String BUSCAR_PESSOAS_PARA_LISTAR = "SELECT idPessoa FROM Pessoa P WHERE estado = true";
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -597,8 +602,28 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	@Override
 	public Page<Pessoa> listarPessoas(Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Pessoa> pessoasList = new ArrayList<Pessoa>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_PESSOAS_PARA_LISTAR);
+			ps.clearParameters();
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				pessoasList.add(recuperarPessoaPorId(rs.getInt("idPessoa")));
+				
+			}
+		} catch (SQLException e) {
+			pessoasList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+		Page<Pessoa> pessoas = new PageImpl<Pessoa>(pessoasList);
+		return pessoas;
 	}
 
 }

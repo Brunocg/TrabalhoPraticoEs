@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import br.ufscar.dao.ConnectionManager;
 import br.ufscar.dominio.Competencia;
 import br.ufscar.dominio.CompetenciaCategoria;
+import br.ufscar.dominio.Pessoa;
 import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.interfaces.ICompetenciaRepository;
 
