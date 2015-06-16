@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 
 
 
+
 import br.ufscar.dao.ConnectionManager;
 import br.ufscar.dominio.Competencia;
 import br.ufscar.dominio.CompetenciaExperiencia;
@@ -61,6 +62,8 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String EDITA_EXPERIENCIA = "UPDATE CompetenciaExperiencia SET idPessoa = ?, idCompetencia = ?, nivel = ?, tempoExp = ?,observacoes = ?,estado = ? WHERE idCompetenciaExperiencia = ?";
 
 	private static final String EDITA_USUARIO = "UPDATE Usuario SET usuarioDe = ?,login = ?,senha = ?,usuarioTipo = ?,estado = ? WHERE idUsuario = ?";
+
+	private static final String EXCLUIR_PESSOA = "UPDATE Pessoa SET estado = ? WHERE idPessoa = ?";
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -808,8 +811,30 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	@Override
 	public boolean excluirPessoa(Pessoa pessoa) {
-		// TODO Auto-generated method stub
-		return false;
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		boolean excluido = false; 
+
+		try {
+
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(EXCLUIR_PESSOA);
+			ps.clearParameters();
+
+			ps.setBoolean(1, false);
+			ps.setInt(2, pessoa.getIdPessoa());
+
+			ps.executeUpdate();
+
+			excluido = true;
+
+		} catch (SQLException e) {
+			excluido = false;
+			e.printStackTrace();
+		}finally	{
+			ConnectionManager.closeAll(ps);
+		}
+		return excluido;
 	}
 
 	@Override
