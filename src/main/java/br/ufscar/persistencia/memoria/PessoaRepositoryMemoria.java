@@ -1,6 +1,5 @@
 package br.ufscar.persistencia.memoria;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -153,8 +152,7 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean editaUsuario(Pessoa pessoa, Usuario usuario)
-			throws SQLException {
+	public boolean editaUsuario(Pessoa pessoa, Usuario usuario) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -693,7 +693,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean editaUsuario(Pessoa pessoa, Usuario usuario) throws SQLException {
+	public boolean editaUsuario(Pessoa pessoa, Usuario usuario) {
 		boolean editado = false;
 
 		Connection mySQLConnection = null;
@@ -718,6 +718,11 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			ps.executeUpdate();
 
 			editado = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			editado = false;
+			ConnectionManager.rollBack();	
 		}finally{
 			ConnectionManager.closeAll(ps);
 		}

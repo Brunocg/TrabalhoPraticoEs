@@ -1,6 +1,5 @@
 package br.ufscar.dominio.interfaces;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -28,7 +27,7 @@ public interface IPessoaRepository {
 	public abstract boolean editarExperiencias(Pessoa pessoa, List<CompetenciaExperiencia> competenciasExperiencia);
 	public abstract boolean editaExperiencias(Pessoa pessoa, CompetenciaExperiencia competenciaExperiencia);
 
-	public abstract boolean editaUsuario(Pessoa pessoa, Usuario usuario) throws SQLException;
+	public abstract boolean editaUsuario(Pessoa pessoa, Usuario usuario) ;
 
 	public abstract boolean excluirPessoa(Pessoa pessoa);
 	
