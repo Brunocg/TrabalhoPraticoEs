@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,25 +39,21 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String GRAVAR_ENDERECO_PESSOA = "INSERT INTO EnderecoPessoa (idEndereco,idPessoa,ts) VALUES (?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_EXPERIENCIA = "INSERT INTO CompetenciaExperiencia (idPessoa, idCompetencia, nivel, tempoExp,observacoes,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_USUARIO = "INSERT INTO Usuario (usuarioDe,login,senha,usuarioTipo,estado,ts) VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)";
+	
 	private static final String BUSCAR_PESSOA_POR_LOGIN = "SELECT usuarioDe FROM Usuario U WHERE login = ?";
 	private static final String BUSCAR_PESSOA_POR_ID = "SELECT idPessoa, nome, sitCivil, sexo, dataNascimento, CPF, RG, telefone, celular, email, pagPessoal, msgInst, estado, ts FROM Pessoa P WHERE idPessoa = ?";
+	private static final String BUSCAR_PESSOAS_PARA_LISTAR = "SELECT idPessoa FROM Pessoa P WHERE estado = true";
 	private static final String BUSCAR_ENDERECOS_POR_PESSOA = "SELECT E.idEndereco, E.rua, E.bairro, E.numero, E.cidade, E.uf, E.pais, E.cep, E.estado, E.ts FROM Endereco E INNER JOIN EnderecoPessoa EP ON EP.idEndereco = E.idEndereco WHERE EP.idPessoa = ?";
 	private static final String BUSCAR_MORADORES_POR_ENDERECO = "SELECT EP.idPessoa, P.nome FROM EnderecoPessoa EP INNER JOIN Pessoa P ON P.idPessoa = EP.idPessoa WHERE idEndereco = ?";
-	private static final String BUSCAR_USUARIO_POR_PESSOA = "SELECT idPessoa, usuarioDe, aprovadoPor, login, senha, usuarioTipo, ultimoLogin, estado, ts FROM Usuario U WHERE login = ?";
-
+	private static final String BUSCAR_USUARIO_POR_PESSOA = "SELECT usuarioDe, aprovadoPor, login, senha, usuarioTipo, ultimoLogin, estado, ts FROM Usuario U WHERE usuarioDe = ?";
 	private static final String BUSCAR_EXPERIENCIA_POR_PESSOA = "SELECT idCompetenciaExperiencia, idPessoa, idCompetencia, nivel, tempoExp, observacoes, estado, ts FROM CompetenciaExperiencia C WHERE idPessoa = ?";
 
-	private static final String BUSCAR_PESSOAS_PARA_LISTAR = "SELECT idPessoa FROM Pessoa P WHERE estado = true";
-
 	private static final String EDITA_PESSOA = "UPDATE Pessoa SET nome = ?, sitCivil = ?, sexo = ?, dataNascimento = ?, CPF = ?, RG = ?, telefone = ?, celular = ?, email = ?, pagPessoal = ?, msgInst = ?, estado = ? WHERE idPessoa = ?";
-
-	private static final String EXCLUIR_ENDERECO_PESSOA = "DELETE FROM EnderecoPessoa E WHERE idEndereco = ? AND idPessoa = ?";
-
 	private static final String EDITA_EXPERIENCIA = "UPDATE CompetenciaExperiencia SET idPessoa = ?, idCompetencia = ?, nivel = ?, tempoExp = ?,observacoes = ?,estado = ? WHERE idCompetenciaExperiencia = ?";
-
 	private static final String EDITA_USUARIO = "UPDATE Usuario SET usuarioDe = ?,login = ?,senha = ?,usuarioTipo = ?,estado = ? WHERE idUsuario = ?";
 
 	private static final String EXCLUIR_PESSOA = "UPDATE Pessoa SET estado = ? WHERE idPessoa = ?";
+	private static final String EXCLUIR_ENDERECO_PESSOA = "DELETE FROM EnderecoPessoa E WHERE idEndereco = ? AND idPessoa = ?";
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -77,7 +74,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			ps.clearParameters();
 
 			ps.setString(1,pessoa.getNome());
-			ps.setDate(2,(Date) pessoa.getDataNascimento());
+			ps.setString(2,new SimpleDateFormat("yyyy-MM-dd").format(pessoa.getDataNascimento()));
 			ps.setString(3,pessoa.getCpf());
 			ps.setString(4,pessoa.getRg());
 			ps.setString(5,pessoa.getEmail());
@@ -137,7 +134,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			ps.setString(1,pessoa.getNome());
 			ps.setString(2,pessoa.getSitCivil());
 			ps.setString(3,pessoa.getSexo());
-			ps.setDate(4,(Date) pessoa.getDataNascimento());
+			ps.setString(4, new SimpleDateFormat("yyyy-MM-dd").format(pessoa.getDataNascimento()));
 			ps.setString(5,pessoa.getCpf());
 			ps.setString(6,pessoa.getRg());
 			ps.setString(7,pessoa.getTelefone());
@@ -507,7 +504,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			rs = ps.executeQuery();
 			if(rs.next()){
 
-				int idUsuario = rs.getInt("idPessoa");
+				int idUsuario = rs.getInt("usuarioDe");
 				String login = rs.getString("login");
 				String senha = rs.getString("senha");
 				java.util.Date ultimoLogin = rs.getDate("ultimoLogin");

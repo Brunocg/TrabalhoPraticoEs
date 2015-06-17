@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import br.ufscar.consulta.EnderecoData;
 import br.ufscar.consulta.LoginData;
 import br.ufscar.consulta.PessoaData;
-import br.ufscar.consulta.UsuarioData;
 import br.ufscar.dominio.Endereco;
 import br.ufscar.dominio.Pessoa;
 import br.ufscar.dominio.Usuario;
+import br.ufscar.dominio.UsuarioTipo;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
 
@@ -56,7 +56,7 @@ public class PessoaApplicationService {
 							  pessoaData.getEmail(), 
 							  pessoaData.getPagPessoal(), 
 							  pessoaData.getMsgInst(), 
-							  new Usuario(pessoaData.getIdUsuario(), pessoaData.getLogin(), pessoaData.getSenha(), null, false, null, null, null), 
+							  new Usuario(pessoaData.getIdUsuario(), pessoaData.getLogin(), pessoaData.getSenha(), null, false, null, null, UsuarioTipo.COLABORADOR), 
 							  pessoaData.isEstado(), 
 							  pessoaData.getTs(), 
 							  null);	
@@ -112,7 +112,7 @@ public class PessoaApplicationService {
 		
 		Pessoa pessoa = getPessoa(pessoaData);
 		
-		repositorio.gravaPessoa(pessoa);
+		repositorio.gravaPessoaBasico(pessoa);
 		
 		return pessoa.getIdPessoa();
 	}
