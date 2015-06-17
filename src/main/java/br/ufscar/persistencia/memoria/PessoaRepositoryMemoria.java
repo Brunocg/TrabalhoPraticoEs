@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 
 import br.ufscar.dominio.CompetenciaExperiencia;
 import br.ufscar.dominio.Endereco;
@@ -14,7 +13,7 @@ import br.ufscar.dominio.Usuario;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
 
-@Repository
+//@Repository
 public class PessoaRepositoryMemoria implements IPessoaRepository  {
 
 	@Override
@@ -24,45 +23,45 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean gravaUsuario(Pessoa pessoa, Usuario usuario) throws SQLException {
+	public boolean gravaUsuario(Pessoa pessoa, Usuario usuario) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean gravaExperiencias(Pessoa pessoa,
-			List<CompetenciaExperiencia> competenciasExperiencia) throws SQLException {
+			List<CompetenciaExperiencia> competenciasExperiencia) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean gravaExperiencias(Pessoa pessoa,
-			CompetenciaExperiencia competenciaExperiencia) throws SQLException {
+			CompetenciaExperiencia competenciaExperiencia) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public boolean gravaEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) throws SQLException {
+	public boolean gravaEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public boolean gravaEnderecosPessoa(Pessoa pessoa, Endereco endereco) throws SQLException {
+	public boolean gravaEnderecosPessoa(Pessoa pessoa, Endereco endereco) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public List<Endereco> gravaEndereco(List<Endereco> enderecos) throws SQLException {
+	public List<Endereco> gravaEndereco(List<Endereco> enderecos) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int gravaEndereco(Endereco endereco) throws SQLException {
+	public int gravaEndereco(Endereco endereco) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -141,14 +140,14 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	@Override
 	public boolean editarExperiencias(Pessoa pessoa,
 			List<CompetenciaExperiencia> competenciasExperiencia)
-			throws SQLException {
+			 {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean editaExperiencias(Pessoa pessoa,
-			CompetenciaExperiencia competenciaExperiencia) throws SQLException {
+			CompetenciaExperiencia competenciaExperiencia)  {
 		// TODO Auto-generated method stub
 		return false;
 	}

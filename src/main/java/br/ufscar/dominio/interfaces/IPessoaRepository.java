@@ -25,8 +25,8 @@ public interface IPessoaRepository {
 
 	public abstract boolean editarPessoa(Pessoa pessoa);
 	
-	public abstract boolean editarExperiencias(Pessoa pessoa, List<CompetenciaExperiencia> competenciasExperiencia) throws SQLException;
-	public abstract boolean editaExperiencias(Pessoa pessoa, CompetenciaExperiencia competenciaExperiencia) throws SQLException;
+	public abstract boolean editarExperiencias(Pessoa pessoa, List<CompetenciaExperiencia> competenciasExperiencia);
+	public abstract boolean editaExperiencias(Pessoa pessoa, CompetenciaExperiencia competenciaExperiencia);
 
 	public abstract boolean editaUsuario(Pessoa pessoa, Usuario usuario) throws SQLException;
 
@@ -37,17 +37,17 @@ public interface IPessoaRepository {
 	public abstract boolean gravaPessoa(Pessoa pessoa);
 	public abstract boolean gravaPessoaBasico(Pessoa pessoa);
 	
-	public abstract boolean gravaUsuario(Pessoa pessoa, Usuario usuario) throws SQLException;
+	public abstract boolean gravaUsuario(Pessoa pessoa, Usuario usuario);
 	
-	public abstract boolean gravaExperiencias(Pessoa pessoa, List<CompetenciaExperiencia> competenciasExperiencia) throws SQLException;
-	public abstract boolean gravaExperiencias(Pessoa pessoa, CompetenciaExperiencia competenciaExperiencia) throws SQLException;
+	public abstract boolean gravaExperiencias(Pessoa pessoa, List<CompetenciaExperiencia> competenciasExperiencia);
+	public abstract boolean gravaExperiencias(Pessoa pessoa, CompetenciaExperiencia competenciaExperiencia);
 	
-	public abstract boolean gravaEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) throws SQLException;
-	public abstract boolean gravaEnderecosPessoa(Pessoa pessoa, Endereco endereco) throws SQLException;
-	public abstract List<Endereco> gravaEndereco(List<Endereco> enderecos) throws SQLException;
-	public abstract int gravaEndereco(Endereco endereco) throws SQLException;
+	public abstract boolean gravaEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos);
+	public abstract boolean gravaEnderecosPessoa(Pessoa pessoa, Endereco endereco);
+	public abstract List<Endereco> gravaEndereco(List<Endereco> enderecos);
+	public abstract int gravaEndereco(Endereco endereco);
 	
-	public abstract boolean excluiEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) throws SQLException;
-	public abstract boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco) throws SQLException;
+	public abstract boolean excluiEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos);
+	public abstract boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco);
 	
 }

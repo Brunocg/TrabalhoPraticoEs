@@ -13,14 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 //import org.springframework.stereotype.Repository;
-
-
-
-
-
-
-
-
+import org.springframework.stereotype.Repository;
 
 import br.ufscar.dao.ConnectionManager;
 import br.ufscar.dominio.Competencia;
@@ -34,7 +27,7 @@ import br.ufscar.dominio.interfaces.ICompetenciaRepository;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
 
-//@Repository
+@Repository
 public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	
 	private ICompetenciaRepository _repositorioDeCompetencia = new CompetenciaRepositoryMySQL();
@@ -203,7 +196,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean gravaUsuario(Pessoa pessoa, Usuario usuario) throws SQLException {
+	public boolean gravaUsuario(Pessoa pessoa, Usuario usuario){
 		boolean gravado = false;
 
 		Connection mySQLConnection = null;
@@ -227,6 +220,11 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			ps.executeUpdate();
 
 			gravado = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			gravado = false;
+			ConnectionManager.rollBack();
 		}finally{
 			ConnectionManager.closeAll(ps);
 		}
@@ -236,7 +234,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	@Override
 	public boolean gravaExperiencias(Pessoa pessoa,
-			List<CompetenciaExperiencia> competenciasExperiencia) throws SQLException {
+			List<CompetenciaExperiencia> competenciasExperiencia){
 
 		boolean gravado = false;
 
@@ -255,7 +253,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	@Override
 	public boolean gravaExperiencias(Pessoa pessoa,
-			CompetenciaExperiencia competenciaExperiencia) throws SQLException {
+			CompetenciaExperiencia competenciaExperiencia){
 		
 		boolean gravado = false;
 
@@ -281,6 +279,11 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			ps.executeUpdate();
 
 			gravado = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			gravado = false;
+			ConnectionManager.rollBack();
 		}finally{
 			ConnectionManager.closeAll(ps);
 		}
@@ -289,7 +292,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean gravaEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) throws SQLException {
+	public boolean gravaEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos){
 		boolean gravado = false;
 
 		for (Endereco endereco : enderecos) {
@@ -303,7 +306,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean gravaEnderecosPessoa(Pessoa pessoa, Endereco endereco) throws SQLException {
+	public boolean gravaEnderecosPessoa(Pessoa pessoa, Endereco endereco){
 
 		boolean gravado = false;
 
@@ -325,6 +328,11 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			ps.executeUpdate();
 
 			gravado = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			gravado = false;
+			ConnectionManager.rollBack();
 		}finally{
 			ConnectionManager.closeAll(ps);
 		}
@@ -333,7 +341,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public List<Endereco> gravaEndereco(List<Endereco> enderecos) throws SQLException {
+	public List<Endereco> gravaEndereco(List<Endereco> enderecos) {
 
 		List<Endereco> enderecosComId = new ArrayList<Endereco>();
 
@@ -359,7 +367,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public int gravaEndereco(Endereco endereco) throws SQLException {
+	public int gravaEndereco(Endereco endereco) {
 
 		Connection mySQLConnection = null;
 		PreparedStatement ps = null;
@@ -392,6 +400,11 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			if(rs.next()){  
 				idEndereco = rs.getInt(1);  
 			}
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			idEndereco = 0;
+			ConnectionManager.rollBack();
 		}finally{
 			ConnectionManager.closeAll(ps,rs);
 		}
@@ -714,7 +727,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	@Override
 	public boolean editarExperiencias(Pessoa pessoa,
-			List<CompetenciaExperiencia> competenciasExperiencia) throws SQLException {
+			List<CompetenciaExperiencia> competenciasExperiencia) {
 		boolean editado = false;
 
 		for (CompetenciaExperiencia competenciaExperiencia : competenciasExperiencia) {
@@ -732,7 +745,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	@Override
 	public boolean editaExperiencias(Pessoa pessoa,
-			CompetenciaExperiencia competenciaExperiencia) throws SQLException {
+			CompetenciaExperiencia competenciaExperiencia) {
 		boolean editado = false;
 
 		Connection mySQLConnection = null;
@@ -758,6 +771,11 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			ps.executeUpdate();
 
 			editado = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			editado = false;
+			ConnectionManager.rollBack();
 		}finally{
 			ConnectionManager.closeAll(ps);
 		}
@@ -767,7 +785,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	@Override
 	public boolean excluiEnderecosPessoa(Pessoa pessoa,
-			List<Endereco> enderecos) throws SQLException {
+			List<Endereco> enderecos) {
 		boolean excluido = false;
 		
 		for (Endereco endereco : enderecos) {
@@ -781,7 +799,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco) throws SQLException {
+	public boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco) {
 		Connection mySQLConnection = null;
 		PreparedStatement ps = null;
 
@@ -802,6 +820,11 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			ps.executeUpdate();
 
 			excluido = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			excluido = false;
+			ConnectionManager.rollBack();
 		}finally{
 			ConnectionManager.closeAll(ps);
 		}
