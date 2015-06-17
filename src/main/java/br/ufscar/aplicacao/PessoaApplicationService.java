@@ -148,13 +148,13 @@ public class PessoaApplicationService {
 	}
 
 	public boolean excluir(int pessoaId) {
-		return repositorio.excluir(repositorio.recuperarPessoaPorId(pessoaId));
+		return repositorio.excluirPessoa(repositorio.recuperarPessoaPorId(pessoaId));
 	}
 
 	public int editar(PessoaData pessoaData) {
 		Pessoa pessoa = getPessoa(pessoaData);
 		
-		repositorio.editar(pessoa);
+		repositorio.editarPessoa(pessoa);
 		
 		return pessoa.getIdPessoa();
 	}

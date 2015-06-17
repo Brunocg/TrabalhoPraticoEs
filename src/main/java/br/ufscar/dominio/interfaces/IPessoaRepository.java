@@ -23,9 +23,14 @@ public interface IPessoaRepository {
 	
 	public abstract List<CompetenciaExperiencia> recuperarExperienciaPorPessoa(int idPessoa);
 
-	public abstract void editar(Pessoa pessoa);
+	public abstract boolean editarPessoa(Pessoa pessoa);
 	
-	public abstract boolean excluir(Pessoa pessoa);
+	public abstract boolean editarExperiencias(Pessoa pessoa, List<CompetenciaExperiencia> competenciasExperiencia) throws SQLException;
+	public abstract boolean editaExperiencias(Pessoa pessoa, CompetenciaExperiencia competenciaExperiencia) throws SQLException;
+
+	public abstract boolean editaUsuario(Pessoa pessoa, Usuario usuario) throws SQLException;
+
+	public abstract boolean excluirPessoa(Pessoa pessoa);
 	
 	public abstract Page<Pessoa> listarPessoas(Pageable pageable);
 	
@@ -41,5 +46,8 @@ public interface IPessoaRepository {
 	public abstract boolean gravaEnderecosPessoa(Pessoa pessoa, Endereco endereco) throws SQLException;
 	public abstract List<Endereco> gravaEndereco(List<Endereco> enderecos) throws SQLException;
 	public abstract int gravaEndereco(Endereco endereco) throws SQLException;
+	
+	public abstract boolean excluiEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) throws SQLException;
+	public abstract boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco) throws SQLException;
 	
 }
