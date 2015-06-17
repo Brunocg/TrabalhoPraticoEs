@@ -43,18 +43,6 @@ public class PessoaApplicationService {
 											   endereco.getCep(), 
 											   null));
 			
-			Usuario usuario = null;
-			
-			if (pessoaData.getUsuario() != null)
-				usuario = new Usuario(pessoaData.getUsuario().getIdUsuario(), 
-									  pessoaData.getUsuario().getLogin(), 
-									  pessoaData.getUsuario().getSenha(), 
-									  pessoaData.getUsuario().getUltimoLogin(), 
-									  pessoaData.getUsuario().isEstado(), 
-									  pessoaData.getUsuario().getTs(), 
-									  null, 
-									  null);
-			
 			return new Pessoa(pessoaData.getIdPessoa(), 
 							  pessoaData.getNome(), 
 							  pessoaData.getSitCivil(), 
@@ -68,7 +56,7 @@ public class PessoaApplicationService {
 							  pessoaData.getEmail(), 
 							  pessoaData.getPagPessoal(), 
 							  pessoaData.getMsgInst(), 
-							  usuario, 
+							  new Usuario(pessoaData.getIdUsuario(), pessoaData.getLogin(), pessoaData.getSenha(), null, false, null, null, null), 
 							  pessoaData.isEstado(), 
 							  pessoaData.getTs(), 
 							  null);	
@@ -91,32 +79,26 @@ public class PessoaApplicationService {
 												   endereco.getUf(), 
 												   endereco.getPais(), 
 												   endereco.getCep()));
-			UsuarioData usuario = null;
 			
 			if (pessoa.getUsuario() != null)
-				usuario = new UsuarioData(pessoa.getUsuario().getIdUsuario(), 
-										  pessoa.getUsuario().getLogin(), 
-										  pessoa.getUsuario().getSenha(), 
-										  pessoa.getUsuario().getUltimoLogin(), 
-										  pessoa.getUsuario().isEstado(), 
-										  pessoa.getUsuario().getTs());
-			
-		    return new PessoaData(pessoa.getIdPessoa(), 
-		    					  pessoa.getNome(), 
-		    					  pessoa.getSitCivil(), 
-		    					  pessoa.getSexo(), 
-		    					  pessoa.getDataNascimento(), 
-		    					  pessoa.getCpf(), 
-		    					  pessoa.getRg(), 
-		    					  enderecos, 
-		    					  pessoa.getTelefone(), 
-		    					  pessoa.getCelular(), 
-		    					  pessoa.getEmail(), 
-		    					  pessoa.getPagPessoal(), 
-		    					  pessoa.getMsgInst(), 
-		    					  usuario, 
-		    					  pessoa.isEstado(), 
-		    					  pessoa.getTs());	
+			    return new PessoaData(pessoa.getIdPessoa(), 
+			    					  pessoa.getNome(), 
+			    					  pessoa.getSitCivil(), 
+			    					  pessoa.getSexo(), 
+			    					  pessoa.getDataNascimento(), 
+			    					  pessoa.getCpf(), 
+			    					  pessoa.getRg(), 
+			    					  enderecos, 
+			    					  pessoa.getTelefone(), 
+			    					  pessoa.getCelular(), 
+			    					  pessoa.getEmail(), 
+			    					  pessoa.getPagPessoal(), 
+			    					  pessoa.getMsgInst(), 
+			    					  pessoa.getUsuario().getIdUsuario(), 
+			    					  pessoa.getUsuario().getLogin(),
+			    					  pessoa.getUsuario().getSenha(),
+			    					  pessoa.isEstado(), 
+			    					  pessoa.getTs());	
 		}
 		
 		return null;

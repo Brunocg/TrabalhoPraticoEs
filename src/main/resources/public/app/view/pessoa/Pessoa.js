@@ -105,6 +105,24 @@ Ext.define('TrabalhoPraticoEsApp.view.pessoa.Pessoa', {
                     xtype: 'textfield',
                     fieldLabel: 'Msg. Inst.',
                     name: 'msgInst'
+                },
+                {
+                	xtype: 'form',
+                	bodyPadding: 10,
+                	title: 'Usuario',
+                	name: 'usuario',
+                	items: [
+                	    {
+                	    	xtype: 'textfield',
+                	    	fieldLabel: 'Login',
+                	    	name: 'login'
+                	    },
+                	    {
+                	    	xtype: 'textfield',
+                	    	fieldLabel: 'Senha',
+                	    	name: 'senha'
+                	    }
+		            ]
                 }
             ],
             buttons: [

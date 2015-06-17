@@ -18,7 +18,10 @@ public class PessoaData {
 	private String email;
 	private String pagPessoal;
 	private String msgInst;
-	private UsuarioData usuario;
+	private int idUsuario;
+	private String login;
+	private String senha;
+	//private UsuarioData usuario;
 	private boolean estado;
 	private Date ts;
 	//private List<CompetenciaExperiencia> competenciasExperiencia = null;
@@ -31,7 +34,7 @@ public class PessoaData {
 	public PessoaData(int idPessoa, String nome, String sitCivil, String sexo,
 			Date dataNascimento, String cpf, String rg, List<EnderecoData> enderecos,
 			String telefone, String celular, String email, String pagPessoal,
-			String msgInst, UsuarioData usuario, boolean estado, Date ts) {
+			String msgInst, int idUsuario, String login, String senha, boolean estado, Date ts) {
 		super();
 		this.idPessoa = idPessoa;
 		this.nome = nome;
@@ -46,7 +49,10 @@ public class PessoaData {
 		this.email = email;
 		this.pagPessoal = pagPessoal;
 		this.msgInst = msgInst;
-		this.usuario = usuario;
+		this.idUsuario = idUsuario;
+		this.login = login;
+		this.senha = senha;
+		//this.usuario = usuario;
 		this.estado = estado;
 		this.ts = ts;
 	}	
@@ -159,13 +165,13 @@ public class PessoaData {
 		this.msgInst = msgInst;
 	}
 
-	public UsuarioData getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(UsuarioData usuario) {
-		this.usuario = usuario;
-	}
+//	public UsuarioData getUsuario() {
+//		return usuario;
+//	}
+//
+//	public void setUsuario(UsuarioData usuario) {
+//		this.usuario = usuario;
+//	}
 
 	public boolean isEstado() {
 		return estado;
@@ -181,6 +187,30 @@ public class PessoaData {
 
 	public void setTs(Date ts) {
 		this.ts = ts;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public int getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(int idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 }
