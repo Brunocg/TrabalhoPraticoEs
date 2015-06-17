@@ -18,38 +18,44 @@ Ext.define("TrabalhoPraticoEsApp.view.login.Login",{
     closable: false,
     autoShow: true,
 
-    items: {
-        xtype: 'form',
-        reference: 'form',
-        url: 'pessoa/usuario/login',
-        jsonSubmit: true,
-        items: [{
-            xtype: 'textfield',
-            name: 'login',
-            fieldLabel: 'Usuário',
-            allowBlank: false
-        }, {
-            xtype: 'textfield',
-            name: 'senha',
-            inputType: 'password',
-            fieldLabel: 'Senha',
-            allowBlank: false
-        }, {
-            xtype: 'displayfield',
-            hideEmptyLabel: false,
-            value: 'Entre com qualquer senha.'
-        }],
-        buttons: [{
-            text: 'Login',
-            formBind: true,
-            listeners: {
-                click: 'onSignInClick'
-            }
-        },{
-            text: 'Cadastrar usuário',
-            listeners: {
-                click: 'onSignUpClick'
-            }
-        }]
-    }
+    items: [
+	    {
+	        xtype: 'form',
+	        reference: 'form',
+	        url: 'pessoa/usuario/login',
+	        jsonSubmit: true,
+	        items: [
+		        {
+		            xtype: 'textfield',
+		            name: 'login',
+		            fieldLabel: 'Usuário',
+		            allowBlank: false
+		        }, {
+		            xtype: 'textfield',
+		            name: 'senha',
+		            inputType: 'password',
+		            fieldLabel: 'Senha',
+		            allowBlank: false
+		        }, {
+		            xtype: 'displayfield',
+		            hideEmptyLabel: false,
+		            value: 'Entre com qualquer senha.'
+		        }
+		    ],
+		    buttons: [
+		        {
+		            text: 'Login',
+		            formBind: true,
+		            listeners: {
+		                click: 'onSignInClick'
+		            }
+		        },{
+		            text: 'Cadastrar usuário',
+		            listeners: {
+		                click: 'onSignUpClick'
+		            }
+		        }
+	        ]
+	    }
+	]
 });

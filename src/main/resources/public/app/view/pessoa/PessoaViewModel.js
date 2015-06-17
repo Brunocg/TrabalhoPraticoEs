@@ -5,11 +5,11 @@ Ext.define('TrabalhoPraticoEsApp.view.pessoa.PessoaViewModel', {
     statics: {
     	gravarPessoa: function(form, success, failure){
     		form.submit({
-    			method:'POST', 
-    			waitTitle:'Connecting', 
-    			waitMsg:'Gravando...',
-    			success:success,
-    			failure:failure
+    			method: 'POST', 
+    			waitTitle: 'Connecting', 
+    			waitMsg: 'Gravando...',
+    			success: success,
+    			failure: failure
     		});
         }
     }

@@ -69,14 +69,12 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 
 	@Override
 	public Pessoa recuperarPessoaPorId(int pessoaId) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Pessoa(34, "", "", "", null, "", "", null, "", "", "", "", "", new Usuario(0, "Bruno", "teste", null, false, null, null, null), false, null, null);
 	}
 
 	@Override
 	public Pessoa recuperarPessoaPorLogin(String login) {
-		// TODO Auto-generated method stub
-		return new Pessoa(0, login, login, login, null, login, login, null, login, login, login, login, login, new Usuario(0, "Bruno", "teste", null, false, null, null, null), false, null, null);
+		return new Pessoa(34, login, login, login, null, login, login, null, login, login, login, login, login, new Usuario(0, "Bruno", "teste", null, false, null, null, null), false, null, null);
 	}
 
 	@Override

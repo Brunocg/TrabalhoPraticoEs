@@ -30,18 +30,23 @@ public class PessoaApplicationService {
 	Pessoa getPessoa(PessoaData pessoaData) {
 		List<Endereco> enderecos = new ArrayList<Endereco>();
 		
-		for (EnderecoData endereco: pessoaData.getEndereco())
-			enderecos.add(new Endereco(endereco.getIdEndereco(),
-									   endereco.getRua(), 
-									   endereco.getBairro(), 
-									   endereco.getNumero(), 
-									   endereco.getCidade(), 
-									   endereco.getUf(), 
-									   endereco.getPais(), 
-									   endereco.getCep(), 
-									   null));
-		
-		Usuario usuario = new Usuario(pessoaData.getUsuario().getIdUsuario(), 
+		if (pessoaData != null) {
+			if (pessoaData.getEndereco() != null)
+				for (EnderecoData endereco: pessoaData.getEndereco())
+					enderecos.add(new Endereco(endereco.getIdEndereco(),
+											   endereco.getRua(), 
+											   endereco.getBairro(), 
+											   endereco.getNumero(), 
+											   endereco.getCidade(), 
+											   endereco.getUf(), 
+											   endereco.getPais(), 
+											   endereco.getCep(), 
+											   null));
+			
+			Usuario usuario = null;
+			
+			if (pessoaData.getUsuario() != null)
+				usuario = new Usuario(pessoaData.getUsuario().getIdUsuario(), 
 									  pessoaData.getUsuario().getLogin(), 
 									  pessoaData.getUsuario().getSenha(), 
 									  pessoaData.getUsuario().getUltimoLogin(), 
@@ -49,62 +54,72 @@ public class PessoaApplicationService {
 									  pessoaData.getUsuario().getTs(), 
 									  null, 
 									  null);
+			
+			return new Pessoa(pessoaData.getIdPessoa(), 
+							  pessoaData.getNome(), 
+							  pessoaData.getSitCivil(), 
+							  pessoaData.getSexo(), 
+							  pessoaData.getDataNascimento(), 
+							  pessoaData.getCpf(), 
+							  pessoaData.getRg(), 
+							  enderecos, 
+							  pessoaData.getTelefone(), 
+							  pessoaData.getCelular(), 
+							  pessoaData.getEmail(), 
+							  pessoaData.getPagPessoal(), 
+							  pessoaData.getMsgInst(), 
+							  usuario, 
+							  pessoaData.isEstado(), 
+							  pessoaData.getTs(), 
+							  null);	
+		}
 		
-		return new Pessoa(pessoaData.getIdPessoa(), 
-						  pessoaData.getNome(), 
-						  pessoaData.getSitCivil(), 
-						  pessoaData.getSexo(), 
-						  pessoaData.getDataNascimento(), 
-						  pessoaData.getCpf(), 
-						  pessoaData.getRg(), 
-						  enderecos, 
-						  pessoaData.getTelefone(), 
-						  pessoaData.getCelular(), 
-						  pessoaData.getEmail(), 
-						  pessoaData.getPagPessoal(), 
-						  pessoaData.getMsgInst(), 
-						  usuario, 
-						  pessoaData.isEstado(), 
-						  pessoaData.getTs(), 
-						  null);	
+		return null;
 	}
 	
 	PessoaData getPessoaData(Pessoa pessoa) {
 		List<EnderecoData> enderecos = new ArrayList<EnderecoData>();
 		
-		for (Endereco endereco: pessoa.getEndereco())
-			enderecos.add(new EnderecoData(endereco.getIdEndereco(),
-										   endereco.getRua(), 
-										   endereco.getBairro(), 
-										   endereco.getNumero(), 
-										   endereco.getCidade(), 
-										   endereco.getUf(), 
-										   endereco.getPais(), 
-										   endereco.getCep()));
+		if (pessoa != null) {
+			if (pessoa.getEndereco() != null)
+				for (Endereco endereco: pessoa.getEndereco())
+					enderecos.add(new EnderecoData(endereco.getIdEndereco(),
+												   endereco.getRua(), 
+												   endereco.getBairro(), 
+												   endereco.getNumero(), 
+												   endereco.getCidade(), 
+												   endereco.getUf(), 
+												   endereco.getPais(), 
+												   endereco.getCep()));
+			UsuarioData usuario = null;
+			
+			if (pessoa.getUsuario() != null)
+				usuario = new UsuarioData(pessoa.getUsuario().getIdUsuario(), 
+										  pessoa.getUsuario().getLogin(), 
+										  pessoa.getUsuario().getSenha(), 
+										  pessoa.getUsuario().getUltimoLogin(), 
+										  pessoa.getUsuario().isEstado(), 
+										  pessoa.getUsuario().getTs());
+			
+		    return new PessoaData(pessoa.getIdPessoa(), 
+		    					  pessoa.getNome(), 
+		    					  pessoa.getSitCivil(), 
+		    					  pessoa.getSexo(), 
+		    					  pessoa.getDataNascimento(), 
+		    					  pessoa.getCpf(), 
+		    					  pessoa.getRg(), 
+		    					  enderecos, 
+		    					  pessoa.getTelefone(), 
+		    					  pessoa.getCelular(), 
+		    					  pessoa.getEmail(), 
+		    					  pessoa.getPagPessoal(), 
+		    					  pessoa.getMsgInst(), 
+		    					  usuario, 
+		    					  pessoa.isEstado(), 
+		    					  pessoa.getTs());	
+		}
 		
-		UsuarioData usuario = new UsuarioData(pessoa.getUsuario().getIdUsuario(), 
-											  pessoa.getUsuario().getLogin(), 
-											  pessoa.getUsuario().getSenha(), 
-											  pessoa.getUsuario().getUltimoLogin(), 
-											  pessoa.getUsuario().isEstado(), 
-											  pessoa.getUsuario().getTs());
-		
-	    return new PessoaData(pessoa.getIdPessoa(), 
-	    					  pessoa.getNome(), 
-	    					  pessoa.getSitCivil(), 
-	    					  pessoa.getSexo(), 
-	    					  pessoa.getDataNascimento(), 
-	    					  pessoa.getCpf(), 
-	    					  pessoa.getRg(), 
-	    					  enderecos, 
-	    					  pessoa.getTelefone(), 
-	    					  pessoa.getCelular(), 
-	    					  pessoa.getEmail(), 
-	    					  pessoa.getPagPessoal(), 
-	    					  pessoa.getMsgInst(), 
-	    					  usuario, 
-	    					  pessoa.isEstado(), 
-	    					  pessoa.getTs());	
+		return null;
 	}
 	
 	public PessoaData obterDataPeloId(int pessoaId) {

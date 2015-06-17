@@ -5,11 +5,11 @@ Ext.define('TrabalhoPraticoEsApp.view.login.LoginViewModel',{
     statics: {
     	efetuarLogin: function(form, success, failure){
     		form.submit({
-    			method:'POST', 
-    			waitTitle:'Connecting', 
-    			waitMsg:'Login in...',
-    			success:success,
-    			failure:failure
+    			method: 'POST', 
+    			waitTitle: 'Connecting', 
+    			waitMsg: 'Login in...',
+    			success: success,
+    			failure: failure
     	    });
     	}
 	}

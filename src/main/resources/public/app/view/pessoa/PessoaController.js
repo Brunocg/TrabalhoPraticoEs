@@ -7,12 +7,20 @@ Ext.define('TrabalhoPraticoEsApp.view.pessoa.PessoaController', {
         TrabalhoPraticoEsApp.view.pessoa.PessoaViewModel.gravarPessoa(
 	        form, 
 	        function(conn, request) {
-	        	var result = Ext.JSON.decode(request.response.responseText, true);
-	        	
-	        	console.log(result);
+				Ext.Msg.show({
+					title:'Sucesso!',
+					msg: 'Usuário cadastrado com sucesso!',
+					icon: Ext.Msg.OK,
+					buttons: Ext.Msg.OK
+				});
 	        },
-	        function(){
-	        	console.log('fail');
+	        function(conn, request){
+				Ext.Msg.show({
+				    title:'Erro!',
+				    msg: 'Usuário ou senha está incorreto.',
+				    icon: Ext.Msg.ERROR,
+				    buttons: Ext.Msg.OK
+				});
 	        }
         );
     },

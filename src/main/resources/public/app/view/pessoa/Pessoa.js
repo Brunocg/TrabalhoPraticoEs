@@ -28,6 +28,10 @@ Ext.define('TrabalhoPraticoEsApp.view.pessoa.Pessoa', {
             jsonSubmit: true,
             items: [
                 {
+                    xtype: 'hidden',
+                    name: 'idPessoa'                	
+                },
+                {
                     xtype: 'textfield',
                     fieldLabel: 'Nome',
                     name: 'nome'
@@ -119,5 +123,4 @@ Ext.define('TrabalhoPraticoEsApp.view.pessoa.Pessoa', {
             ]
         }
     ]
-
 });

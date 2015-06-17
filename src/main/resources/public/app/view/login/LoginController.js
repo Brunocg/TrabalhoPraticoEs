@@ -8,22 +8,23 @@ Ext.define('TrabalhoPraticoEsApp.view.login.LoginController', {
 	        form, 
 	        function(conn, request) {
 	        	var result = Ext.JSON.decode(request.response.responseText, true);
-	        	
-	        	if (result.success) {
-		            localStorage.setItem('LoggedIn', true);
-		            form.up('window').close();
-		            Ext.widget('main');
-	        	}else{
-					Ext.Msg.show({
-					    title:'Erro!',
-					    msg: 'Usuário ou senha está incorreto.',
-					    icon: Ext.Msg.ERROR,
-					    buttons: Ext.Msg.OK
-					});
-	        	}
+				Ext.Msg.show({
+				    title:'Bem vindo!',
+				    msg: 'Seja bem vindo!',
+				    icon: Ext.Msg.OK,
+				    buttons: Ext.Msg.OK
+				});
+	            localStorage.setItem('LoggedIn', true);
+	            form.up('window').close();
+	            Ext.widget('main');
 	        },
 	        function(){
-	        	console.log('fail');
+				Ext.Msg.show({
+				    title:'Erro!',
+				    msg: 'Usuário ou senha está incorreto.',
+				    icon: Ext.Msg.ERROR,
+				    buttons: Ext.Msg.OK
+				});
 	        }
         );
     },

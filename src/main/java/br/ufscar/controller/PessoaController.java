@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ufscar.aplicacao.PessoaApplicationService;
 import br.ufscar.consulta.LoginData;
 import br.ufscar.consulta.PessoaData;
-import br.ufscar.util.SimpleResponse;
+import br.ufscar.util.Response;
 
 @RestController
 @RequestMapping("/pessoa")
@@ -24,40 +24,42 @@ public class PessoaController {
 	
 	@RequestMapping(value = "/inserir", method = RequestMethod.POST)
 	@ResponseBody 
-	public PessoaData inserir(@RequestBody PessoaData pessoa){
-		int pessoaId = servico.inserir(pessoa);
-		return servico.obterDataPeloId(pessoaId);
+	public Response inserir(@RequestBody PessoaData pessoa){
+		PessoaData pessoaData = servico.obterDataPeloId(servico.inserir(pessoa));
+		return new Response(pessoaData != null, pessoaData);
 	}
 	
 	@RequestMapping("/obter")
 	@ResponseBody 
-	public PessoaData obter(@RequestParam("id") String pessoaId){
-		return servico.obterDataPeloId(Integer.valueOf(pessoaId));
+	public Response obter(@RequestParam("id") String pessoaId){
+		PessoaData pessoaData = servico.obterDataPeloId(Integer.valueOf(pessoaId));
+		return new Response(pessoaData != null, pessoaData);
 	}
 	
 	@RequestMapping(value = "/listar", method=RequestMethod.GET)
 	@ResponseBody 
-	public Page<PessoaData> listar(Pageable pageable){
-		return servico.listar(pageable);
+	public Response listar(Pageable pageable){
+		Page<PessoaData> pessoaDataList = servico.listar(pageable);
+		return new Response(pessoaDataList != null, pessoaDataList);
 	}
 	
 	@RequestMapping(value = "/excluir", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean excluir(@RequestParam("id") String pessoaId){
-		return servico.excluir(Integer.valueOf(pessoaId));
+	public Response excluir(@RequestParam("id") String pessoaId){
+		return new Response(servico.excluir(Integer.valueOf(pessoaId)), null);
 	}
 	
 	@RequestMapping(value = "/editar", method = RequestMethod.POST)
 	@ResponseBody
-	public PessoaData editar(@RequestBody PessoaData pessoa){
-		int pessoaId = servico.editar(pessoa);
-		return servico.obterDataPeloId(pessoaId);
+	public Response editar(@RequestBody PessoaData pessoa){
+		PessoaData pessoaData = servico.obterDataPeloId(servico.editar(pessoa));
+		return new Response(pessoaData != null, pessoaData);
 	}
 	
 	@RequestMapping(value = "/usuario/login", method = RequestMethod.POST)
 	@ResponseBody
-	public SimpleResponse login(@RequestBody LoginData login){
-		return new SimpleResponse(servico.loginValido(login));		
+	public Response login(@RequestBody LoginData login){
+		return new Response(servico.loginValido(login), null);		
 	}	
 
 }
