@@ -77,7 +77,7 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	@Override
 	public Pessoa recuperarPessoaPorLogin(String login) {
 		for (Pessoa pessoa: pessoas.values())
-			if (pessoa.getUsuario() != null && pessoa.getUsuario().getLogin().equals(login))
+			if (pessoa.getUsuario() != null && pessoa.getUsuario().getLogin() != null && pessoa.getUsuario().getLogin().equals(login))
 				return pessoa;
 		return null;
 	}
