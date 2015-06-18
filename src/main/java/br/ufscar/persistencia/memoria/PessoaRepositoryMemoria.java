@@ -1,9 +1,11 @@
 package br.ufscar.persistencia.memoria;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import br.ufscar.dominio.CompetenciaExperiencia;
 import br.ufscar.dominio.Endereco;
@@ -12,18 +14,20 @@ import br.ufscar.dominio.Usuario;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
 
-//@Repository
+@Repository
 public class PessoaRepositoryMemoria implements IPessoaRepository  {
-
+	HashMap<Integer, Pessoa> pessoas = new HashMap<Integer, Pessoa>();
+	
 	@Override
 	public boolean gravaPessoa(Pessoa pessoa){
-		// TODO Auto-generated method stub
+		pessoas.put(pessoa.getIdPessoa(), pessoa);
 		return true;
 	}
 
 	@Override
 	public boolean gravaUsuario(Pessoa pessoa, Usuario usuario) {
-		// TODO Auto-generated method stub
+		pessoa.setUsuario(usuario);
+		pessoas.put(pessoa.getIdPessoa(), pessoa);
 		return true;
 	}
 
@@ -67,14 +71,17 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 
 	@Override
 	public Pessoa recuperarPessoaPorId(int pessoaId) {
-		return new Pessoa(34, "", "", "", null, "", "", null, "", "", "", "", "", new Usuario(0, "Bruno", "teste", null, false, null, null, null), false, null, null);
+		return pessoas.get(pessoaId);
 	}
 
 	@Override
 	public Pessoa recuperarPessoaPorLogin(String login) {
-		return new Pessoa(34, login, login, login, null, login, login, null, login, login, login, login, login, new Usuario(0, "Bruno", "teste", null, false, null, null, null), false, null, null);
+		for (Pessoa pessoa: pessoas.values())
+			if (pessoa.getUsuario() != null && pessoa.getUsuario().getLogin() != null && pessoa.getUsuario().getLogin().equals(login))
+				return pessoa;
+		return null;
 	}
-
+	
 	@Override
 	public boolean editarPessoa(Pessoa pessoa) {
 		// TODO Auto-generated method stub

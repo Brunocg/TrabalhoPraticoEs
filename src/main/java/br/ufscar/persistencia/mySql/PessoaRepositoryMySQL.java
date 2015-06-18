@@ -28,7 +28,7 @@ import br.ufscar.dominio.interfaces.ICompetenciaRepository;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
 
-@Repository
+//@Repository
 public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	
 	private ICompetenciaRepository _repositorioDeCompetencia = new CompetenciaRepositoryMySQL();

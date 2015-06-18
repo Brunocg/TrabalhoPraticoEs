@@ -34,26 +34,21 @@ Ext.define('TrabalhoPraticoEsApp.view.main.Main', {
             items: [
                 {
                     xtype: 'panel',
-                    title: 'Group 1',
+                    title: 'Perfil',
                     items: [
                         {
                             xtype: 'menu',
                             floating: false,
-                            itemId: 'menu1',
+                            itemId: 'Perfil',
                             items: [
                                 {
                                     xtype: 'menuitem',
-                                    text: 'Menu Item',
+                                    text: 'Todos',
                                     focusable: true
                                 },
                                 {
                                     xtype: 'menuitem',
-                                    text: 'Menu Item',
-                                    focusable: true
-                                },
-                                {
-                                    xtype: 'menuitem',
-                                    text: 'Menu Item',
+                                    text: 'Novo',
                                     focusable: true
                                 }
                             ]
@@ -62,26 +57,21 @@ Ext.define('TrabalhoPraticoEsApp.view.main.Main', {
                 },
                 {
                     xtype: 'panel',
-                    title: 'Group 2',
+                    title: 'Gerentes',
                     items: [
                         {
                             xtype: 'menu',
                             floating: false,
-                            itemId: 'menu2',
+                            itemId: 'gerentes',
                             items: [
                                 {
                                     xtype: 'menuitem',
-                                    text: 'Menu Item',
+                                    text: 'Todos',
                                     focusable: true
                                 },
                                 {
                                     xtype: 'menuitem',
-                                    text: 'Menu Item',
-                                    focusable: true
-                                },
-                                {
-                                    xtype: 'menuitem',
-                                    text: 'Menu Item',
+                                    text: 'Novo',
                                     focusable: true
                                 }
                             ]
@@ -90,26 +80,113 @@ Ext.define('TrabalhoPraticoEsApp.view.main.Main', {
                 },
                 {
                     xtype: 'panel',
-                    title: 'Group 3',
+                    title: 'Colaboradores',
                     items: [
                         {
                             xtype: 'menu',
                             floating: false,
-                            itemId: 'menu3',
+                            itemId: 'colaboradores',
                             items: [
                                 {
                                     xtype: 'menuitem',
-                                    text: 'Menu Item',
+                                    text: 'Todos',
                                     focusable: true
                                 },
                                 {
                                     xtype: 'menuitem',
-                                    text: 'Menu Item',
+                                    text: 'Novo',
+                                    focusable: true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    xtype: 'panel',
+                    title: 'Moderadores',
+                    items: [
+                        {
+                            xtype: 'menu',
+                            floating: false,
+                            itemId: 'moderadores',
+                            items: [
+                                {
+                                    xtype: 'menuitem',
+                                    text: 'Todos',
                                     focusable: true
                                 },
                                 {
                                     xtype: 'menuitem',
-                                    text: 'Menu Item',
+                                    text: 'Novo',
+                                    focusable: true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    xtype: 'panel',
+                    title: 'Especialidades',
+                    items: [
+                        {
+                            xtype: 'menu',
+                            floating: false,
+                            itemId: 'especialidades',
+                            items: [
+                                {
+                                    xtype: 'menuitem',
+                                    text: 'Todos',
+                                    focusable: true
+                                },
+                                {
+                                    xtype: 'menuitem',
+                                    text: 'Novo',
+                                    focusable: true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    xtype: 'panel',
+                    title: 'Projetos',
+                    items: [
+                        {
+                            xtype: 'menu',
+                            floating: false,
+                            itemId: 'projetos',
+                            items: [
+                                {
+                                    xtype: 'menuitem',
+                                    text: 'Todos',
+                                    focusable: true
+                                },
+                                {
+                                    xtype: 'menuitem',
+                                    text: 'Novo',
+                                    focusable: true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    xtype: 'panel',
+                    title: 'Gerenciar Contas',
+                    items: [
+                        {
+                            xtype: 'menu',
+                            floating: false,
+                            itemId: 'gerenciar_contas',
+                            items: [
+                                {
+                                    xtype: 'menuitem',
+                                    text: 'Todos',
+                                    focusable: true
+                                },
+                                {
+                                    xtype: 'menuitem',
+                                    text: 'Novo',
                                     focusable: true
                                 }
                             ]
