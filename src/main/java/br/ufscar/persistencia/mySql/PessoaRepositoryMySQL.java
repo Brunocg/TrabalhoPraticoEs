@@ -13,8 +13,6 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-//import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Repository;
 
 import br.ufscar.dao.ConnectionManager;
 import br.ufscar.dominio.Competencia;
@@ -26,6 +24,7 @@ import br.ufscar.dominio.Usuario;
 import br.ufscar.dominio.UsuarioTipo;
 import br.ufscar.dominio.interfaces.ICompetenciaRepository;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
+//import org.springframework.stereotype.Repository;
 
 
 //@Repository
@@ -34,7 +33,8 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private ICompetenciaRepository _repositorioDeCompetencia = new CompetenciaRepositoryMySQL();
 
 	private static final String GRAVAR_PESSOA = "INSERT INTO Pessoa (nome,sitCivil,sexo,dataNascimento,CPF,RG,telefone,celular,email,pagPessoal,msgInst,estado,ts) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
-	private static final String GRAVAR_PESSOA_BASICO = "INSERT INTO Pessoa (nome,dataNascimento,CPF,RG,email,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
+	private static final String GRAVAR_PESSOA_BASICO = "INSERT INTO Pessoa (nome,sitCivil,sexo,dataNascimento,CPF,RG,telefone,celular,email,pagPessoal,msgInst,estado,ts) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
+//	private static final String GRAVAR_PESSOA_BASICO_OLD = "INSERT INTO Pessoa (nome,dataNascimento,CPF,RG,email,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_ENDERECO = "INSERT INTO Endereco (rua,bairro,numero,cidade,uf,pais,cep,estado,ts) VALUES (?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_ENDERECO_PESSOA = "INSERT INTO EnderecoPessoa (idEndereco,idPessoa,ts) VALUES (?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_EXPERIENCIA = "INSERT INTO CompetenciaExperiencia (idPessoa, idCompetencia, nivel, tempoExp,observacoes,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
@@ -74,11 +74,17 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			ps.clearParameters();
 
 			ps.setString(1,pessoa.getNome());
-			ps.setString(2,new SimpleDateFormat("yyyy-MM-dd").format(pessoa.getDataNascimento()));
-			ps.setString(3,pessoa.getCpf());
-			ps.setString(4,pessoa.getRg());
-			ps.setString(5,pessoa.getEmail());
-			ps.setBoolean(6,true);
+			ps.setString(2,pessoa.getSitCivil());
+			ps.setString(3,pessoa.getSexo());
+			ps.setString(4, new SimpleDateFormat("yyyy-MM-dd").format(pessoa.getDataNascimento()));
+			ps.setString(5,pessoa.getCpf());
+			ps.setString(6,pessoa.getRg());
+			ps.setString(7,pessoa.getTelefone());
+			ps.setString(8,pessoa.getCelular());
+			ps.setString(9,pessoa.getEmail());
+			ps.setString(10,pessoa.getPagPessoal());
+			ps.setString(11,pessoa.getMsgInst());
+			ps.setBoolean(12,true);
 
 			ps.executeUpdate();
 

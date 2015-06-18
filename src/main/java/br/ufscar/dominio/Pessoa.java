@@ -114,6 +114,11 @@ public class Pessoa {
 	}
 
 	public String getSitCivil() {
+		if("Casado".equalsIgnoreCase(sitCivil)){
+			return "C";
+		}else if("Solteiro".equalsIgnoreCase(sitCivil)){
+			return "S";
+		}
 		return sitCivil;
 	}
 
@@ -122,6 +127,11 @@ public class Pessoa {
 	}
 
 	public String getSexo() {
+		if("Masculino".equalsIgnoreCase(sitCivil)){
+			return "M";
+		}else if("Feminino".equalsIgnoreCase(sitCivil)){
+			return "F";
+		}
 		return sexo;
 	}
 
