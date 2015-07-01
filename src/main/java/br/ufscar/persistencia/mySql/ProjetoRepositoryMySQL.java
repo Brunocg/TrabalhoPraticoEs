@@ -24,6 +24,11 @@ public class ProjetoRepositoryMySQL {
 	private static final String GRAVAR_COMPETENCIA_ATIVIDADE = "INSERT INTO ProjetoAtividadeCompetencias (idProjetoAtividade, idCompetencia) VALUES (?,?)";
 	private static final String GRAVAR_ATIVIDADES_DO_PROJETO = "INSERT INTO ProjetoAtividades (idProjeto, idAtividade) VALUES (?,?)";
 	private static final String GRAVAR_PROJETO_RESPONSAVEL = "INSERT INTO ProjetoResponsaveis (idProjeto, idPessoa) VALUES (?,?)";
+	
+	private static final String EXCLUIR_ATIVIDADES_DO_PROJETO = "DELETE FROM ProjetoAtividades WHERE idProjeto = ?";
+	private static final String EXCLUIR_PROJETO_RESPONSAVEL = "DELETE FROM ProjetoResponsaveis WHERE idProjeto = ?";
+	private static final String EXCLUIR_ATIVIDADE_RESPONSAVEL = "DELETE FROM ProjetoAtividadeResponsaveis WHERE idProjetoAtividade = ?";
+	private static final String EXCLUIR_COMPETENCIA_ATIVIDADE = "DELETE FROM ProjetoAtividadeCompetencias WHERE idProjetoAtividade = ?";
 
 	public boolean gravaProjeto(Projeto projeto){
 		Connection mySQLConnection = null;
@@ -370,6 +375,289 @@ public class ProjetoRepositoryMySQL {
 		return idAtividade;
 	}
 	
+	public boolean alterarProjeto(Projeto projeto){
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean gravado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(EDITAR_PROJETO);
+			ps.clearParameters();
+
+			ps.setString(1,projeto.getNome());
+			ps.setInt(2,projeto.getTipo());
+			ps.setString(3, new SimpleDateFormat("yyyy-MM-dd").format(projeto.getPrazo()));
+			ps.setString(4,projeto.getObservacoes());
+			ps.setInt(5,projeto.getStatus());
+			ps.setBoolean(6,true);
+			ps.setInt(7, projeto.getIdProjeto());
+
+			ps.executeUpdate();
+
+			List<ProjetoAtividade> atividades = alterarAtividade(projeto.getProjetoAtividade());
+			if(atividades == null){
+				gravado = false;
+			}else{
+
+				if(excluirAtividadesProjeto(projeto) && gravaAtividadesProjeto(projeto, atividades)){
+
+					if(excluirResponsaveisProjeto(projeto) && gravaResponsaveisProjeto(projeto, projeto.getResponsaveis())){
+						gravado = true;
+					}
+						
+				}else{
+					gravado = false;
+				}
+			}
+
+			if(gravado){
+				//Chama commit no final do processo
+				mySQLConnection.commit();
+				//Habilita auto comit novamente
+				mySQLConnection.setAutoCommit(true);
+			}else{
+				ConnectionManager.rollBack();
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			gravado = false;
+			ConnectionManager.rollBack();		
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return gravado;
+	}
 	
+	public List<ProjetoAtividade> alterarAtividade(
+			List<ProjetoAtividade> projetoAtividade) {
+		List<ProjetoAtividade> atividadesAlteradas = new ArrayList<ProjetoAtividade>();
+
+		for (ProjetoAtividade atividade : projetoAtividade) {
+			if(atividade.getIdAtividade() > 0){//ja existe
+				if(!alterarAtividade(atividade)){
+					atividadesAlteradas = null;
+					break;
+				}
+				
+				if(excluirResponsaveisAtividade(atividade) && gravaResponsaveisAtividade(atividade)){
+					
+					if(excluirCompetenciaAtividades(atividade) && gravaCompetenciaAtividades(atividade)){
+						
+						atividadesAlteradas.add(atividade);
+
+					}else{
+						atividadesAlteradas = null;
+						break;
+					}
+						
+				}else{
+					atividadesAlteradas = null;
+					break;
+				}
+			}else{
+				
+				int idAtividade = gravaAtividade(atividade);
+				
+				if(idAtividade != 0){
+					
+					atividade.setIdAtividade(idAtividade);
+					
+					if(gravaResponsaveisAtividade(atividade)){
+						
+						if(gravaCompetenciaAtividades(atividade)){
+							
+							atividadesAlteradas.add(atividade);
+
+						}else{
+							atividadesAlteradas = null;
+							break;
+						}
+						
+					}else{
+						atividadesAlteradas = null;
+						break;
+					}
+					
+				}else{
+					atividadesAlteradas = null;
+					break;
+				}
+			}
+		}
+
+		return atividadesAlteradas;
+	}
 	
+	public boolean excluirAtividadesProjeto(Projeto projeto) {
+		boolean excluido = false;
+
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(EXCLUIR_ATIVIDADES_DO_PROJETO);
+			ps.clearParameters();
+
+			ps.setInt(1,projeto.getIdProjeto());
+
+			ps.executeUpdate();
+
+			excluido = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			excluido = false;
+			ConnectionManager.rollBack();
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return excluido;
+	}
+
+	public boolean excluirResponsaveisProjeto(Projeto projeto) {
+		boolean excluido = false;
+
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(EXCLUIR_PROJETO_RESPONSAVEL);
+			ps.clearParameters();
+
+			ps.setInt(1,projeto.getIdProjeto());
+
+			ps.executeUpdate();
+
+			excluido = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			excluido = false;
+			ConnectionManager.rollBack();
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return excluido;
+	}
+	
+	public boolean alterarAtividade(ProjetoAtividade atividade) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+		
+		boolean alterado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(EDITAR_ATIVIDADE);
+			ps.clearParameters();
+
+			ps.setString(1,atividade.getNome());
+			ps.setString(2,atividade.getDescricao());
+			ps.setInt(3,atividade.getTipo());
+			ps.setString(4, new SimpleDateFormat("yyyy-MM-dd").format(atividade.getPrazo()));
+			ps.setInt(5,atividade.getStatus());
+			ps.setBoolean(6,true);
+			ps.setInt(7, atividade.getIdAtividade());
+
+			ps.executeUpdate();
+
+			alterado = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			alterado = false;
+			ConnectionManager.rollBack();
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return alterado;
+	}
+	
+	public boolean excluirResponsaveisAtividade(ProjetoAtividade atividade) {
+		boolean excluido = false;
+
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(EXCLUIR_ATIVIDADE_RESPONSAVEL);
+			ps.clearParameters();
+
+			ps.setInt(1,atividade.getIdAtividade());
+
+			ps.executeUpdate();
+
+			excluido = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			excluido = false;
+			ConnectionManager.rollBack();
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return excluido;
+	}
+	
+	private boolean excluirCompetenciaAtividades(ProjetoAtividade atividade) {
+		boolean excluido = false;
+
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			//Desabilita auto-commit
+			mySQLConnection.setAutoCommit(false);
+
+			ps = mySQLConnection.prepareStatement(EXCLUIR_COMPETENCIA_ATIVIDADE);
+			ps.clearParameters();
+
+			ps.setInt(1,atividade.getIdAtividade());
+
+			ps.executeUpdate();
+
+			excluido = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			excluido = false;
+			ConnectionManager.rollBack();
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return excluido;
+	}
 }
