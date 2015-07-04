@@ -24,7 +24,7 @@ Ext.define('TrabalhoPraticoEsApp.view.pessoa.Pessoa', {
             layout: 'auto',
             bodyPadding: 10,
             title: '',
-            url: 'pessoa/inserir',
+            url: 'pessoa/inserir/basico',
             jsonSubmit: true,
             items: [
                 {

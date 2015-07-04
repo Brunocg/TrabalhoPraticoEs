@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -117,16 +114,13 @@ public class PessoaApplicationService {
 		return pessoa.getIdPessoa();
 	}
 
-	public Page<PessoaData> listar(Pageable pageable) {		
+	public List<PessoaData> listar() {		
 		List<PessoaData> result = new ArrayList<PessoaData>();
 		
-		for (Pessoa pessoa : repositorio.listarPessoas(pageable)) {
+		for (Pessoa pessoa : repositorio.listarPessoas()) 
 			result.add(getPessoaData(pessoa));		
-		}
 		
-		Page<PessoaData> pessoaPaginado = new PageImpl<PessoaData> (result, pageable, result.size());
-		
-		return pessoaPaginado;			
+		return result;			
 	}
 
 	public boolean excluir(int pessoaId) {

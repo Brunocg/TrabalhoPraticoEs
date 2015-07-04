@@ -2,9 +2,6 @@ package br.ufscar.dominio.interfaces;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import br.ufscar.dominio.CompetenciaExperiencia;
 import br.ufscar.dominio.Endereco;
 import br.ufscar.dominio.Pessoa;
@@ -31,7 +28,7 @@ public interface IPessoaRepository {
 
 	public abstract boolean excluirPessoa(Pessoa pessoa);
 	
-	public abstract Page<Pessoa> listarPessoas(Pageable pageable);
+	public abstract List<Pessoa> listarPessoas();
 	
 	public abstract boolean gravaPessoa(Pessoa pessoa);
 	public abstract boolean gravaPessoaBasico(Pessoa pessoa);

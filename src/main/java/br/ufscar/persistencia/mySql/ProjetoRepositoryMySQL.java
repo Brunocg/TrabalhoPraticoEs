@@ -387,7 +387,8 @@ public class ProjetoRepositoryMySQL {
 			//Desabilita auto-commit
 			mySQLConnection.setAutoCommit(false);
 
-			ps = mySQLConnection.prepareStatement(EDITAR_PROJETO);
+			//FIXME
+			ps = mySQLConnection.prepareStatement(""/*EDITAR_PROJETO*/);
 			ps.clearParameters();
 
 			ps.setString(1,projeto.getNome());
@@ -570,8 +571,8 @@ public class ProjetoRepositoryMySQL {
 
 			//Desabilita auto-commit
 			mySQLConnection.setAutoCommit(false);
-
-			ps = mySQLConnection.prepareStatement(EDITAR_ATIVIDADE);
+			//FIXME
+			ps = mySQLConnection.prepareStatement(""/*EDITAR_ATIVIDADE*/);
 			ps.clearParameters();
 
 			ps.setString(1,atividade.getNome());

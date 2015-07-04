@@ -1,10 +1,10 @@
 package br.ufscar.persistencia.memoria;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import br.ufscar.dominio.CompetenciaExperiencia;
@@ -20,14 +20,13 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	
 	@Override
 	public boolean gravaPessoa(Pessoa pessoa){
-		pessoas.put(pessoa.getIdPessoa(), pessoa);
+		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean gravaUsuario(Pessoa pessoa, Usuario usuario) {
-		pessoa.setUsuario(usuario);
-		pessoas.put(pessoa.getIdPessoa(), pessoa);
+		// TODO Auto-generated method stub
 		return true;
 	}
 
@@ -79,13 +78,14 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 		for (Pessoa pessoa: pessoas.values())
 			if (pessoa.getUsuario() != null && pessoa.getUsuario().getLogin() != null && pessoa.getUsuario().getLogin().equals(login))
 				return pessoa;
+		
 		return null;
 	}
 	
 	@Override
 	public boolean editarPessoa(Pessoa pessoa) {
-		// TODO Auto-generated method stub
-		return false;
+		pessoas.put(pessoa.getIdPessoa(), pessoa);
+		return true;
 	}
 
 	@Override
@@ -95,15 +95,15 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	}
 
 	@Override
-	public Page<Pessoa> listarPessoas(Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Pessoa> listarPessoas() {		
+		return new ArrayList<Pessoa>(pessoas.values());
 	}
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa) {
-		// TODO Auto-generated method stub
-		return false;
+		pessoa.setIdPessoa((int) UUID.randomUUID().getMostSignificantBits());
+		pessoas.put(pessoa.getIdPessoa(), pessoa);
+		return true;
 	}
 
 	@Override
