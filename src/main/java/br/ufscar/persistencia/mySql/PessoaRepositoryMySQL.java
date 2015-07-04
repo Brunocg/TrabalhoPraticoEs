@@ -10,10 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-
 import br.ufscar.dao.ConnectionManager;
 import br.ufscar.dominio.Competencia;
 import br.ufscar.dominio.CompetenciaExperiencia;
@@ -869,7 +865,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public Page<Pessoa> listarPessoas(Pageable pageable) {
+	public List<Pessoa> listarPessoas() {
 		List<Pessoa> pessoasList = new ArrayList<Pessoa>();
 		Connection 			mySQLConnection = null;
 		PreparedStatement 	ps = null;
@@ -890,8 +886,8 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		}finally {
 			ConnectionManager.closeAll(ps,rs);
 		}
-		Page<Pessoa> pessoas = new PageImpl<Pessoa>(pessoasList);
-		return pessoas;
+
+		return pessoasList;
 	}
 
 }

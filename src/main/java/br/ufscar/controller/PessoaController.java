@@ -1,8 +1,8 @@
 package br.ufscar.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +22,7 @@ public class PessoaController {
 	@Autowired
 	private PessoaApplicationService servico;
 	
-	@RequestMapping(value = "/inserir", method = RequestMethod.POST)
+	@RequestMapping(value = "/inserir/basico", method = RequestMethod.POST)
 	@ResponseBody 
 	public Response inserir(@RequestBody PessoaData pessoa){
 		PessoaData pessoaData = servico.obterDataPeloId(servico.inserir(pessoa));
@@ -38,8 +38,8 @@ public class PessoaController {
 	
 	@RequestMapping(value = "/listar", method=RequestMethod.GET)
 	@ResponseBody 
-	public Response listar(Pageable pageable){
-		Page<PessoaData> pessoaDataList = servico.listar(pageable);
+	public Response listar(){
+		List<PessoaData> pessoaDataList = servico.listar();
 		return new Response(pessoaDataList != null, pessoaDataList);
 	}
 	
