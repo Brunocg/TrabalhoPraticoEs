@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import br.ufscar.dominio.CompetenciaExperiencia;
 import br.ufscar.dominio.Endereco;
 import br.ufscar.dominio.Pessoa;
+import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.Usuario;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
@@ -162,6 +163,12 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	public boolean editaUsuario(Pessoa pessoa, Usuario usuario) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Responsavel recuperarResponsavelPorId(int int1) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

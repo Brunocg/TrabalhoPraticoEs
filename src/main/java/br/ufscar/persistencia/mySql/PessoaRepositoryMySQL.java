@@ -21,11 +21,13 @@ import br.ufscar.dominio.UsuarioTipo;
 import br.ufscar.dominio.interfaces.ICompetenciaRepository;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 //import org.springframework.stereotype.Repository;
+import br.ufscar.dominio.interfaces.IProjetoRepository;
 
 
 //@Repository
 public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	
+	private IProjetoRepository _repositorioDeProjetos = new ProjetoRepositoryMySQL();
 	private ICompetenciaRepository _repositorioDeCompetencia = new CompetenciaRepositoryMySQL();
 
 	private static final String GRAVAR_PESSOA = "INSERT INTO Pessoa (nome,sitCivil,sexo,dataNascimento,CPF,RG,telefone,celular,email,pagPessoal,msgInst,estado,ts) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
@@ -888,6 +890,32 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		}
 
 		return pessoasList;
+	}
+
+	@Override
+	public Responsavel recuperarResponsavelPorId(int idPessoa) {
+		Responsavel responsavel = null;
+		//FIXME
+//		Pessoa pessoa = recuperarPessoaPorId(idPessoa);
+//		
+//		List<Projeto> projeto = _repositorioDeProjetos.listarProjetosPorResponsavel(idPessoa);
+//		
+//		List<ProjetoAtividade> projetoAtividades = _repositorioDeProjetos.listarProjetosAtividadesPorResponsavel(idPessoa);
+//		
+//		List<Usuario> usuariosAprovados = recuperarUsuariosAprovadosPorResponsavel(idPessoa);
+//		
+//		List<Competencia> competenciasAprovadas = _repositorioDeCompetencia.recuperarCompetenciasAprovadasPorResponsavel(idPessoa);
+//		
+//		List<Feedback> feedbackCriados = _repositorioDeProjetos.recuperarFeedbacksCriadosPorResponsavel(idPessoa);
+//		
+//		List<Feedback> feedbacksRecebidos = _repositorioDeProjetos.recuperarFeedbacksRecebidosPorResponsavel(idPessoa);
+//		
+//		List<CompetenciaCategoria> competenciasCategoriaAprovadas = _repositorioDeCompetencia.recuperarCompetenciaCategoriasAprovadasPorResponsavel(idPessoa);
+//		
+//		responsavel = new Responsavel(pessoa, projeto, projetoAtividades, usuariosAprovados, competenciasAprovadas, feedbackCriados, feedbacksRecebidos, competenciasCategoriaAprovadas);
+//		
+		
+		return responsavel;
 	}
 
 }

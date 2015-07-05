@@ -5,6 +5,7 @@ import java.util.List;
 import br.ufscar.dominio.CompetenciaExperiencia;
 import br.ufscar.dominio.Endereco;
 import br.ufscar.dominio.Pessoa;
+import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.Usuario;
 
 public interface IPessoaRepository {
@@ -45,5 +46,6 @@ public interface IPessoaRepository {
 	
 	public abstract boolean excluiEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos);
 	public abstract boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco);
+	public abstract Responsavel recuperarResponsavelPorId(int int1);
 	
 }

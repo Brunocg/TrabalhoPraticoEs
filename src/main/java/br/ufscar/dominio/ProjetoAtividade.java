@@ -15,7 +15,7 @@ public class ProjetoAtividade {
 	private Date ts;
 	private Projeto projeto = null;
 	private List<Responsavel> responsaveis = null;
-	private List<CompetenciaCategoria> competenciaCategoria = null;
+	private List<Competencia> competencia = null;
 	private Feedback feedbackAtividade = null;
 
 
@@ -26,7 +26,7 @@ public class ProjetoAtividade {
 	public ProjetoAtividade(int idAtividade, String nome, String descricao,
 			int tipo, Date prazo, int status, boolean estado, Date ts,
 			Projeto projeto, List<Responsavel> responsaveis,
-			List<CompetenciaCategoria> competenciaCategoria,
+			List<Competencia> competencia,
 			Feedback feedbackAtividade) {
 		super();
 		this.idAtividade = idAtividade;
@@ -39,7 +39,7 @@ public class ProjetoAtividade {
 		this.ts = ts;
 		this.projeto = projeto;
 		this.responsaveis = responsaveis;
-		this.competenciaCategoria = competenciaCategoria;
+		this.competencia = competencia;
 		this.feedbackAtividade = feedbackAtividade;
 	}
 	
@@ -51,31 +51,31 @@ public class ProjetoAtividade {
 	}
 	
 	public boolean naoTemCompetenciaCategoria() {
-		return competenciaCategoria.isEmpty();
+		return competencia.isEmpty();
 	}
 
-	public boolean contemEstaCompetenciaCategoria(CompetenciaCategoria CompetenciaCategoria) {
-		return competenciaCategoria.contains(CompetenciaCategoria);
+	public boolean contemEstaCompetencia(Competencia Competencia) {
+		return competencia.contains(Competencia);
 	}
 
-	public boolean contemEstasCompetenciaCategoria(List<? extends CompetenciaCategoria> competenciaCategoria) {
-		return this.competenciaCategoria.containsAll(competenciaCategoria);
+	public boolean contemEstasCompetencia(List<? extends CompetenciaCategoria> competencia) {
+		return this.competencia.containsAll(competencia);
 	}
 
 	public int quantasCompetenciaCategoria() {
-		return competenciaCategoria.size();
+		return competencia.size();
 	}
 
-	public boolean adicionaCompetenciaCategoria(CompetenciaCategoria CompetenciaCategoria) {
-		return competenciaCategoria.add(CompetenciaCategoria);
+	public boolean adicionaCompetencia(Competencia Competencia) {
+		return competencia.add(Competencia);
 	}
 
-	public boolean removerCompetenciaCategoria(CompetenciaCategoria CompetenciaCategoria) {
-		return competenciaCategoria.remove(CompetenciaCategoria);
+	public boolean removerCompetencia(Competencia Competencia) {
+		return competencia.remove(Competencia);
 	}
 
-	public void limparCompetenciaCategoria() {
-		competenciaCategoria.clear();
+	public void limparCompetencia() {
+		competencia.clear();
 	}
 
 	public boolean naoTemResponsaveis() {
@@ -191,12 +191,12 @@ public class ProjetoAtividade {
 		this.feedbackAtividade = feedbackAtividade;
 	}
 
-	public List<CompetenciaCategoria> getCompetenciaCategoria() {
-		return competenciaCategoria;
+	public List<Competencia> getCompetencia() {
+		return competencia;
 	}
 
-	public void setCompetenciaCategoria(List<CompetenciaCategoria> competenciaCategoria) {
-		this.competenciaCategoria = competenciaCategoria;
+	public void setCompetencia(List<Competencia> competencia) {
+		this.competencia = competencia;
 	}
 
 	public List<Responsavel> getResponsaveis() {

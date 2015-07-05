@@ -20,12 +20,14 @@ import br.ufscar.dominio.interfaces.ICompetenciaRepository;
 @Repository
 public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 
-	private static final String GRAVA_COMPETENCIA = "INSERT INTO Competencia (aprovadoPor,nome,estado,ts) VALUES (?,?,?,CURRENT_TIMESTAMP)";
 	private static final String VERIFICA_EXISTENCIA_COMPETENCIA = "SELECT COUNT(*) FROM Competencia WHERE nome = ?";
+	private static final String VERIFICA_EXISTENCIA_CATEGORIA = "SELECT COUNT(*) FROM CompetenciaCategoria WHERE nome = ?";
+
 	private static final String RECUPERA_CATEGORIA_PELO_NOME_CATEGORIA = "SELECT idCompetenciaCategoria, aprovadoPor, nome, estado, ts FROM CompetenciaCategoria C WHERE nome = ?";
 	private static final String RECUPERA_COMPETENCIA_PELO_NOME = "SELECT idCompetencia, aprovadoPor, nome, estado, ts FROM Competencia C WHERE nome = ?";
 	private static final String RECUPERA_COMPETENCIA_PELA_CATEGORIA = "SELECT C.idCompetencia, C.aprovadoPor, C.nome, C.estado, C.ts, C.idCategoria FROM Competencia C INNER JOIN CompetenciaPorCategoria CPC ON CPC.idCompetencia = C.idCompetencia WHERE CPC.idCategoria = ? AND C.estado = true";
-	private static final String VERIFICA_EXISTENCIA_CATEGORIA = "SELECT COUNT(*) FROM CompetenciaCategoria WHERE nome = ?";
+	
+	private static final String GRAVA_COMPETENCIA = "INSERT INTO Competencia (aprovadoPor,nome,estado,ts) VALUES (?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVA_COMPETENCIA_CATEGORIA = "INSERT INTO CompetenciaCategoria (aprovadoPor,nome,estado,ts) VALUES (?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_RELACAO_CATEGORIA_SUB_CATEGORIA = "INSERT INTO CompetenciaSubCategoria (idCategoria,idSubCategoria) VALUES (?,?)";
 	private static final String GRAVAR_RELACAO_CATEGORIA_COMPETENCIA = "INSERT INTO CompetenciaPorCategoria (idCategoria,idCompetencia) VALUES (?,?)";
