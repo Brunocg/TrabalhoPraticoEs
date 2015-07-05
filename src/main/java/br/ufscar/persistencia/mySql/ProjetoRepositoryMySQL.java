@@ -7,16 +7,23 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.ufscar.dao.ConnectionManager;
 import br.ufscar.dominio.Competencia;
-import br.ufscar.dominio.CompetenciaCategoria;
+import br.ufscar.dominio.Feedback;
 import br.ufscar.dominio.Projeto;
 import br.ufscar.dominio.ProjetoAtividade;
 import br.ufscar.dominio.Responsavel;
+import br.ufscar.dominio.interfaces.ICompetenciaRepository;
+import br.ufscar.dominio.interfaces.IPessoaRepository;
+import br.ufscar.dominio.interfaces.IProjetoRepository;
 
-public class ProjetoRepositoryMySQL {
+public class ProjetoRepositoryMySQL implements IProjetoRepository {
+
+	private IPessoaRepository _pessoaRepository = new PessoaRepositoryMySQL();
+	private ICompetenciaRepository _competenciaRepository = new CompetenciaRepositoryMySQL();
 
 	private static final String GRAVA_PROJETO = "INSERT INTO Projeto (nome, tipo, prazo, observacoes, status, estado, ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_ATIVIDADE = "INSERT INTO ProjetoAtividade (nome, descricao, tipo, prazo, status, estado, ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
@@ -24,12 +31,31 @@ public class ProjetoRepositoryMySQL {
 	private static final String GRAVAR_COMPETENCIA_ATIVIDADE = "INSERT INTO ProjetoAtividadeCompetencias (idProjetoAtividade, idCompetencia) VALUES (?,?)";
 	private static final String GRAVAR_ATIVIDADES_DO_PROJETO = "INSERT INTO ProjetoAtividades (idProjeto, idAtividade) VALUES (?,?)";
 	private static final String GRAVAR_PROJETO_RESPONSAVEL = "INSERT INTO ProjetoResponsaveis (idProjeto, idPessoa) VALUES (?,?)";
-	
+
 	private static final String EXCLUIR_ATIVIDADES_DO_PROJETO = "DELETE FROM ProjetoAtividades WHERE idProjeto = ?";
 	private static final String EXCLUIR_PROJETO_RESPONSAVEL = "DELETE FROM ProjetoResponsaveis WHERE idProjeto = ?";
 	private static final String EXCLUIR_ATIVIDADE_RESPONSAVEL = "DELETE FROM ProjetoAtividadeResponsaveis WHERE idProjetoAtividade = ?";
 	private static final String EXCLUIR_COMPETENCIA_ATIVIDADE = "DELETE FROM ProjetoAtividadeCompetencias WHERE idProjetoAtividade = ?";
 
+	private static final String EDITAR_PROJETO = "UPDATE Projeto SET nome = ?, tipo = ?, prazo = ?, observacoes = ?, status = ?, estado = ? WHERE idProjeto = ?";
+	private static final String EDITAR_ATIVIDADE = "UPDATE ProjetoAtividade SET nome = ?, descricao = ?, tipo = ?, prazo = ?, status = ?, estado = ? WHERE idProjetoAtividade = ?";
+
+	private static final String BUSCAR_COMPETENCIAS_ATIVIDADE_PARA_LISTAR = "SELECT idCompetencia FROM ProjetoAtividadeCompetencias P WHERE idProjetoAtividade = ?";
+	private static final String BUSCAR_RESPONSAVEIS_PROJETO_PARA_LISTAR = "SELECT idPessoa FROM ProjetoResponsaveis P WHERE idProjeto = ?";
+	private static final String BUSCAR_RESPONSAVEIS_ATIVIDADE_PARA_LISTAR = "SELECT idPessoa FROM ProjetoAtividadeResponsaveis P WHERE idProjetoAtividade = ?";
+	private static final String BUSCAR_PROJETOS_PARA_LISTAR = "SELECT idProjeto FROM Projeto P WHERE estado = TRUE";
+	private static final String BUSCAR_ATIVIDADES_PROJETO_PARA_LISTAR = "SELECT idAtividade FROM ProjetoAtividades P WHERE idProjeto = ?";
+	private static final String BUSCAR_ATIVIDADE_PROJETO_POR_ID = "SELECT nome, descricao, tipo, prazo, status, estado, ts FROM ProjetoAtividade P WHERE idProjetoAtividade = ?";
+	private static final String BUSCAR_PROJETO_POR_ATIVIDADE = "SELECT PA.idProjeto, P.nome, P.nome, P.tipo, P.prazo, P.observacoes, P.status, P.estado, P.ts FROM ProjetoAtividades PA INNER JOIN Projeto P ON P.idProjeto = PA.idProjeto WHERE idAtividade = ?";
+	private static final String BUSCAR_FEEDBACK_ATIVIDADE_POR_ATIVIDADE = "SELECT idFeedback, feedbackDe, feedbackPara, avaliacao, tpFeedback, observacoes, estado, ts FROM Feedback F WHERE idProjetoAtividade = ?";
+	private static final String BUSCAR_PROJETO_POR_ID = "SELECT nome, tipo, prazo, observacoes, status, estado, ts FROM Projeto P WHERE idProjeto = ?";
+	private static final String BUSCAR_FEEDBACKS_PROJETO_PARA_LISTAR = "SELECT idFeedback FROM ProjetoFeedbacks P WHERE idProjeto = ?";
+	private static final String BUSCAR_FEEDBACK_POR_ID = "SELECT idProjetoAtividade, feedbackDe, feedbackPara, avaliacao, tpFeedback, observacoes, estado, ts FROM Feedback F WHERE idFeedback = ?";
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaProjeto(br.ufscar.dominio.Projeto)
+	 */
+	@Override
 	public boolean gravaProjeto(Projeto projeto){
 		Connection mySQLConnection = null;
 		PreparedStatement ps = null;
@@ -72,7 +98,7 @@ public class ProjetoRepositoryMySQL {
 				if(gravaAtividadesProjeto(projeto, atividades)){
 
 					gravado = gravaResponsaveisProjeto(projeto, projeto.getResponsaveis());
-						
+
 				}else{
 					gravado = false;
 				}
@@ -97,6 +123,10 @@ public class ProjetoRepositoryMySQL {
 		return gravado;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaResponsaveisProjeto(br.ufscar.dominio.Projeto, java.util.List)
+	 */
+	@Override
 	public boolean gravaResponsaveisProjeto(Projeto projeto,
 			List<Responsavel> responsaveis) {
 		boolean gravado = false;
@@ -111,6 +141,10 @@ public class ProjetoRepositoryMySQL {
 		return gravado;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaResponsaveisProjeto(br.ufscar.dominio.Projeto, br.ufscar.dominio.Responsavel)
+	 */
+	@Override
 	public boolean gravaResponsaveisProjeto(Projeto projeto,
 			Responsavel responsavel) {
 		boolean gravado = false;
@@ -133,7 +167,7 @@ public class ProjetoRepositoryMySQL {
 			ps.executeUpdate();
 
 			gravado = true;
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			gravado = false;
@@ -145,21 +179,29 @@ public class ProjetoRepositoryMySQL {
 		return gravado;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaAtividadesProjeto(br.ufscar.dominio.Projeto, java.util.List)
+	 */
+	@Override
 	public boolean gravaAtividadesProjeto(Projeto projeto,
 			List<ProjetoAtividade> atividades) {
 		boolean gravado = false;
 
 		for (ProjetoAtividade atividade : atividades) {
-				
-				gravado = gravaAtividadesProjeto(projeto,atividade);
 
-				if(!gravado){
-					break;
-				}
+			gravado = gravaAtividadesProjeto(projeto,atividade);
+
+			if(!gravado){
+				break;
+			}
 		}
 		return gravado;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaAtividadesProjeto(br.ufscar.dominio.Projeto, br.ufscar.dominio.ProjetoAtividade)
+	 */
+	@Override
 	public boolean gravaAtividadesProjeto(Projeto projeto,
 			ProjetoAtividade atividade) {
 		boolean gravado = false;
@@ -182,7 +224,7 @@ public class ProjetoRepositoryMySQL {
 			ps.executeUpdate();
 
 			gravado = true;
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			gravado = false;
@@ -194,6 +236,10 @@ public class ProjetoRepositoryMySQL {
 		return gravado;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaAtividade(java.util.List)
+	 */
+	@Override
 	public List<ProjetoAtividade> gravaAtividade(
 			List<ProjetoAtividade> projetoAtividade) {
 		List<ProjetoAtividade> atividadesComId = new ArrayList<ProjetoAtividade>();
@@ -202,29 +248,29 @@ public class ProjetoRepositoryMySQL {
 			if(atividade.getIdAtividade() > 0){//ja existe
 				atividadesComId.add(atividade);
 			}else{
-				
+
 				int idAtividade = gravaAtividade(atividade);
-				
+
 				if(idAtividade != 0){
-					
+
 					atividade.setIdAtividade(idAtividade);
-					
+
 					if(gravaResponsaveisAtividade(atividade)){
-						
+
 						if(gravaCompetenciaAtividades(atividade)){
-							
+
 							atividadesComId.add(atividade);
 
 						}else{
 							atividadesComId = null;
 							break;
 						}
-						
+
 					}else{
 						atividadesComId = null;
 						break;
 					}
-					
+
 				}else{
 					atividadesComId = null;
 					break;
@@ -236,17 +282,19 @@ public class ProjetoRepositoryMySQL {
 		return atividadesComId;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaCompetenciaAtividades(br.ufscar.dominio.ProjetoAtividade)
+	 */
+	@Override
 	public boolean gravaCompetenciaAtividades(ProjetoAtividade atividade) {
 		boolean gravado = false;
 
-		for (CompetenciaCategoria categoria : atividade.getCompetenciaCategoria()) {
-			for (Competencia competencia : categoria.getCompetencias()) {
-				
-				gravado = gravaCompetenciaAtividades(atividade,competencia);
+		for (Competencia competencia : atividade.getCompetencia()) {
 
-				if(!gravado){
-					break;
-				}
+			gravado = gravaCompetenciaAtividades(atividade,competencia);
+
+			if(!gravado){
+				break;
 			}
 		}
 		return gravado;
@@ -274,7 +322,7 @@ public class ProjetoRepositoryMySQL {
 			ps.executeUpdate();
 
 			gravado = true;
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			gravado = false;
@@ -286,6 +334,10 @@ public class ProjetoRepositoryMySQL {
 		return gravado;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaResponsaveisAtividade(br.ufscar.dominio.ProjetoAtividade)
+	 */
+	@Override
 	public boolean gravaResponsaveisAtividade(ProjetoAtividade atividade) {
 		boolean gravado = false;
 
@@ -299,6 +351,10 @@ public class ProjetoRepositoryMySQL {
 		return gravado;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaResponsaveisAtividade(br.ufscar.dominio.ProjetoAtividade, br.ufscar.dominio.Responsavel)
+	 */
+	@Override
 	public boolean gravaResponsaveisAtividade(ProjetoAtividade atividade,
 			Responsavel responsavel) {
 		boolean gravado = false;
@@ -321,7 +377,7 @@ public class ProjetoRepositoryMySQL {
 			ps.executeUpdate();
 
 			gravado = true;
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			gravado = false;
@@ -333,6 +389,10 @@ public class ProjetoRepositoryMySQL {
 		return gravado;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaAtividade(br.ufscar.dominio.ProjetoAtividade)
+	 */
+	@Override
 	public int gravaAtividade(ProjetoAtividade atividade) {
 		Connection mySQLConnection = null;
 		PreparedStatement ps = null;
@@ -363,7 +423,7 @@ public class ProjetoRepositoryMySQL {
 			if(rs.next()){  
 				idAtividade = rs.getInt(1);  
 			}
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			idAtividade = 0;
@@ -374,7 +434,11 @@ public class ProjetoRepositoryMySQL {
 
 		return idAtividade;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#alterarProjeto(br.ufscar.dominio.Projeto)
+	 */
+	@Override
 	public boolean alterarProjeto(Projeto projeto){
 		Connection mySQLConnection = null;
 		PreparedStatement ps = null;
@@ -387,8 +451,7 @@ public class ProjetoRepositoryMySQL {
 			//Desabilita auto-commit
 			mySQLConnection.setAutoCommit(false);
 
-			//FIXME
-			ps = mySQLConnection.prepareStatement(""/*EDITAR_PROJETO*/);
+			ps = mySQLConnection.prepareStatement(EDITAR_PROJETO);
 			ps.clearParameters();
 
 			ps.setString(1,projeto.getNome());
@@ -411,7 +474,7 @@ public class ProjetoRepositoryMySQL {
 					if(excluirResponsaveisProjeto(projeto) && gravaResponsaveisProjeto(projeto, projeto.getResponsaveis())){
 						gravado = true;
 					}
-						
+
 				}else{
 					gravado = false;
 				}
@@ -435,7 +498,11 @@ public class ProjetoRepositoryMySQL {
 
 		return gravado;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#alterarAtividade(java.util.List)
+	 */
+	@Override
 	public List<ProjetoAtividade> alterarAtividade(
 			List<ProjetoAtividade> projetoAtividade) {
 		List<ProjetoAtividade> atividadesAlteradas = new ArrayList<ProjetoAtividade>();
@@ -446,46 +513,46 @@ public class ProjetoRepositoryMySQL {
 					atividadesAlteradas = null;
 					break;
 				}
-				
+
 				if(excluirResponsaveisAtividade(atividade) && gravaResponsaveisAtividade(atividade)){
-					
+
 					if(excluirCompetenciaAtividades(atividade) && gravaCompetenciaAtividades(atividade)){
-						
+
 						atividadesAlteradas.add(atividade);
 
 					}else{
 						atividadesAlteradas = null;
 						break;
 					}
-						
+
 				}else{
 					atividadesAlteradas = null;
 					break;
 				}
 			}else{
-				
+
 				int idAtividade = gravaAtividade(atividade);
-				
+
 				if(idAtividade != 0){
-					
+
 					atividade.setIdAtividade(idAtividade);
-					
+
 					if(gravaResponsaveisAtividade(atividade)){
-						
+
 						if(gravaCompetenciaAtividades(atividade)){
-							
+
 							atividadesAlteradas.add(atividade);
 
 						}else{
 							atividadesAlteradas = null;
 							break;
 						}
-						
+
 					}else{
 						atividadesAlteradas = null;
 						break;
 					}
-					
+
 				}else{
 					atividadesAlteradas = null;
 					break;
@@ -495,7 +562,11 @@ public class ProjetoRepositoryMySQL {
 
 		return atividadesAlteradas;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#excluirAtividadesProjeto(br.ufscar.dominio.Projeto)
+	 */
+	@Override
 	public boolean excluirAtividadesProjeto(Projeto projeto) {
 		boolean excluido = false;
 
@@ -516,7 +587,7 @@ public class ProjetoRepositoryMySQL {
 			ps.executeUpdate();
 
 			excluido = true;
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			excluido = false;
@@ -528,6 +599,10 @@ public class ProjetoRepositoryMySQL {
 		return excluido;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#excluirResponsaveisProjeto(br.ufscar.dominio.Projeto)
+	 */
+	@Override
 	public boolean excluirResponsaveisProjeto(Projeto projeto) {
 		boolean excluido = false;
 
@@ -548,7 +623,7 @@ public class ProjetoRepositoryMySQL {
 			ps.executeUpdate();
 
 			excluido = true;
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			excluido = false;
@@ -559,11 +634,15 @@ public class ProjetoRepositoryMySQL {
 
 		return excluido;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#alterarAtividade(br.ufscar.dominio.ProjetoAtividade)
+	 */
+	@Override
 	public boolean alterarAtividade(ProjetoAtividade atividade) {
 		Connection mySQLConnection = null;
 		PreparedStatement ps = null;
-		
+
 		boolean alterado = false;
 
 		try{
@@ -571,8 +650,7 @@ public class ProjetoRepositoryMySQL {
 
 			//Desabilita auto-commit
 			mySQLConnection.setAutoCommit(false);
-			//FIXME
-			ps = mySQLConnection.prepareStatement(""/*EDITAR_ATIVIDADE*/);
+			ps = mySQLConnection.prepareStatement(EDITAR_ATIVIDADE);
 			ps.clearParameters();
 
 			ps.setString(1,atividade.getNome());
@@ -586,7 +664,7 @@ public class ProjetoRepositoryMySQL {
 			ps.executeUpdate();
 
 			alterado = true;
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			alterado = false;
@@ -597,7 +675,11 @@ public class ProjetoRepositoryMySQL {
 
 		return alterado;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#excluirResponsaveisAtividade(br.ufscar.dominio.ProjetoAtividade)
+	 */
+	@Override
 	public boolean excluirResponsaveisAtividade(ProjetoAtividade atividade) {
 		boolean excluido = false;
 
@@ -618,7 +700,7 @@ public class ProjetoRepositoryMySQL {
 			ps.executeUpdate();
 
 			excluido = true;
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			excluido = false;
@@ -629,7 +711,7 @@ public class ProjetoRepositoryMySQL {
 
 		return excluido;
 	}
-	
+
 	private boolean excluirCompetenciaAtividades(ProjetoAtividade atividade) {
 		boolean excluido = false;
 
@@ -650,7 +732,7 @@ public class ProjetoRepositoryMySQL {
 			ps.executeUpdate();
 
 			excluido = true;
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			excluido = false;
@@ -660,5 +742,394 @@ public class ProjetoRepositoryMySQL {
 		}
 
 		return excluido;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#listarProjetos()
+	 */
+	@Override
+	public List<Projeto> listarProjetos() {
+		List<Projeto> projetosList = new ArrayList<Projeto>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_PROJETOS_PARA_LISTAR);
+			ps.clearParameters();
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				projetosList.add(recuperarProjetoPorId(rs.getInt("idProjeto")));
+
+			}
+		} catch (SQLException e) {
+			projetosList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return projetosList;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#recuperarProjetoPorId(int)
+	 */
+	@Override
+	public Projeto recuperarProjetoPorId(int idProjeto) {
+		Projeto projeto = null;
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_PROJETO_POR_ID);
+			ps.clearParameters();
+			rs = ps.executeQuery();
+			if(rs.next()){
+
+				String nome = rs.getString("nome");
+				int tipo = rs.getInt("tipo");
+				Date prazo = rs.getDate("prazo");
+				String observacoes = rs.getString("observacoes");
+				int status = rs.getInt("status");
+				boolean estado = rs.getBoolean("estado");
+				Date ts = rs.getDate("ts");
+				
+				projeto = new Projeto(idProjeto, nome, tipo, prazo, observacoes, status, estado, ts, null, null, null);
+
+				List<ProjetoAtividade> projetoAtividade = listarAtividadesProjeto(projeto);
+				projeto.setProjetoAtividade(projetoAtividade);
+				
+				List<Responsavel> responsaveis = listarResponsaveisProjeto(projeto);
+				projeto.setResponsaveis(responsaveis);
+				
+				List<Feedback> feedbacksResponsaveisAtividades = listarFeedbacksProjeto(projeto);
+				projeto.setFeedbacksResponsaveisAtividades(feedbacksResponsaveisAtividades);
+				
+			}
+		} catch (SQLException e) {
+			projeto = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return projeto;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#listarFeedbacksProjeto(br.ufscar.dominio.Projeto)
+	 */
+	@Override
+	public List<Feedback> listarFeedbacksProjeto(Projeto projeto) {
+		List<Feedback> feedbackList = new ArrayList<Feedback>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_FEEDBACKS_PROJETO_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, projeto.getIdProjeto());
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				feedbackList.add(recuperarFeedbackPorId(rs.getInt("idFeedback")));
+
+			}
+		} catch (SQLException e) {
+			feedbackList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return feedbackList;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#recuperarFeedbackPorId(int)
+	 */
+	@Override
+	public Feedback recuperarFeedbackPorId(int idFeedBack) {
+		Feedback feedback = null;
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_FEEDBACK_POR_ID);
+			ps.clearParameters();
+			ps.setInt(1, idFeedBack);
+			rs = ps.executeQuery();
+			if(rs.next()){
+
+				int idFeedback = rs.getInt("idFeedback");
+				int avaliacao = rs.getInt("avaliacao");
+				int tpFeedback = rs.getInt("tpFeedback");
+				String observacoes = rs.getString("observacoes");
+				boolean estado = rs.getBoolean("estado");
+				Date ts = rs.getDate("ts");
+				Responsavel feedbackDe = _pessoaRepository.recuperarResponsavelPorId(rs.getInt("feedbackDe"));
+				Responsavel feedbackPara = _pessoaRepository.recuperarResponsavelPorId(rs.getInt("feedbackPara"));
+				ProjetoAtividade atividade = recuperarAtividadeProjetoPorId(rs.getInt("idProjetoAtividade"));
+				feedback = new Feedback(idFeedback, avaliacao, tpFeedback, observacoes, estado, ts, feedbackDe, feedbackPara, atividade);
+
+			}
+		} catch (SQLException e) {
+			feedback = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return feedback;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#listarAtividadesProjeto(br.ufscar.dominio.Projeto)
+	 */
+	@Override
+	public List<ProjetoAtividade> listarAtividadesProjeto(Projeto projeto) {
+		List<ProjetoAtividade> atividadesList = new ArrayList<ProjetoAtividade>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_ATIVIDADES_PROJETO_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, projeto.getIdProjeto());
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				atividadesList.add(recuperarAtividadeProjetoPorId(rs.getInt("idAtividade")));
+
+			}
+		} catch (SQLException e) {
+			atividadesList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return atividadesList;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#recuperarAtividadeProjetoPorId(int)
+	 */
+	@Override
+	public ProjetoAtividade recuperarAtividadeProjetoPorId(int idAtividade) {
+		ProjetoAtividade atividade = null;
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_ATIVIDADE_PROJETO_POR_ID);
+			ps.clearParameters();
+			ps.setInt(1, idAtividade);
+			rs = ps.executeQuery();
+			if(rs.next()){
+
+				String nome = rs.getString("nome");
+				String descricao = rs.getString("descricao");
+				int tipo = rs.getInt("tipo");
+				Date prazo = rs.getDate("prazo");
+				int status = rs.getInt("status");
+				boolean estado = rs.getBoolean("estado");
+				Date ts = rs.getDate("ts");
+				atividade =  new ProjetoAtividade(idAtividade, nome, descricao, tipo, prazo, status, estado, ts, null, null, null, null);
+
+				Projeto projeto = recuperarProjetoPorAtividade(atividade);
+				atividade.setProjeto(projeto);
+
+				List<Responsavel> responsaveis = listarResponsaveisProjetoAtividade(atividade);
+				atividade.setResponsaveis(responsaveis);
+
+				List<Competencia> competencias = listarCompetenciasProjetoAtividade(atividade);
+				atividade.setCompetencia(competencias);
+
+				Feedback feedbackAtividade = recuperaFeedbackAtividade(atividade);
+				atividade.setFeedbackAtividade(feedbackAtividade);
+
+			}
+		} catch (SQLException e) {
+			atividade = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return atividade;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#recuperaFeedbackAtividade(br.ufscar.dominio.ProjetoAtividade)
+	 */
+	@Override
+	public Feedback recuperaFeedbackAtividade(ProjetoAtividade atividade) {
+		Feedback feedback = null;
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_FEEDBACK_ATIVIDADE_POR_ATIVIDADE);
+			ps.clearParameters();
+			ps.setInt(1, atividade.getIdAtividade());
+			rs = ps.executeQuery();
+			if(rs.next()){
+
+				int idFeedback = rs.getInt("idFeedback");
+				int avaliacao = rs.getInt("avaliacao");
+				int tpFeedback = rs.getInt("tpFeedback");
+				String observacoes = rs.getString("observacoes");
+				boolean estado = rs.getBoolean("estado");
+				Date ts = rs.getDate("ts");
+				Responsavel feedbackDe = _pessoaRepository.recuperarResponsavelPorId(rs.getInt("feedbackDe"));
+				Responsavel feedbackPara = _pessoaRepository.recuperarResponsavelPorId(rs.getInt("feedbackPara"));
+				feedback = new Feedback(idFeedback, avaliacao, tpFeedback, observacoes, estado, ts, feedbackDe, feedbackPara, atividade);
+
+			}
+		} catch (SQLException e) {
+			feedback = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return feedback;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#recuperarProjetoPorAtividade(br.ufscar.dominio.ProjetoAtividade)
+	 */
+	@Override
+	public Projeto recuperarProjetoPorAtividade(ProjetoAtividade atividade) {
+		Projeto projeto = null;
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_PROJETO_POR_ATIVIDADE);
+			ps.clearParameters();
+			ps.setInt(1, atividade.getIdAtividade());
+			rs = ps.executeQuery();
+			if(rs.next()){
+
+				int idProjeto = rs.getInt("PA.idProjeto");
+				String nome = rs.getString("P.nome");
+				int tipo = rs.getInt("P.tipo");
+				Date prazo = rs.getDate("P.prazo");
+				String observacoes = rs.getString("P.observacoes");
+				int status = rs.getInt("P.status");
+				boolean estado = rs.getBoolean("P.estado");
+				Date ts = rs.getDate("P.ts");
+				projeto = new Projeto(idProjeto, nome, tipo, prazo, observacoes, status, estado, ts, null, null, null);
+
+			}
+		} catch (SQLException e) {
+			projeto = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return projeto;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#listarResponsaveisProjeto(br.ufscar.dominio.Projeto)
+	 */
+	@Override
+	public List<Responsavel> listarResponsaveisProjeto(Projeto projeto) {
+		List<Responsavel> responsaveisList = new ArrayList<Responsavel>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_RESPONSAVEIS_PROJETO_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, projeto.getIdProjeto());
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				responsaveisList.add(_pessoaRepository.recuperarResponsavelPorId(rs.getInt("idPessoa")));
+
+			}
+		} catch (SQLException e) {
+			responsaveisList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return responsaveisList;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#listarCompetenciasProjetoAtividade(br.ufscar.dominio.ProjetoAtividade)
+	 */
+	@Override
+	public List<Competencia> listarCompetenciasProjetoAtividade(ProjetoAtividade atividade) {
+		List<Competencia> competenciasList = new ArrayList<Competencia>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_COMPETENCIAS_ATIVIDADE_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, atividade.getIdAtividade());
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				competenciasList.add(_competenciaRepository.recuperarCompetenciaPeloId(rs.getInt("idCompetencia")));
+
+			}
+		} catch (SQLException e) {
+			competenciasList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return competenciasList;
+	}
+
+	/* (non-Javadoc)
+	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#listarResponsaveisProjetoAtividade(br.ufscar.dominio.ProjetoAtividade)
+	 */
+	@Override
+	public List<Responsavel> listarResponsaveisProjetoAtividade(ProjetoAtividade atividade) {
+		List<Responsavel> responsaveisList = new ArrayList<Responsavel>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_RESPONSAVEIS_ATIVIDADE_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, atividade.getIdAtividade());
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				responsaveisList.add(_pessoaRepository.recuperarResponsavelPorId(rs.getInt("idPessoa")));
+
+			}
+		} catch (SQLException e) {
+			responsaveisList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return responsaveisList;
 	}
 }
