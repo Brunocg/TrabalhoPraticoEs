@@ -166,7 +166,19 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	}
 
 	@Override
-	public Responsavel recuperarResponsavelPorId(int int1) {
+	public Responsavel recuperarResponsavelCompletoPorId(int idPessoa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Responsavel recuperarResponsavelSimplesPorId(int idPessoa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Usuario> recuperarUsuariosAprovadosPorResponsavel(int idPessoa) {
 		// TODO Auto-generated method stub
 		return null;
 	}
