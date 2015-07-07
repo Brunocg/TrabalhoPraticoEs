@@ -18,54 +18,57 @@ import br.ufscar.dominio.interfaces.IPessoaRepository;
 @Repository
 public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	HashMap<Integer, Pessoa> pessoas = new HashMap<Integer, Pessoa>();
+	HashMap<Integer, Endereco> enderecos = new HashMap<Integer, Endereco>();
 	
 	@Override
 	public boolean gravaPessoa(Pessoa pessoa){
-		// TODO Auto-generated method stub
+		pessoas.put(pessoa.getIdPessoa(), pessoa);
 		return true;
 	}
 
 	@Override
 	public boolean gravaUsuario(Pessoa pessoa, Usuario usuario) {
-		// TODO Auto-generated method stub
+		pessoas.get(pessoa.getIdPessoa()).setUsuario(usuario);
 		return true;
 	}
 
 	@Override
 	public boolean gravaExperiencias(Pessoa pessoa,
 			List<CompetenciaExperiencia> competenciasExperiencia) {
-		// TODO Auto-generated method stub
+			pessoas.get(pessoa.getIdPessoa()).setCompetenciasExperiencia(competenciasExperiencia);
 		return true;
 	}
 
 	@Override
 	public boolean gravaExperiencias(Pessoa pessoa,
 			CompetenciaExperiencia competenciaExperiencia) {
-		// TODO Auto-generated method stub
+		pessoas.get(pessoa.getIdPessoa()).adicionarCompetenciasExperiencia(competenciaExperiencia);
 		return true;
 	}
 
 	@Override
 	public boolean gravaEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos) {
-		// TODO Auto-generated method stub
+		pessoas.get(pessoa.getIdPessoa()).setEndereco(enderecos);
 		return true;
 	}
 
 	@Override
 	public boolean gravaEnderecosPessoa(Pessoa pessoa, Endereco endereco) {
-		// TODO Auto-generated method stub
+		pessoas.get(pessoa.getIdPessoa()).getEndereco().add(endereco);
 		return true;
 	}
 
 	@Override
 	public List<Endereco> gravaEndereco(List<Endereco> enderecos) {
-		// TODO Auto-generated method stub
-		return null;
+		for (Endereco endereco: enderecos)
+			this.enderecos.put(endereco.getIdEndereco(), endereco);
+		
+		return new ArrayList<Endereco>(this.enderecos.values());
 	}
 
 	@Override
 	public int gravaEndereco(Endereco endereco) {
-		// TODO Auto-generated method stub
+		enderecos.put(endereco.getIdEndereco(), endereco);
 		return 0;
 	}
 
@@ -91,7 +94,7 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 
 	@Override
 	public boolean excluirPessoa(Pessoa pessoa) {
-		// TODO Auto-generated method stub
+		pessoas.remove(pessoa.getIdPessoa());
 		return false;
 	}
 
@@ -109,20 +112,17 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 
 	@Override
 	public List<Endereco> recuperarEnderecosPorPessoa(int idPessoa) {
-		// TODO Auto-generated method stub
-		return null;
+		return pessoas.get(idPessoa).getEndereco();
 	}
 
 	@Override
 	public List<Pessoa> recuperarMoradoresEndereco(int idEndereco) {
-		// TODO Auto-generated method stub
-		return null;
+		return enderecos.get(idEndereco).getMoradores();
 	}
 
 	@Override
 	public Usuario recuperarUsuarioPorPessoa(int idPessoa) {
-		// TODO Auto-generated method stub
-		return null;
+		return pessoas.get(idPessoa).getUsuario();
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	public boolean editarExperiencias(Pessoa pessoa,
 			List<CompetenciaExperiencia> competenciasExperiencia)
 			 {
-		// TODO Auto-generated method stub
+		pessoas.get(pessoa.getIdPessoa()).setCompetenciasExperiencia(competenciasExperiencia);
 		return false;
 	}
 
@@ -156,13 +156,13 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	public boolean editaExperiencias(Pessoa pessoa,
 			CompetenciaExperiencia competenciaExperiencia)  {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean editaUsuario(Pessoa pessoa, Usuario usuario) {
-		// TODO Auto-generated method stub
-		return false;
+		pessoas.get(pessoa.getIdPessoa()).setUsuario(usuario);
+		return true;
 	}
 
 	@Override
