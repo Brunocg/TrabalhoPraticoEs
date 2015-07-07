@@ -12,9 +12,13 @@ import java.util.List;
 
 import br.ufscar.dao.ConnectionManager;
 import br.ufscar.dominio.Competencia;
+import br.ufscar.dominio.CompetenciaCategoria;
 import br.ufscar.dominio.CompetenciaExperiencia;
 import br.ufscar.dominio.Endereco;
+import br.ufscar.dominio.Feedback;
 import br.ufscar.dominio.Pessoa;
+import br.ufscar.dominio.Projeto;
+import br.ufscar.dominio.ProjetoAtividade;
 import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.Usuario;
 import br.ufscar.dominio.UsuarioTipo;
@@ -52,6 +56,8 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	private static final String EXCLUIR_PESSOA = "UPDATE Pessoa SET estado = ? WHERE idPessoa = ?";
 	private static final String EXCLUIR_ENDERECO_PESSOA = "DELETE FROM EnderecoPessoa E WHERE idEndereco = ? AND idPessoa = ?";
+	//FIXME
+	private static final String BUSCAR_USUARIOS_APROVADOS_POR_RESPONSAVEL_PARA_LISTAR = null;
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -893,27 +899,66 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public Responsavel recuperarResponsavelPorId(int idPessoa) {
+	public Responsavel recuperarResponsavelCompletoPorId(int idPessoa) {
 		Responsavel responsavel = null;
-		//FIXME
-//		Pessoa pessoa = recuperarPessoaPorId(idPessoa);
-//		
-//		List<Projeto> projeto = _repositorioDeProjetos.listarProjetosPorResponsavel(idPessoa);
-//		
-//		List<ProjetoAtividade> projetoAtividades = _repositorioDeProjetos.listarProjetosAtividadesPorResponsavel(idPessoa);
-//		
-//		List<Usuario> usuariosAprovados = recuperarUsuariosAprovadosPorResponsavel(idPessoa);
-//		
-//		List<Competencia> competenciasAprovadas = _repositorioDeCompetencia.recuperarCompetenciasAprovadasPorResponsavel(idPessoa);
-//		
-//		List<Feedback> feedbackCriados = _repositorioDeProjetos.recuperarFeedbacksCriadosPorResponsavel(idPessoa);
-//		
-//		List<Feedback> feedbacksRecebidos = _repositorioDeProjetos.recuperarFeedbacksRecebidosPorResponsavel(idPessoa);
-//		
-//		List<CompetenciaCategoria> competenciasCategoriaAprovadas = _repositorioDeCompetencia.recuperarCompetenciaCategoriasAprovadasPorResponsavel(idPessoa);
-//		
-//		responsavel = new Responsavel(pessoa, projeto, projetoAtividades, usuariosAprovados, competenciasAprovadas, feedbackCriados, feedbacksRecebidos, competenciasCategoriaAprovadas);
-//		
+		
+		Pessoa pessoa = recuperarPessoaPorId(idPessoa);
+		
+		List<Projeto> projeto = _repositorioDeProjetos.listarProjetosPorResponsavel(idPessoa);
+		
+		List<ProjetoAtividade> projetoAtividades = _repositorioDeProjetos.listarProjetosAtividadesPorResponsavel(idPessoa);
+		
+		List<Usuario> usuariosAprovados = recuperarUsuariosAprovadosPorResponsavel(idPessoa);
+		
+		List<Competencia> competenciasAprovadas = _repositorioDeCompetencia.recuperarCompetenciasAprovadasPorResponsavel(idPessoa);
+		
+		List<Feedback> feedbackCriados = _repositorioDeProjetos.recuperarFeedbacksCriadosPorResponsavel(idPessoa);
+		
+		List<Feedback> feedbacksRecebidos = _repositorioDeProjetos.recuperarFeedbacksRecebidosPorResponsavel(idPessoa);
+		
+		List<CompetenciaCategoria> competenciasCategoriaAprovadas = _repositorioDeCompetencia.recuperarCompetenciaCategoriasAprovadasPorResponsavel(idPessoa);
+		
+		responsavel = new Responsavel(pessoa, projeto, projetoAtividades, usuariosAprovados, competenciasAprovadas, feedbackCriados, feedbacksRecebidos, competenciasCategoriaAprovadas);
+		
+		
+		return responsavel;
+	}
+	
+	@Override
+	public List<Usuario> recuperarUsuariosAprovadosPorResponsavel(int idPessoa) {
+		List<Usuario> usuarios = new ArrayList<Usuario>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_USUARIOS_APROVADOS_POR_RESPONSAVEL_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, idPessoa);
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				usuarios.add(recuperarUsuarioPorPessoa(rs.getInt("idPessoa")));
+
+			}
+		} catch (SQLException e) {
+			usuarios = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return usuarios;
+	}
+
+	@Override
+	public Responsavel recuperarResponsavelSimplesPorId(int idPessoa) {
+		Responsavel responsavel = null;
+		
+		Pessoa pessoa = recuperarPessoaPorId(idPessoa);
+		
+		responsavel = new Responsavel(pessoa, null, null, null, null, null, null, null);
+		
 		
 		return responsavel;
 	}
