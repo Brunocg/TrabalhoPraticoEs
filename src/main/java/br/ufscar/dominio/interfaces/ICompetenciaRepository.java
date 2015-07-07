@@ -25,5 +25,9 @@ public interface ICompetenciaRepository {
 		public abstract List<Competencia> recuperarCompetenciasPorCategoria(CompetenciaCategoria categoria);
 		public abstract Competencia recuperarCompetenciaPeloNome(String nome);
 		public abstract Competencia recuperarCompetenciaPeloId(int idCompetencia);
+		public abstract List<Competencia> recuperarCompetenciasAprovadasPorResponsavel(
+				int idPessoa);
+		public abstract List<CompetenciaCategoria> recuperarCompetenciaCategoriasAprovadasPorResponsavel(
+				int idPessoa);
 
 }
