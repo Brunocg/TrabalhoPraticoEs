@@ -2,6 +2,8 @@ package br.ufscar.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,8 +60,26 @@ public class PessoaController {
 	
 	@RequestMapping(value = "/usuario/login", method = RequestMethod.POST)
 	@ResponseBody
-	public Response login(@RequestBody LoginData login){
-		return new Response(servico.loginValido(login), null);		
+	public Response login(@RequestBody LoginData login, HttpServletRequest r){
+		if (servico.loginValido(login)) {
+			r.getSession().setAttribute("logado", servico.loginEfetuado(login));
+			return new Response(true, null);
+		} else {
+			return new Response(false, null);
+		}		
+	}	
+	
+	@RequestMapping(value = "/usuario/logado", method = RequestMethod.GET)
+	@ResponseBody
+	public Response getSessaoLogado(HttpServletRequest r){
+		return new Response(true, r.getSession().getAttribute("logado"));
+	}
+	
+	@RequestMapping(value = "/usuario/logout", method = RequestMethod.GET)
+	@ResponseBody
+	public Response logout(HttpServletRequest r){
+		r.getSession().setAttribute("logado", null);
+		return new Response(true, null);		
 	}	
 
 }
