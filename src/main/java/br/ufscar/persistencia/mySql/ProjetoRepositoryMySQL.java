@@ -51,6 +51,11 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 	private static final String BUSCAR_PROJETO_POR_ID = "SELECT nome, tipo, prazo, observacoes, status, estado, ts FROM Projeto P WHERE idProjeto = ?";
 	private static final String BUSCAR_FEEDBACKS_PROJETO_PARA_LISTAR = "SELECT idFeedback FROM ProjetoFeedbacks P WHERE idProjeto = ?";
 	private static final String BUSCAR_FEEDBACK_POR_ID = "SELECT idProjetoAtividade, feedbackDe, feedbackPara, avaliacao, tpFeedback, observacoes, estado, ts FROM Feedback F WHERE idFeedback = ?";
+	//FIXME
+	private static final String BUSCAR_ATIVIDADES_POR_RESPONSAVEL_PARA_LISTAR = null;
+	private static final String BUSCAR_PROJETOS_POR_RESPNSAVEL_PARA_LISTAR = null;
+	private static final String BUSCAR_FEEDBACK_CRIADO_POR_RESPONSAVEL_PARA_LISTAR = null;
+	private static final String BUSCAR_FEEDBACK_RECEBIDO_POR_RESPONSAVEL_PARA_LISTAR = null;
 
 	/* (non-Javadoc)
 	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaProjeto(br.ufscar.dominio.Projeto)
@@ -872,8 +877,8 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 				String observacoes = rs.getString("observacoes");
 				boolean estado = rs.getBoolean("estado");
 				Date ts = rs.getDate("ts");
-				Responsavel feedbackDe = _pessoaRepository.recuperarResponsavelPorId(rs.getInt("feedbackDe"));
-				Responsavel feedbackPara = _pessoaRepository.recuperarResponsavelPorId(rs.getInt("feedbackPara"));
+				Responsavel feedbackDe = _pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("feedbackDe"));
+				Responsavel feedbackPara = _pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("feedbackPara"));
 				ProjetoAtividade atividade = recuperarAtividadeProjetoPorId(rs.getInt("idProjetoAtividade"));
 				feedback = new Feedback(idFeedback, avaliacao, tpFeedback, observacoes, estado, ts, feedbackDe, feedbackPara, atividade);
 
@@ -990,8 +995,8 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 				String observacoes = rs.getString("observacoes");
 				boolean estado = rs.getBoolean("estado");
 				Date ts = rs.getDate("ts");
-				Responsavel feedbackDe = _pessoaRepository.recuperarResponsavelPorId(rs.getInt("feedbackDe"));
-				Responsavel feedbackPara = _pessoaRepository.recuperarResponsavelPorId(rs.getInt("feedbackPara"));
+				Responsavel feedbackDe = _pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("feedbackDe"));
+				Responsavel feedbackPara = _pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("feedbackPara"));
 				feedback = new Feedback(idFeedback, avaliacao, tpFeedback, observacoes, estado, ts, feedbackDe, feedbackPara, atividade);
 
 			}
@@ -1060,7 +1065,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 			rs = ps.executeQuery();
 			while(rs.next()){
 
-				responsaveisList.add(_pessoaRepository.recuperarResponsavelPorId(rs.getInt("idPessoa")));
+				responsaveisList.add(_pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("idPessoa")));
 
 			}
 		} catch (SQLException e) {
@@ -1120,7 +1125,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 			rs = ps.executeQuery();
 			while(rs.next()){
 
-				responsaveisList.add(_pessoaRepository.recuperarResponsavelPorId(rs.getInt("idPessoa")));
+				responsaveisList.add(_pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("idPessoa")));
 
 			}
 		} catch (SQLException e) {
@@ -1132,4 +1137,114 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 
 		return responsaveisList;
 	}
+
+	@Override
+	public List<Projeto> listarProjetosPorResponsavel(int idPessoa) {
+		List<Projeto> projetosList = new ArrayList<Projeto>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_PROJETOS_POR_RESPNSAVEL_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, idPessoa);
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				projetosList.add(recuperarProjetoPorId(rs.getInt("idProjeto")));
+
+			}
+		} catch (SQLException e) {
+			projetosList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return projetosList;
+	}
+
+	@Override
+	public List<ProjetoAtividade> listarProjetosAtividadesPorResponsavel(
+			int idPessoa) {
+		List<ProjetoAtividade> atividadesList = new ArrayList<ProjetoAtividade>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_ATIVIDADES_POR_RESPONSAVEL_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, idPessoa);
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				atividadesList.add(recuperarAtividadeProjetoPorId(rs.getInt("idAtividade")));
+
+			}
+		} catch (SQLException e) {
+			atividadesList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return atividadesList;
+	}
+
+	@Override
+	public List<Feedback> recuperarFeedbacksCriadosPorResponsavel(int idPessoa) {
+		List<Feedback> feedbacksList = new ArrayList<Feedback>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_FEEDBACK_CRIADO_POR_RESPONSAVEL_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, idPessoa);
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				feedbacksList.add(recuperarFeedbackPorId(rs.getInt("feedbackDe")));
+
+			}
+		} catch (SQLException e) {
+			feedbacksList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return feedbacksList;
+	}
+
+	@Override
+	public List<Feedback> recuperarFeedbacksRecebidosPorResponsavel(int idPessoa) {
+		List<Feedback> feedbacksList = new ArrayList<Feedback>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_FEEDBACK_RECEBIDO_POR_RESPONSAVEL_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, idPessoa);
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				feedbacksList.add(recuperarFeedbackPorId(rs.getInt("feedbackPara")));
+
+			}
+		} catch (SQLException e) {
+			feedbacksList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return feedbacksList;
+	}
+
 }
