@@ -1,0 +1,96 @@
+<head>
+	<meta charset="utf-8">
+</head>
+<script>
+
+</script>
+<div class="container-fluid">
+
+    <!-- begin PAGE TITLE AREA -->
+    <!-- Use this section for each page's title and breadcrumb layout. In this example a date range picker is included within the breadcrumb. -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-title">
+                <h1>Gerente
+                    <small>Todos os gerentes</small>
+                    <a href="javascript:;" class="btn btn-default pull-right btn-gerente-novo" ><i class="fa fa-plus"></i> Novo Gerente</a>
+                </h1>
+                <ol class="breadcrumb">
+                    <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+                    <li class="active">Listagem dos gerentes</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+        
+        <div class="col-lg-12 listagem-gerentes">
+        
+        <div class="portlet portlet-default">
+	        <div class="portlet-heading">
+	            <div class="portlet-title">
+	                <h4>&nbsp;</h4>
+	            </div>
+	            <div class="clearfix"></div>
+	        </div>
+	        <div class="portlet-body">
+	            
+			  	<table id="tableGerente" class="table table-hover table-bordered">
+			        <thead>
+			            <tr>
+			                <th>Nome</th>
+			                <th>CPF</th>
+			                <th>Estado Civil</th>
+			                <th>Sexo</th>
+			                <th>Nasc.</th>
+			                <th>Estado</th>
+			                <th>Usuário</th>
+			                <th>Ações</th>
+			            </tr>
+			        </thead>
+			
+			        <tbody>
+			            <tr role="row">
+			              <td>Col 1</td>
+			              <td>111111</td>
+			              <td>Solteiro</td>
+			              <td>Mesculino</td>
+			              <td>01/01/2001</td>
+			              <td>*****</td>
+			              <td>*****</td>
+			              <td>
+			                <button class="btn btn-green btn-xs" title="Editar"><i class="fa fa-pencil-square-o"></i></button>
+			              	&nbsp;
+			                <button class="btn btn-red btn-xs" title="Excluir"><i class="fa fa-times"></i></button>
+			              </td>
+			            </tr>
+			            <tr role="row">
+			              <td>Col 1</td>
+			              <td>111111</td>
+			              <td>Solteiro</td>
+			              <td>Mesculino</td>
+			              <td>01/01/2001</td>
+			              <td>*****</td>
+			              <td>*****</td>
+			              <td>
+			              	<button class="btn btn-green btn-xs" title="Editar"><i class="fa fa-pencil-square-o"></i></button>
+			              	&nbsp;
+			                <button class="btn btn-red btn-xs" title="Excluir"><i class="fa fa-times"></i></button>
+			              </td>
+			            </tr>
+			        </tbody>
+		    	</table>
+
+	        </div>
+	        <!-- /.portlet-body -->
+	    </div>
+			    
+        </div>
+    </div>
+    <!-- /.row -->
+    <!-- end PAGE TITLE AREA -->
+
+
+</div>
+<!-- /.page-content -->
+
+<script src="resources/js/appController.js"></script>

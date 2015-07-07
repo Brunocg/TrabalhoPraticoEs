@@ -1,0 +1,133 @@
+<head>
+	<meta charset="utf-8">
+</head>
+<script>
+function getFormData($form){
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
+
+    $.map(unindexed_array, function(n, i){
+        indexed_array[n['name']] = n['value'];
+    });
+
+    return indexed_array;
+}
+
+function login($login, $senha) {
+	$.ajax({
+	    type: "POST",
+	    url: "/pessoa/usuario/login",
+	    // The key needs to match your method's input parameter (case-sensitive).
+	    data: JSON.stringify({login:$login, senha:$senha}),
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "json",
+	    success: function(data){
+	    	if(data.success == false) {
+	    		alert("Dados incorretos!");
+	    	} else {
+	    		window.location.href="home.html";
+	    	}
+    	},
+	    failure: function(errMsg) {
+	        alert(errMsg);
+	    }
+	});
+}
+
+$(document).ready(function() {
+	$(".btn-to-login").on("click", function(){
+		$(location).attr('href', "/");
+	});
+	$("#dataNascimento").datepicker({
+	    autoclose: true,
+	    format: 'yyyy-mm-dd',
+	    todayHighlight: true
+	});
+	$("#pessoaForm").on("submit", function(){
+		$.ajax({
+		    type: "POST",
+		    url: "pessoa/inserir/basico",
+		    // The key needs to match your method's input parameter (case-sensitive).
+		    data: JSON.stringify(getFormData($(this))),
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json",
+		    success: function(data){
+		    	if(data.success == false) {
+		    		alert("Dados incorretos!");
+		    	} else {
+		    		login(data.data.login, data.data.senha);
+		    	}
+	    	},
+		    failure: function(errMsg) {
+		        alert(errMsg);
+		    }
+		});
+		return false;
+	});
+});
+</script>
+<div class="portlet-heading login-heading">
+    <div class="portlet-title">
+        <h4><strong>Cadastro de usuário</strong>
+        </h4>
+    </div>
+    <div class="portlet-widgets">
+        <button class="btn btn-white btn-xs btn-to-login"><i class="fa fa-arrow-circle-left"></i> Voltar</button>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="portlet-body">
+    <form accept-charset="UTF-8" role="form" id="pessoaForm">
+        <fieldset>
+        	<input type="hidden" name="idPessoa" value="" />
+        	<div class="form-group">
+                <input class="form-control" placeholder="Nome" name="nome" id="nome" type="text" required="required" />
+            </div>
+            <div class="form-group">
+                <select class="form-control" placeholder="Sexo" name="sexo" id="sexo" required="required">
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="form-control" placeholder="Estado Civil" name="sitCivil" id="sitCivil" required="required">
+                    <option value="C">Casado</option>
+                    <option value="S">Solteiro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input class="form-control" placeholder="Data de Nascimento" type="text" name="dataNascimento" id="dataNascimento" required="required" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" placeholder="CPF" type="text" name="cpf" id="cpf" required="required" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" placeholder="RG" name="rg" id="rg" type="text" required="required" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" placeholder="Telefone" name="telefone" id="telefone" type="text" required="required" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" placeholder="Celular" name="celular" id="celular" type="text" required="required" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" placeholder="E-mail" name="email" id="email" type="email" required="required" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" placeholder="Página pessoal" name="pagPessoal" id="pagPessoal" type="text" required="required" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" placeholder="Mensagem Instantânea" name="msgInst" id="msgInst" type="text" required="required" />
+            </div>
+            <hr />
+            <div class="form-group">
+                <input class="form-control" placeholder="Usuário" name="login" id="login" type="text" required="required" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" placeholder="Senha" name="senha" id="senha" type="password" value="" required="required" />
+            </div>
+            <br>
+            <input type="submit" class="btn btn-lg btn-green btn-block btn-cadastrar-usuario" value="Cadastrar" />
+        </fieldset>
+    </form>
+</div>
