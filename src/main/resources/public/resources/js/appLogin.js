@@ -1,5 +1,4 @@
-// Main document to control the app
-
+// Documento para controlar funcoes do login
 function getFormData($form){
     var unindexed_array = $form.serializeArray();
     var indexed_array = {};
@@ -35,7 +34,6 @@ $(document).ready(function() {
 		$.ajax({
 		    type: "POST",
 		    url: "/pessoa/usuario/login",
-		    // The key needs to match your method's input parameter (case-sensitive).
 		    data: JSON.stringify(getFormData($(this))),
 		    contentType: "application/json; charset=utf-8",
 		    dataType: "json",
