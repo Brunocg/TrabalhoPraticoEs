@@ -14,24 +14,6 @@ public class CompetenciaData {
 		super();
 	}
 
-	public CompetenciaData(int idCompetencia, String nome, boolean estado,
-			Date ts, ResponsavelData aprovadorPor) {
-		super();
-		this.idCompetencia = idCompetencia;
-		this.nome = nome;
-		this.estado = estado;
-		this.ts = ts;
-		this.aprovadorPor = aprovadorPor;
-	}
-	
-	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
-
-	public boolean aprovar(){
-		return true;
-	}
-	
-	//-------------------------------------------------------------------------Getters and Setters-------------------------------------------------------------------------
-	
 	public int getIdCompetencia() {
 		return idCompetencia;
 	}
@@ -71,5 +53,4 @@ public class CompetenciaData {
 	public void setAprovadorPor(ResponsavelData aprovadorPor) {
 		this.aprovadorPor = aprovadorPor;
 	}
-
 }

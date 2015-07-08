@@ -17,27 +17,6 @@ public class CompetenciaExperienciaData {
 		super();
 	}
 
-	public CompetenciaExperienciaData(int idExperiencia, int nivel,
-			int tempoExperiencia, String observacoes, boolean estado,
-			Date ts, CompetenciaData competencia, PessoaData pessoa) {
-		super();
-		this.idExperiencia = idExperiencia;
-		this.nivel = nivel;
-		this.tempoExperiencia = tempoExperiencia;
-		this.observacoes = observacoes;
-		this.estado = estado;
-		this.ts = ts;
-		this.competencia = competencia;
-		this.pessoa = pessoa;
-	}
-
-	
-	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
-
-
-	
-	//-------------------------------------------------------------------------Getters and Setters-------------------------------------------------------------------------
-	
 	public int getIdExperiencia() {
 		return idExperiencia;
 	}
@@ -86,14 +65,6 @@ public class CompetenciaExperienciaData {
 		this.ts = ts;
 	}
 
-	public PessoaData getPessoa() {
-		return pessoa;
-	}
-
-	public void setPessoa(PessoaData pessoa) {
-		this.pessoa = pessoa;
-	}
-
 	public CompetenciaData getCompetencia() {
 		return competencia;
 	}
@@ -102,5 +73,12 @@ public class CompetenciaExperienciaData {
 		this.competencia = competencia;
 	}
 
+	public PessoaData getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(PessoaData pessoa) {
+		this.pessoa = pessoa;
+	}
 }
 

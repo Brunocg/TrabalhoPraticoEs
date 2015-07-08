@@ -16,7 +16,6 @@ public enum UsuarioTipoData {
 	private UsuarioTipoData(int cod, String descricao){
 		this.setUsuarioTipo(cod);
 		this.setDescricao(descricao);
-		this.acessos = new UsuarioAcessoData().getAcessos(cod);
 	}
 	
 	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
