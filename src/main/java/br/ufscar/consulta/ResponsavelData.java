@@ -52,7 +52,7 @@ public class ResponsavelData extends PessoaData {
 			List<CompetenciaData> competenciasAprovadas,
 			List<FeedbackData> feedbackCriados, List<FeedbackData> feedbacksRecebidos,
 			List<CompetenciaCategoriaData> competenciasCategoriaAprovadas) {
-		super(pessoa.getIdPessoa(), pessoa.getNome(), pessoa.getSitCivil(), pessoa.getSexo(), pessoa.getDataNascimento(), pessoa.getCpf(), pessoa.getRg(), pessoa.getEndereco(),
+		super(pessoa.getIdPessoa(), pessoa.getNome(), pessoa.getSitCivil(), pessoa.getSexo(), pessoa.getDataNascimento(), pessoa.getCpf(), pessoa.getRg(), pessoa.getEnderecos(),
 				pessoa.getTelefone(), pessoa.getCelular(), pessoa.getEmail(), pessoa.getPagPessoal(), pessoa.getMsgInst(), pessoa.getUsuario(), pessoa.isEstado(), pessoa.getTs(),
 				pessoa.getCompetenciasExperiencia());
 		this.projeto = projeto;

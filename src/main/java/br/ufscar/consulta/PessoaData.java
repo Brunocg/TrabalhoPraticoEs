@@ -52,50 +52,6 @@ public class PessoaData {
 		this.ts = ts;
 		this.competenciasExperiencia = competenciasExperiencia;
 	}
-	
-	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
-
-	public boolean naoTemCompetenciasExperiencia() {
-		return competenciasExperiencia.isEmpty();
-	}
-
-	public boolean contemEstaCompetenciaExperiencia(CompetenciaExperienciaData competenciasExperiencia) {
-		return this.competenciasExperiencia.contains(competenciasExperiencia);
-	}
-
-	public boolean contemEstasCompetenciasExperiencia(List<CompetenciaExperienciaData> competenciasExperiencia) {
-		return this.competenciasExperiencia.containsAll(competenciasExperiencia);
-	}
-
-	public int quantasCompetenciasExperiencia() {
-		return competenciasExperiencia.size();
-	}
-
-	public boolean adicionarCompetenciasExperiencia(CompetenciaExperienciaData competenciasExperiencia) {
-		return this.competenciasExperiencia.add(competenciasExperiencia);
-	}
-
-	public boolean removerCompetenciasExperiencia(CompetenciaExperienciaData competenciasExperiencia) {
-		return this.competenciasExperiencia.remove(competenciasExperiencia);
-	}
-
-	public void limparCompetenciasExperiencia() {
-		this.competenciasExperiencia.clear();
-	}
-
-	public List<CompetenciaExperienciaData> getCompetenciasExperiencia() {
-		return competenciasExperiencia;
-	}
-
-	
-	
-	
-	//-------------------------------------------------------------------------Getters and Setters-------------------------------------------------------------------------
-	
-	public void setCompetenciasExperiencia(
-			List<CompetenciaExperienciaData> competenciasExperiencia) {
-		this.competenciasExperiencia = competenciasExperiencia;
-	}
 
 	public int getIdPessoa() {
 		return idPessoa;
@@ -114,11 +70,6 @@ public class PessoaData {
 	}
 
 	public String getSitCivil() {
-		if("Casado".equalsIgnoreCase(sitCivil)){
-			return "C";
-		}else if("Solteiro".equalsIgnoreCase(sitCivil)){
-			return "S";
-		}
 		return sitCivil;
 	}
 
@@ -127,11 +78,6 @@ public class PessoaData {
 	}
 
 	public String getSexo() {
-		if("Masculino".equalsIgnoreCase(sitCivil)){
-			return "M";
-		}else if("Feminino".equalsIgnoreCase(sitCivil)){
-			return "F";
-		}
 		return sexo;
 	}
 
@@ -163,11 +109,11 @@ public class PessoaData {
 		this.rg = rg;
 	}
 
-	public List<EnderecoData> getEndereco() {
+	public List<EnderecoData> getEnderecos() {
 		return enderecos;
 	}
 
-	public void setEndereco(List<EnderecoData> enderecos) {
+	public void setEnderecos(List<EnderecoData> enderecos) {
 		this.enderecos = enderecos;
 	}
 
@@ -235,4 +181,13 @@ public class PessoaData {
 		this.ts = ts;
 	}
 
+	public List<CompetenciaExperienciaData> getCompetenciasExperiencia() {
+		return competenciasExperiencia;
+	}
+
+	public void setCompetenciasExperiencia(
+			List<CompetenciaExperienciaData> competenciasExperiencia) {
+		this.competenciasExperiencia = competenciasExperiencia;
+	}
+	
 }

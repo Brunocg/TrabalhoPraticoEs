@@ -14,6 +14,10 @@ public class UsuarioData {
 	private Date ts;
 
 
+	public UsuarioData() {
+		super();
+	}
+
 	public UsuarioData(int idUsuario, String login, String senha,
 			Date ultimoLogin, boolean estado, Date ts) {
 		super();
