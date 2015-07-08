@@ -46,6 +46,10 @@ public interface IPessoaRepository {
 	
 	public abstract boolean excluiEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos);
 	public abstract boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco);
-	public abstract Responsavel recuperarResponsavelPorId(int int1);
+	
+	public abstract Responsavel recuperarResponsavelCompletoPorId(int idPessoa);
+	public abstract Responsavel recuperarResponsavelSimplesPorId(int idPessoa);
+	
+	public abstract List<Usuario> recuperarUsuariosAprovadosPorResponsavel(int idPessoa);
 	
 }

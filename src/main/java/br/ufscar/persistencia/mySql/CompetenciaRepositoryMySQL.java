@@ -31,6 +31,9 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 	private static final String GRAVA_COMPETENCIA_CATEGORIA = "INSERT INTO CompetenciaCategoria (aprovadoPor,nome,estado,ts) VALUES (?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_RELACAO_CATEGORIA_SUB_CATEGORIA = "INSERT INTO CompetenciaSubCategoria (idCategoria,idSubCategoria) VALUES (?,?)";
 	private static final String GRAVAR_RELACAO_CATEGORIA_COMPETENCIA = "INSERT INTO CompetenciaPorCategoria (idCategoria,idCompetencia) VALUES (?,?)";
+	//FIXME
+	private static final String BUSCAR_COMPETENCIAS_APROVADAS_POR_RESPONSAVEL_PARA_LISTAR = null;
+	private static final String BUSCAR_COMPETENCIAS_CATEGORIA_APROVADAS_POR_RESPONSAVEL_PARA_LISTAR = null;
 
 	/* (non-Javadoc)
 	 * @see br.ufscar.persistencia.mySql.teste#verificaExostenciaCompetencia(br.ufscar.dominio.Competencia)
@@ -508,6 +511,62 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 			ConnectionManager.closeAll(ps,rs);
 		}
 		return competencia;
+	}
+
+	@Override
+	public List<Competencia> recuperarCompetenciasAprovadasPorResponsavel(
+			int idPessoa) {
+		List<Competencia> competenciasList = new ArrayList<Competencia>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_COMPETENCIAS_APROVADAS_POR_RESPONSAVEL_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, idPessoa);
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				competenciasList.add(recuperarCompetenciaPeloId(rs.getInt("idCompetencia")));
+
+			}
+		} catch (SQLException e) {
+			competenciasList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return competenciasList;
+	}
+
+	@Override
+	public List<CompetenciaCategoria> recuperarCompetenciaCategoriasAprovadasPorResponsavel(
+			int idPessoa) {
+		List<CompetenciaCategoria> competenciasList = new ArrayList<CompetenciaCategoria>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(BUSCAR_COMPETENCIAS_CATEGORIA_APROVADAS_POR_RESPONSAVEL_PARA_LISTAR);
+			ps.clearParameters();
+			ps.setInt(1, idPessoa);
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				competenciasList.add(recuperarCategoriaPeloNome(rs.getString("nome")));
+
+			}
+		} catch (SQLException e) {
+			competenciasList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return competenciasList;
 	}
 
 }

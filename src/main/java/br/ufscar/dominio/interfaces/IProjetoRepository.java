@@ -80,4 +80,15 @@ public interface IProjetoRepository {
 	public abstract List<Responsavel> listarResponsaveisProjetoAtividade(
 			ProjetoAtividade atividade);
 
+	public abstract List<Projeto> listarProjetosPorResponsavel(int idPessoa);
+
+	public abstract List<ProjetoAtividade> listarProjetosAtividadesPorResponsavel(
+			int idPessoa);
+
+	public abstract List<Feedback> recuperarFeedbacksCriadosPorResponsavel(
+			int idPessoa);
+
+	public abstract List<Feedback> recuperarFeedbacksRecebidosPorResponsavel(
+			int idPessoa);
+
 }
