@@ -64,15 +64,16 @@ function editarPessoa($id) {
 
 function excluirPessoa($id) {
 	$.ajax({
-		type: "POST",
-	    url: "pessoa/excluir",
-	    data: JSON.stringify({id:$id}),
-	    contentType: "application/json; charset=utf-8",
-	    dataType: "json",
+		type: "GET",
+	    url: "pessoa/excluir?id="+$id	,
 	    success: function(data){
-	    	if(data.data != null) {
+	    	if(data.success == true) {
 	    		$msg = 'Dados excluídos com sucesso!';
 	    		$type = 'success';
+	    		showMessage($msg, $type);
+	    	} else {
+	    		$msg = 'Erro ao excluir pessoa!';
+	    		$type = 'error';
 	    		showMessage($msg, $type);
 	    	}
     	},
@@ -183,10 +184,13 @@ $(document).ready(function() {
 	// Inserir um novo gerente
 	$("#gerenteForm").on("submit", function(){
 		$url = ($(this).val() == "Editar") ? "pessoa/editar" : "pessoa/inserir/basico";
+		
+		var $pessoa = JSON.stringify(getFormData($(this)));
+		$pessoa.usuario = JSON.stringify({login:$("#login").val(), senha:$("#senha").val()});
 		$.ajax({
 		    type: "POST",
 		    url: $url,
-		    data: JSON.stringify(getFormData($(this))),
+		    data: $pessoa,
 		    contentType: "application/json; charset=utf-8",
 		    dataType: "json",
 		    success: function(data){

@@ -45,7 +45,7 @@ public class PessoaController {
 		return new Response(pessoaDataList != null, pessoaDataList);
 	}
 	
-	@RequestMapping(value = "/excluir", method = RequestMethod.POST)
+	@RequestMapping(value = "/excluir")
 	@ResponseBody
 	public Response excluir(@RequestParam("id") String pessoaId){
 		return new Response(servico.excluir(Integer.valueOf(pessoaId)), null);

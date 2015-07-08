@@ -23,7 +23,7 @@ function login($login, $senha) {
 	    dataType: "json",
 	    success: function(data){
 	    	if(data.success == false) {
-	    		alert("Dados incorretos!");
+	    		alert("Dados do usuário incorretos!");
 	    	} else {
 	    		window.location.href="home.html";
 	    	}
@@ -44,18 +44,21 @@ $(document).ready(function() {
 	    todayHighlight: true
 	});
 	$("#pessoaForm").on("submit", function(){
+		var $pessoa = getFormData($(this));
+		$usuario = {login:$("#login").val(), senha:$("#senha").val()};
+		$pessoa.usuario = $usuario;
 		$.ajax({
 		    type: "POST",
 		    url: "pessoa/inserir/basico",
 		    // The key needs to match your method's input parameter (case-sensitive).
-		    data: JSON.stringify(getFormData($(this))),
+		    data: JSON.stringify($pessoa),
 		    contentType: "application/json; charset=utf-8",
 		    dataType: "json",
 		    success: function(data){
 		    	if(data.success == false) {
 		    		alert("Dados incorretos!");
 		    	} else {
-		    		login(data.data.login, data.data.senha);
+		    		login(data.data.usuario.login, data.data.usuario.senha);
 		    	}
 	    	},
 		    failure: function(errMsg) {

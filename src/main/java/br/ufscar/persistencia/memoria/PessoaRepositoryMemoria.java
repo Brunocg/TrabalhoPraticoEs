@@ -95,7 +95,7 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	@Override
 	public boolean excluirPessoa(Pessoa pessoa) {
 		pessoas.remove(pessoa.getIdPessoa());
-		return false;
+		return true;
 	}
 
 	@Override
