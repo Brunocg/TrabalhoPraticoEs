@@ -18,13 +18,10 @@ public class PessoaData {
 	private String email;
 	private String pagPessoal;
 	private String msgInst;
-	private int idUsuario;
-	private String login;
-	private String senha;
-	//private UsuarioData usuario;
+	private UsuarioData usuario;
 	private boolean estado;
 	private Date ts;
-	//private List<CompetenciaExperiencia> competenciasExperiencia = null;
+	private List<CompetenciaExperienciaData> competenciasExperiencia = null;
 
 
 	public PessoaData() {
@@ -34,7 +31,8 @@ public class PessoaData {
 	public PessoaData(int idPessoa, String nome, String sitCivil, String sexo,
 			Date dataNascimento, String cpf, String rg, List<EnderecoData> enderecos,
 			String telefone, String celular, String email, String pagPessoal,
-			String msgInst, int idUsuario, String login, String senha, boolean estado, Date ts) {
+			String msgInst, UsuarioData usuario, boolean estado, Date ts,
+			List<CompetenciaExperienciaData> competenciasExperiencia) {
 		super();
 		this.idPessoa = idPessoa;
 		this.nome = nome;
@@ -49,18 +47,56 @@ public class PessoaData {
 		this.email = email;
 		this.pagPessoal = pagPessoal;
 		this.msgInst = msgInst;
-		this.idUsuario = idUsuario;
-		this.login = login;
-		this.senha = senha;
-		//this.usuario = usuario;
+		this.usuario = usuario;
 		this.estado = estado;
 		this.ts = ts;
-	}	
+		this.competenciasExperiencia = competenciasExperiencia;
+	}
+	
 	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
+
+	public boolean naoTemCompetenciasExperiencia() {
+		return competenciasExperiencia.isEmpty();
+	}
+
+	public boolean contemEstaCompetenciaExperiencia(CompetenciaExperienciaData competenciasExperiencia) {
+		return this.competenciasExperiencia.contains(competenciasExperiencia);
+	}
+
+	public boolean contemEstasCompetenciasExperiencia(List<CompetenciaExperienciaData> competenciasExperiencia) {
+		return this.competenciasExperiencia.containsAll(competenciasExperiencia);
+	}
+
+	public int quantasCompetenciasExperiencia() {
+		return competenciasExperiencia.size();
+	}
+
+	public boolean adicionarCompetenciasExperiencia(CompetenciaExperienciaData competenciasExperiencia) {
+		return this.competenciasExperiencia.add(competenciasExperiencia);
+	}
+
+	public boolean removerCompetenciasExperiencia(CompetenciaExperienciaData competenciasExperiencia) {
+		return this.competenciasExperiencia.remove(competenciasExperiencia);
+	}
+
+	public void limparCompetenciasExperiencia() {
+		this.competenciasExperiencia.clear();
+	}
+
+	public List<CompetenciaExperienciaData> getCompetenciasExperiencia() {
+		return competenciasExperiencia;
+	}
+
 	
 	
 	
 	//-------------------------------------------------------------------------Getters and Setters-------------------------------------------------------------------------
+	
+	public void setCompetenciasExperiencia(
+			List<CompetenciaExperienciaData> competenciasExperiencia) {
+		this.competenciasExperiencia = competenciasExperiencia;
+	}
+
 	public int getIdPessoa() {
 		return idPessoa;
 	}
@@ -78,6 +114,11 @@ public class PessoaData {
 	}
 
 	public String getSitCivil() {
+		if("Casado".equalsIgnoreCase(sitCivil)){
+			return "C";
+		}else if("Solteiro".equalsIgnoreCase(sitCivil)){
+			return "S";
+		}
 		return sitCivil;
 	}
 
@@ -86,6 +127,11 @@ public class PessoaData {
 	}
 
 	public String getSexo() {
+		if("Masculino".equalsIgnoreCase(sitCivil)){
+			return "M";
+		}else if("Feminino".equalsIgnoreCase(sitCivil)){
+			return "F";
+		}
 		return sexo;
 	}
 
@@ -165,13 +211,13 @@ public class PessoaData {
 		this.msgInst = msgInst;
 	}
 
-//	public UsuarioData getUsuario() {
-//		return usuario;
-//	}
-//
-//	public void setUsuario(UsuarioData usuario) {
-//		this.usuario = usuario;
-//	}
+	public UsuarioData getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(UsuarioData usuario) {
+		this.usuario = usuario;
+	}
 
 	public boolean isEstado() {
 		return estado;
@@ -187,30 +233,6 @@ public class PessoaData {
 
 	public void setTs(Date ts) {
 		this.ts = ts;
-	}
-
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public int getIdUsuario() {
-		return idUsuario;
-	}
-
-	public void setIdUsuario(int idUsuario) {
-		this.idUsuario = idUsuario;
 	}
 
 }
