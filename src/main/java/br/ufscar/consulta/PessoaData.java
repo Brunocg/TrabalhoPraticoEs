@@ -18,13 +18,10 @@ public class PessoaData {
 	private String email;
 	private String pagPessoal;
 	private String msgInst;
-	private int idUsuario;
-	private String login;
-	private String senha;
-	//private UsuarioData usuario;
+	private UsuarioData usuario;
 	private boolean estado;
 	private Date ts;
-	//private List<CompetenciaExperiencia> competenciasExperiencia = null;
+	private List<CompetenciaExperienciaData> competenciasExperiencia = null;
 
 
 	public PessoaData() {
@@ -34,7 +31,8 @@ public class PessoaData {
 	public PessoaData(int idPessoa, String nome, String sitCivil, String sexo,
 			Date dataNascimento, String cpf, String rg, List<EnderecoData> enderecos,
 			String telefone, String celular, String email, String pagPessoal,
-			String msgInst, int idUsuario, String login, String senha, boolean estado, Date ts) {
+			String msgInst, UsuarioData usuario, boolean estado, Date ts,
+			List<CompetenciaExperienciaData> competenciasExperiencia) {
 		super();
 		this.idPessoa = idPessoa;
 		this.nome = nome;
@@ -49,18 +47,12 @@ public class PessoaData {
 		this.email = email;
 		this.pagPessoal = pagPessoal;
 		this.msgInst = msgInst;
-		this.idUsuario = idUsuario;
-		this.login = login;
-		this.senha = senha;
-		//this.usuario = usuario;
+		this.usuario = usuario;
 		this.estado = estado;
 		this.ts = ts;
-	}	
-	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
-	
-	
-	
-	//-------------------------------------------------------------------------Getters and Setters-------------------------------------------------------------------------
+		this.competenciasExperiencia = competenciasExperiencia;
+	}
+
 	public int getIdPessoa() {
 		return idPessoa;
 	}
@@ -117,11 +109,11 @@ public class PessoaData {
 		this.rg = rg;
 	}
 
-	public List<EnderecoData> getEndereco() {
+	public List<EnderecoData> getEnderecos() {
 		return enderecos;
 	}
 
-	public void setEndereco(List<EnderecoData> enderecos) {
+	public void setEnderecos(List<EnderecoData> enderecos) {
 		this.enderecos = enderecos;
 	}
 
@@ -165,13 +157,13 @@ public class PessoaData {
 		this.msgInst = msgInst;
 	}
 
-//	public UsuarioData getUsuario() {
-//		return usuario;
-//	}
-//
-//	public void setUsuario(UsuarioData usuario) {
-//		this.usuario = usuario;
-//	}
+	public UsuarioData getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(UsuarioData usuario) {
+		this.usuario = usuario;
+	}
 
 	public boolean isEstado() {
 		return estado;
@@ -189,28 +181,13 @@ public class PessoaData {
 		this.ts = ts;
 	}
 
-	public String getLogin() {
-		return login;
+	public List<CompetenciaExperienciaData> getCompetenciasExperiencia() {
+		return competenciasExperiencia;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setCompetenciasExperiencia(
+			List<CompetenciaExperienciaData> competenciasExperiencia) {
+		this.competenciasExperiencia = competenciasExperiencia;
 	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public int getIdUsuario() {
-		return idUsuario;
-	}
-
-	public void setIdUsuario(int idUsuario) {
-		this.idUsuario = idUsuario;
-	}
-
+	
 }

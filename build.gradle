@@ -36,6 +36,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jetty")
 	compile("org.springframework.data:spring-data-commons:1.10.0.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("net.sf.dozer:dozer:5.5.1")
 
     testCompile("junit:junit")
 }

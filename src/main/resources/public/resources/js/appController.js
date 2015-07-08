@@ -28,26 +28,6 @@ function obterPessoa($id) {
 	});
 }
 
-function cadastrarPessoa($url){
-	$.ajax({
-	    type: "POST",
-	    url: $url,
-	    data: JSON.stringify(getFormData($("#gerenteForm"))),
-	    contentType: "application/json; charset=utf-8",
-	    dataType: "json",
-	    success: function(data){
-	    	if(data.success == false) {
-	    		alert("Dados incorretos!");
-	    	} else {
-	    		login(data.data.login, data.data.senha);
-	    	}
-    	},
-	    failure: function(errMsg) {
-	        alert(errMsg);
-	    }
-	});
-}
-
 function editarPessoa($id) {
 	$("#page-wrapper").load("resources/view/gerente/cadastro.html");
 	$(".navbar-header button").click();
@@ -68,6 +48,7 @@ function editarPessoa($id) {
 	    		$("#pagPessoal").val(data.data.pagPessoal);
 	    		$("#msgInst").val(data.data.msgInst);
 	    		$("#login").val(data.data.login);
+	    		$("#idPessoa").val($id);
 	    		
 	    		$(".subtitulo").html("Editar usuário");
 	    		$(".btn-cadastrar-usuario").val("Editar");
@@ -195,15 +176,16 @@ $(document).ready(function() {
 	});
 	
 	$(".btn-cadastrar-usuario").on("click", function(){
-		$url = ($(this).val() == "Editar") ? "pessoa/editar" : "pessoa/inserir/basico";
+		
 		cadastrarPessoa($url);
 	});
 	
 	// Inserir um novo gerente
 	$("#gerenteForm").on("submit", function(){
+		$url = ($(this).val() == "Editar") ? "pessoa/editar" : "pessoa/inserir/basico";
 		$.ajax({
 		    type: "POST",
-		    url: "pessoa/inserir/basico",
+		    url: $url,
 		    data: JSON.stringify(getFormData($(this))),
 		    contentType: "application/json; charset=utf-8",
 		    dataType: "json",
