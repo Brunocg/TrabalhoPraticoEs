@@ -21,13 +21,6 @@ public class ProjetoController {
 	@Autowired
 	private ProjetoApplicationService servico;
 	
-	@RequestMapping(value = "/inserir/basico", method = RequestMethod.POST)
-	@ResponseBody 
-	public Response inserir(@RequestBody ProjetoData projeto){
-		ProjetoData projetoData = servico.obterDataPeloId(servico.inserir(projeto));
-		return new Response(projetoData != null, projetoData);
-	}
-	
 	@RequestMapping("/obter")
 	@ResponseBody 
 	public Response obter(@RequestParam("id") String projetoId){
