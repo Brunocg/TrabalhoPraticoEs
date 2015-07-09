@@ -28,6 +28,12 @@ function obterPessoa($id) {
 	});
 }
 
+function showListGerente() {
+	$("#page-wrapper").load("resources/view/gerente/listar.html");
+	$(".navbar-header button").click();
+	$('html, body').animate({ scrollTop: 0 }, 200);
+}
+
 function editarPessoa($id) {
 	$("#page-wrapper").load("resources/view/gerente/cadastro.html");
 	$(".navbar-header button").click();
@@ -71,6 +77,7 @@ function excluirPessoa($id) {
 	    		$msg = 'Dados excluídos com sucesso!';
 	    		$type = 'success';
 	    		showMessage($msg, $type);
+	    		showListGerente();
 	    	} else {
 	    		$msg = 'Erro ao excluir pessoa!';
 	    		$type = 'error';
@@ -171,9 +178,7 @@ $(document).ready(function() {
 	});
 	
 	$(".btn-gerente-todos").on("click", function(){
-		$("#page-wrapper").load("resources/view/gerente/listar.html");
-		$(".navbar-header button").click();
-		$('html, body').animate({ scrollTop: 0 }, 200);
+		showListGerente();
 	});
 	
 	$(".btn-cadastrar-usuario").on("click", function(){
@@ -183,14 +188,16 @@ $(document).ready(function() {
 	
 	// Inserir um novo gerente
 	$("#gerenteForm").on("submit", function(){
-		$url = ($(this).val() == "Editar") ? "pessoa/editar" : "pessoa/inserir/basico";
+		$url = ($(".btn-cadastrar-usuario").val() == "Editar") ? "pessoa/editar" : "pessoa/inserir/basico";
 		
-		var $pessoa = JSON.stringify(getFormData($(this)));
-		$pessoa.usuario = JSON.stringify({login:$("#login").val(), senha:$("#senha").val()});
+		var $pessoa = getFormData($(this));
+		$usuario = {login:$("#login").val(), senha:$("#senha").val()};
+		$pessoa.usuario = $usuario;
+		
 		$.ajax({
 		    type: "POST",
 		    url: $url,
-		    data: $pessoa,
+		    data: JSON.stringify($pessoa),
 		    contentType: "application/json; charset=utf-8",
 		    dataType: "json",
 		    success: function(data){
@@ -202,7 +209,7 @@ $(document).ready(function() {
 		    		$msg = 'Dados salvos com sucesso!';
 		    		$type = 'success';
 		    		showMessage($msg, $type);
-		    		$("#page-wrapper").load("resources/view/gerente/cadastro.html");
+		    		showListGerente();
 		    	}
 	    	},
 		    failure: function(errMsg) {
