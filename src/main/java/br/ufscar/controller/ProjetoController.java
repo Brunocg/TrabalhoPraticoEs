@@ -2,8 +2,6 @@ package br.ufscar.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.ufscar.aplicacao.PessoaApplicationService;
-import br.ufscar.consulta.LoginData;
-import br.ufscar.consulta.PessoaData;
+import br.ufscar.aplicacao.ProjetoApplicationService;
+import br.ufscar.consulta.ProjetoData;
 import br.ufscar.util.Response;
 
 @RestController
@@ -22,64 +19,34 @@ import br.ufscar.util.Response;
 public class ProjetoController {
 	
 	@Autowired
-	private PessoaApplicationService servico;
+	private ProjetoApplicationService servico;
 	
 	@RequestMapping(value = "/inserir/basico", method = RequestMethod.POST)
 	@ResponseBody 
-	public Response inserir(@RequestBody PessoaData pessoa){
-		PessoaData pessoaData = servico.obterDataPeloId(servico.inserir(pessoa));
-		return new Response(pessoaData != null, pessoaData);
+	public Response inserir(@RequestBody ProjetoData projeto){
+		ProjetoData projetoData = servico.obterDataPeloId(servico.inserir(projeto));
+		return new Response(projetoData != null, projetoData);
 	}
 	
 	@RequestMapping("/obter")
 	@ResponseBody 
-	public Response obter(@RequestParam("id") String pessoaId){
-		PessoaData pessoaData = servico.obterDataPeloId(Integer.valueOf(pessoaId));
-		return new Response(pessoaData != null, pessoaData);
+	public Response obter(@RequestParam("id") String projetoId){
+		ProjetoData projetoData = servico.obterDataPeloId(Integer.valueOf(projetoId));
+		return new Response(projetoData != null, projetoData);
 	}
 	
 	@RequestMapping(value = "/listar", method=RequestMethod.GET)
 	@ResponseBody 
 	public Response listar(){
-		List<PessoaData> pessoaDataList = servico.listar();
-		return new Response(pessoaDataList != null, pessoaDataList);
-	}
-	
-	@RequestMapping(value = "/excluir")
-	@ResponseBody
-	public Response excluir(@RequestParam("id") String pessoaId){
-		return new Response(servico.excluir(Integer.valueOf(pessoaId)), null);
+		List<ProjetoData> projetoDataList = servico.listar();
+		return new Response(projetoDataList != null, projetoDataList);
 	}
 	
 	@RequestMapping(value = "/editar", method = RequestMethod.POST)
 	@ResponseBody
-	public Response editar(@RequestBody PessoaData pessoa){
-		PessoaData pessoaData = servico.obterDataPeloId(servico.editar(pessoa));
-		return new Response(pessoaData != null, pessoaData);
+	public Response editar(@RequestBody ProjetoData projeto){
+		ProjetoData projetoData = servico.obterDataPeloId(servico.editar(projeto));
+		return new Response(projetoData != null, projetoData);
 	}
 	
-	@RequestMapping(value = "/usuario/login", method = RequestMethod.POST)
-	@ResponseBody
-	public Response login(@RequestBody LoginData login, HttpServletRequest r){
-		if (servico.loginValido(login)) {
-			r.getSession().setAttribute("logado", servico.loginEfetuado(login));
-			return new Response(true, null);
-		} else {
-			return new Response(false, null);
-		}		
-	}	
-	
-	@RequestMapping(value = "/usuario/logado", method = RequestMethod.GET)
-	@ResponseBody
-	public Response getSessaoLogado(HttpServletRequest r){
-		return new Response(true, r.getSession().getAttribute("logado"));
-	}
-	
-	@RequestMapping(value = "/usuario/logout", method = RequestMethod.GET)
-	@ResponseBody
-	public Response logout(HttpServletRequest r){
-		r.getSession().setAttribute("logado", null);
-		return new Response(true, null);		
-	}	
-
 }

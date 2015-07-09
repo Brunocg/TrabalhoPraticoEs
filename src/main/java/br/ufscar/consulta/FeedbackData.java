@@ -4,12 +4,20 @@ import java.util.Date;
 
 public class FeedbackData {
 
+	public FeedbackData() {
+		super();
+	}
+
 	private int idFeedback;
 	private int avaliacao;
 	private int tpFeedback;// finalizacao de projeto ou finalizacao de atividade
 	private String observacoes;
-	private boolean estado;
-	
+	private boolean estado;	
+	private Date ts;
+	private ResponsavelData feedbackDe = null;
+	private ResponsavelData feedbackPara = null;
+	private ProjetoAtividadeData projetoAtividade = null;
+
 	public int getIdFeedback() {
 		return idFeedback;
 	}
@@ -80,15 +88,6 @@ public class FeedbackData {
 
 	public void setProjetoAtividade(ProjetoAtividadeData projetoAtividade) {
 		this.projetoAtividade = projetoAtividade;
-	}
-
-	private Date ts;
-	private ResponsavelData feedbackDe = null;
-	private ResponsavelData feedbackPara = null;
-	private ProjetoAtividadeData projetoAtividade = null;
-
-	public FeedbackData() {
-		super();
 	}
 }
 

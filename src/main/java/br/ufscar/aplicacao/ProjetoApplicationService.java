@@ -9,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import br.ufscar.consulta.LoginData;
-import br.ufscar.consulta.PessoaData;
-import br.ufscar.dominio.Pessoa;
-import br.ufscar.dominio.interfaces.IPessoaRepository;
+import br.ufscar.consulta.ProjetoData;
+import br.ufscar.dominio.Projeto;
+import br.ufscar.dominio.interfaces.IProjetoRepository;
 
 
 @Service
@@ -20,40 +19,36 @@ import br.ufscar.dominio.interfaces.IPessoaRepository;
 public class ProjetoApplicationService {
 	
 	@Autowired
-	private IPessoaRepository repositorio;
+	private IProjetoRepository repositorio;
 	private Mapper mapper = new DozerBeanMapper();
 
-	public PessoaData obterDataPeloId(int pessoaId) {		    
-	    return mapper.map(repositorio.recuperarPessoaPorId(pessoaId), PessoaData.class);
+	public ProjetoData obterDataPeloId(int projetoId) {		    
+	    return mapper.map(repositorio.recuperarProjetoPorId(projetoId), ProjetoData.class);
 	} 
 
-	public int inserir(PessoaData pessoaData) {
+	public int inserir(ProjetoData projetoData) {
 		
-		Pessoa pessoa = mapper.map(pessoaData, Pessoa.class);
+		Projeto projeto = mapper.map(projetoData, Projeto.class);
 		
-		repositorio.gravaPessoaBasico(pessoa);
+		repositorio.gravaProjeto(projeto);
 		
-		return pessoa.getIdPessoa();
+		return projeto.getIdProjeto();
 	}
 
-	public List<PessoaData> listar() {		
-		List<PessoaData> result = new ArrayList<PessoaData>();
+	public List<ProjetoData> listar() {		
+		List<ProjetoData> result = new ArrayList<ProjetoData>();
 		
-		for (Pessoa pessoa : repositorio.listarPessoas()) 
-			result.add(mapper.map(pessoa, PessoaData.class));		
+		for (Projeto projeto : repositorio.listarProjetos()) 
+			result.add(mapper.map(projeto, ProjetoData.class));		
 		
 		return result;			
 	}
 
-	public boolean excluir(int pessoaId) {
-		return repositorio.excluirPessoa(repositorio.recuperarPessoaPorId(pessoaId));
-	}
-
-	public int editar(PessoaData pessoaData) {
-		Pessoa pessoa = mapper.map(pessoaData, Pessoa.class);
+	public int editar(ProjetoData projetoData) {
+		Projeto projeto = mapper.map(projetoData, Projeto.class);
 		
-		repositorio.editarPessoa(pessoa);
+		repositorio.alterarProjeto(projeto);
 		
-		return pessoa.getIdPessoa();
+		return projeto.getIdProjeto();
 	}
 }
