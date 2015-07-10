@@ -23,18 +23,13 @@ import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.Usuario;
 import br.ufscar.dominio.UsuarioAcesso;
 import br.ufscar.dominio.UsuarioTipo;
-import br.ufscar.dominio.interfaces.ICompetenciaRepository;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 //import org.springframework.stereotype.Repository;
-import br.ufscar.dominio.interfaces.IProjetoRepository;
 
 
 //@Repository
 public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	
-	private IProjetoRepository _repositorioDeProjetos = new ProjetoRepositoryMySQL();
-	private ICompetenciaRepository _repositorioDeCompetencia = new CompetenciaRepositoryMySQL();
-
 	private static final String GRAVAR_PESSOA = "INSERT INTO Pessoa (nome,sitCivil,sexo,dataNascimento,CPF,RG,telefone,celular,email,pagPessoal,msgInst,estado,ts) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_PESSOA_BASICO = "INSERT INTO Pessoa (nome,sitCivil,sexo,dataNascimento,CPF,RG,telefone,celular,email,pagPessoal,msgInst,estado,ts) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 //	private static final String GRAVAR_PESSOA_BASICO_OLD = "INSERT INTO Pessoa (nome,dataNascimento,CPF,RG,email,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
@@ -68,6 +63,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String ATUALIZAR_TIPO_USUARIO = "UPDATE Usuario SET usuarioTipo = ? WHERE idUsuario = ?";
 	private static final String APROVAR_USUARIO = "UPDATE Usuario SET aprovadoPor = ? WHERE idUsuario = ?";
 	private static final String RECUPERAR_ACESSOS_POR_TIPO = "SELECT idUsuarioAcesso, descricao, niveisDeAcesso FROM UsuarioAcesso U WHERE niveisDeAcesso LIKE ?";
+	private static final String VERIFICA_EXISTENCIA_ACESSO = "SELECT COUNT(*) FROM UsuarioAcesso WHERE descricao = ?";
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -493,7 +489,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 				String observacoes = rs.getString("observacoes");
 				boolean estado = rs.getBoolean("estado");
 				java.util.Date ts = rs.getDate("ts");
-				Competencia competencia = _repositorioDeCompetencia.recuperarCompetenciaPeloId(rs.getInt("idCompetencia"));
+				Competencia competencia = new CompetenciaRepositoryMySQL().recuperarCompetenciaPeloId(rs.getInt("idCompetencia"));
 				Pessoa pessoa = new Pessoa();
 				pessoa.setIdPessoa(idPessoa);
 				CompetenciaExperiencia experiencia = new CompetenciaExperiencia(idExperiencia, nivel, tempoExperiencia, observacoes, estado, ts, competencia, pessoa);
@@ -914,19 +910,19 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		
 		Pessoa pessoa = recuperarPessoaPorId(idPessoa);
 		
-		List<Projeto> projeto = _repositorioDeProjetos.listarProjetosPorResponsavel(idPessoa);
+		List<Projeto> projeto = new ProjetoRepositoryMySQL().listarProjetosPorResponsavel(idPessoa);
 		
-		List<ProjetoAtividade> projetoAtividades = _repositorioDeProjetos.listarProjetosAtividadesPorResponsavel(idPessoa);
+		List<ProjetoAtividade> projetoAtividades = new ProjetoRepositoryMySQL().listarProjetosAtividadesPorResponsavel(idPessoa);
 		
 		List<Usuario> usuariosAprovados = recuperarUsuariosAprovadosPorResponsavel(idPessoa);
 		
-		List<Competencia> competenciasAprovadas = _repositorioDeCompetencia.recuperarCompetenciasAprovadasPorResponsavel(idPessoa);
+		List<Competencia> competenciasAprovadas = new CompetenciaRepositoryMySQL().recuperarCompetenciasAprovadasPorResponsavel(idPessoa);
 		
-		List<Feedback> feedbackCriados = _repositorioDeProjetos.recuperarFeedbacksCriadosPorResponsavel(idPessoa);
+		List<Feedback> feedbackCriados = new ProjetoRepositoryMySQL().recuperarFeedbacksCriadosPorResponsavel(idPessoa);
 		
-		List<Feedback> feedbacksRecebidos = _repositorioDeProjetos.recuperarFeedbacksRecebidosPorResponsavel(idPessoa);
+		List<Feedback> feedbacksRecebidos = new ProjetoRepositoryMySQL().recuperarFeedbacksRecebidosPorResponsavel(idPessoa);
 		
-		List<CompetenciaCategoria> competenciasCategoriaAprovadas = _repositorioDeCompetencia.recuperarCompetenciaCategoriasAprovadasPorResponsavel(idPessoa);
+		List<CompetenciaCategoria> competenciasCategoriaAprovadas = new CompetenciaRepositoryMySQL().recuperarCompetenciaCategoriasAprovadasPorResponsavel(idPessoa);
 		
 		responsavel = new Responsavel(pessoa, projeto, projetoAtividades, usuariosAprovados, competenciasAprovadas, feedbackCriados, feedbacksRecebidos, competenciasCategoriaAprovadas);
 		
@@ -1048,7 +1044,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean trocaTipoUsuario(Usuario usuario, UsuarioTipo novoTipo) {
+	public boolean trocarTipoUsuario(Usuario usuario, UsuarioTipo novoTipo) {
 		Connection mySQLConnection = null;
 		PreparedStatement ps = null;
 
@@ -1237,6 +1233,34 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		}
 
 		return gravado;
+	}
+
+	@Override
+	public boolean verificarExistenciaAcesso(UsuarioAcesso usuarioAcesso) {
+		boolean existe = false;
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(VERIFICA_EXISTENCIA_ACESSO);
+			ps.clearParameters();
+			ps.setString(1, usuarioAcesso.getDescricao());
+			rs = ps.executeQuery();
+			if(rs.next()){
+				int qtd = rs.getInt(1);
+				if(qtd > 0){
+					existe = true;
+				}
+			}
+		} catch (SQLException e) {
+			existe = false;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+		return existe;
+
 	}
 	
 }

@@ -16,14 +16,9 @@ import br.ufscar.dominio.Feedback;
 import br.ufscar.dominio.Projeto;
 import br.ufscar.dominio.ProjetoAtividade;
 import br.ufscar.dominio.Responsavel;
-import br.ufscar.dominio.interfaces.ICompetenciaRepository;
-import br.ufscar.dominio.interfaces.IPessoaRepository;
 import br.ufscar.dominio.interfaces.IProjetoRepository;
 
 public class ProjetoRepositoryMySQL implements IProjetoRepository {
-
-	private IPessoaRepository _pessoaRepository = new PessoaRepositoryMySQL();
-	private ICompetenciaRepository _competenciaRepository = new CompetenciaRepositoryMySQL();
 
 	private static final String GRAVA_PROJETO = "INSERT INTO Projeto (nome, tipo, prazo, observacoes, status, estado, ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_ATIVIDADE = "INSERT INTO ProjetoAtividade (nome, descricao, tipo, prazo, status, estado, ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
@@ -883,8 +878,8 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 				String observacoes = rs.getString("observacoes");
 				boolean estado = rs.getBoolean("estado");
 				Date ts = rs.getDate("ts");
-				Responsavel feedbackDe = _pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("feedbackDe"));
-				Responsavel feedbackPara = _pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("feedbackPara"));
+				Responsavel feedbackDe = new PessoaRepositoryMySQL().recuperarResponsavelSimplesPorId(rs.getInt("feedbackDe"));
+				Responsavel feedbackPara = new PessoaRepositoryMySQL().recuperarResponsavelSimplesPorId(rs.getInt("feedbackPara"));
 				ProjetoAtividade atividade = recuperarAtividadeProjetoPorId(rs.getInt("idProjetoAtividade"));
 				feedback = new Feedback(idFeedback, avaliacao, tpFeedback, observacoes, estado, ts, feedbackDe, feedbackPara, atividade);
 
@@ -1001,8 +996,8 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 				String observacoes = rs.getString("observacoes");
 				boolean estado = rs.getBoolean("estado");
 				Date ts = rs.getDate("ts");
-				Responsavel feedbackDe = _pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("feedbackDe"));
-				Responsavel feedbackPara = _pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("feedbackPara"));
+				Responsavel feedbackDe = new PessoaRepositoryMySQL().recuperarResponsavelSimplesPorId(rs.getInt("feedbackDe"));
+				Responsavel feedbackPara = new PessoaRepositoryMySQL().recuperarResponsavelSimplesPorId(rs.getInt("feedbackPara"));
 				feedback = new Feedback(idFeedback, avaliacao, tpFeedback, observacoes, estado, ts, feedbackDe, feedbackPara, atividade);
 
 			}
@@ -1071,7 +1066,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 			rs = ps.executeQuery();
 			while(rs.next()){
 
-				responsaveisList.add(_pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("idPessoa")));
+				responsaveisList.add(new PessoaRepositoryMySQL().recuperarResponsavelSimplesPorId(rs.getInt("idPessoa")));
 
 			}
 		} catch (SQLException e) {
@@ -1101,7 +1096,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 			rs = ps.executeQuery();
 			while(rs.next()){
 
-				competenciasList.add(_competenciaRepository.recuperarCompetenciaPeloId(rs.getInt("idCompetencia")));
+				competenciasList.add(new CompetenciaRepositoryMySQL().recuperarCompetenciaPeloId(rs.getInt("idCompetencia")));
 
 			}
 		} catch (SQLException e) {
@@ -1131,7 +1126,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 			rs = ps.executeQuery();
 			while(rs.next()){
 
-				responsaveisList.add(_pessoaRepository.recuperarResponsavelSimplesPorId(rs.getInt("idPessoa")));
+				responsaveisList.add(new PessoaRepositoryMySQL().recuperarResponsavelSimplesPorId(rs.getInt("idPessoa")));
 
 			}
 		} catch (SQLException e) {

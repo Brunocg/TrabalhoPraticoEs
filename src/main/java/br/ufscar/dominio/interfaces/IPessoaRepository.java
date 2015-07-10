@@ -58,12 +58,17 @@ public interface IPessoaRepository {
 	public abstract int gravaEndereco(Endereco endereco);
 	
 	public abstract boolean atualizaUltimoLoginUsuario(Usuario usuario, Date novaData);
+
 	public abstract boolean trocarSenhaUsuario(String login, String senhaAntiga, String senhaNova);
 	public abstract boolean trocarSenhaUsuario(String login, String senhaNova);
+	public abstract boolean trocarTipoUsuario(Usuario usuario, UsuarioTipo novoTipo);
+
 	public abstract boolean desativaUsuario(String login);
-	public abstract boolean trocaTipoUsuario(Usuario usuario, UsuarioTipo novoTipo);
-	public abstract boolean verificaLoginExiste(String login);
+	
 	public abstract boolean aprovarUsuario(Usuario usuario, Responsavel aprovador);
+
+	public abstract boolean verificaLoginExiste(String login);
+	public abstract boolean verificarExistenciaAcesso(UsuarioAcesso usuarioAcesso);
 
 	public abstract List<UsuarioAcesso> recuperarUsuarioAcessosPorTipo(UsuarioTipo usuarioTipo);
 }
