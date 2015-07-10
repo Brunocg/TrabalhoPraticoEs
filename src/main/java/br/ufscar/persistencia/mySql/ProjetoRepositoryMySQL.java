@@ -45,21 +45,21 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 	private static final String ALTERAR_STATUS_PROJETO = "UPDATE Projeto SET status = ? WHERE idProjeto = ?";
 	private static final String ALTERAR_STATUS_PROJETO_ATIVIDADE = "UPDATE ProjetoAtividade SET status = ? WHERE idProjetoAtividade = ?";
 
-	private static final String BUSCAR_COMPETENCIAS_ATIVIDADE_PARA_LISTAR = "SELECT idCompetencia FROM ProjetoAtividadeCompetencias P WHERE idProjetoAtividade = ?";
-	private static final String BUSCAR_RESPONSAVEIS_PROJETO_PARA_LISTAR = "SELECT idPessoa FROM ProjetoResponsaveis P WHERE idProjeto = ?";
-	private static final String BUSCAR_RESPONSAVEIS_ATIVIDADE_PARA_LISTAR = "SELECT idPessoa FROM ProjetoAtividadeResponsaveis P WHERE idProjetoAtividade = ?";
+	private static final String BUSCAR_COMPETENCIAS_ATIVIDADE_PARA_LISTAR = "SELECT idCompetencia FROM ProjetoAtividadeCompetencias P WHERE idProjetoAtividade = ? AND estado = TRUE";
+	private static final String BUSCAR_RESPONSAVEIS_PROJETO_PARA_LISTAR = "SELECT idPessoa FROM ProjetoResponsaveis P WHERE idProjeto = ? AND estado = TRUE";
+	private static final String BUSCAR_RESPONSAVEIS_ATIVIDADE_PARA_LISTAR = "SELECT idPessoa FROM ProjetoAtividadeResponsaveis P WHERE idProjetoAtividade = ? AND estado = TRUE";
 	private static final String BUSCAR_PROJETOS_PARA_LISTAR = "SELECT idProjeto FROM Projeto P WHERE estado = TRUE";
-	private static final String BUSCAR_ATIVIDADES_PROJETO_PARA_LISTAR = "SELECT idAtividade FROM ProjetoAtividades P WHERE idProjeto = ?";
-	private static final String BUSCAR_ATIVIDADE_PROJETO_POR_ID = "SELECT nome, descricao, tipo, prazo, status, estado, ts FROM ProjetoAtividade P WHERE idProjetoAtividade = ?";
-	private static final String BUSCAR_PROJETO_POR_ATIVIDADE = "SELECT PA.idProjeto, P.nome, P.nome, P.tipo, P.prazo, P.observacoes, P.status, P.estado, P.ts FROM ProjetoAtividades PA INNER JOIN Projeto P ON P.idProjeto = PA.idProjeto WHERE idAtividade = ?";
-	private static final String BUSCAR_FEEDBACK_ATIVIDADE_POR_ATIVIDADE = "SELECT idFeedback, feedbackDe, feedbackPara, avaliacao, tpFeedback, observacoes, estado, ts FROM Feedback F WHERE idProjetoAtividade = ?";
-	private static final String BUSCAR_PROJETO_POR_ID = "SELECT nome, tipo, prazo, observacoes, status, estado, ts FROM Projeto P WHERE idProjeto = ?";
-	private static final String BUSCAR_FEEDBACKS_PROJETO_PARA_LISTAR = "SELECT idFeedback FROM ProjetoFeedbacks P WHERE idProjeto = ?";
-	private static final String BUSCAR_FEEDBACK_POR_ID = "SELECT idProjetoAtividade, feedbackDe, feedbackPara, avaliacao, tpFeedback, observacoes, estado, ts FROM Feedback F WHERE idFeedback = ?";
-	private static final String BUSCAR_ATIVIDADES_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idProjetoAtividade FROM ProjetoAtividadeResponsaveis P WHERE idPessoa = ?";
-	private static final String BUSCAR_PROJETOS_POR_RESPNSAVEL_PARA_LISTAR = "SELECT idProjeto FROM ProjetoResponsaveis P WHERE idPessoa = ?";
-	private static final String BUSCAR_FEEDBACK_CRIADO_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idFeedback FROM Feedback F WHERE feedbackDe = ?";
-	private static final String BUSCAR_FEEDBACK_RECEBIDO_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idFeedback FROM Feedback F WHERE feedbackPara = ?";
+	private static final String BUSCAR_ATIVIDADES_PROJETO_PARA_LISTAR = "SELECT idAtividade FROM ProjetoAtividades P WHERE idProjeto = ? AND estado = TRUE";
+	private static final String BUSCAR_ATIVIDADE_PROJETO_POR_ID = "SELECT nome, descricao, tipo, prazo, status, estado, ts FROM ProjetoAtividade P WHERE idProjetoAtividade = ? AND estado = TRUE";
+	private static final String BUSCAR_PROJETO_POR_ATIVIDADE = "SELECT PA.idProjeto, P.nome, P.nome, P.tipo, P.prazo, P.observacoes, P.status, P.estado, P.ts FROM ProjetoAtividades PA INNER JOIN Projeto P ON P.idProjeto = PA.idProjeto WHERE idAtividade = ? AND estado = TRUE";
+	private static final String BUSCAR_FEEDBACK_ATIVIDADE_POR_ATIVIDADE = "SELECT idFeedback, feedbackDe, feedbackPara, avaliacao, tpFeedback, observacoes, estado, ts FROM Feedback F WHERE idProjetoAtividade = ? AND estado = TRUE";
+	private static final String BUSCAR_PROJETO_POR_ID = "SELECT nome, tipo, prazo, observacoes, status, estado, ts FROM Projeto P WHERE idProjeto = ? AND estado = TRUE";
+	private static final String BUSCAR_FEEDBACKS_PROJETO_PARA_LISTAR = "SELECT idFeedback FROM ProjetoFeedbacks P WHERE idProjeto = ? AND estado = TRUE";
+	private static final String BUSCAR_FEEDBACK_POR_ID = "SELECT idProjetoAtividade, feedbackDe, feedbackPara, avaliacao, tpFeedback, observacoes, estado, ts FROM Feedback F WHERE idFeedback = ? AND estado = TRUE";
+	private static final String BUSCAR_ATIVIDADES_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idProjetoAtividade FROM ProjetoAtividadeResponsaveis P WHERE idPessoa = ? AND estado = TRUE";
+	private static final String BUSCAR_PROJETOS_POR_RESPNSAVEL_PARA_LISTAR = "SELECT idProjeto FROM ProjetoResponsaveis P WHERE idPessoa = ? AND estado = TRUE";
+	private static final String BUSCAR_FEEDBACK_CRIADO_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idFeedback FROM Feedback F WHERE feedbackDe = ? AND estado = TRUE";
+	private static final String BUSCAR_FEEDBACK_RECEBIDO_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idFeedback FROM Feedback F WHERE feedbackPara = ? AND estado = TRUE";
 
 	/* (non-Javadoc)
 	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaProjeto(br.ufscar.dominio.Projeto)

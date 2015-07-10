@@ -42,22 +42,28 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String GRAVAR_EXPERIENCIA = "INSERT INTO CompetenciaExperiencia (idPessoa, idCompetencia, nivel, tempoExp,observacoes,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_USUARIO = "INSERT INTO Usuario (usuarioDe,login,senha,usuarioTipo,estado,ts) VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)";
 	
-	private static final String BUSCAR_PESSOA_POR_LOGIN = "SELECT usuarioDe FROM Usuario U WHERE login = ?";
-	private static final String BUSCAR_PESSOA_POR_ID = "SELECT idPessoa, nome, sitCivil, sexo, dataNascimento, CPF, RG, telefone, celular, email, pagPessoal, msgInst, estado, ts FROM Pessoa P WHERE idPessoa = ?";
+	private static final String BUSCAR_PESSOA_POR_LOGIN = "SELECT usuarioDe FROM Usuario U WHERE login = ? AND estado = TRUE";
+	private static final String BUSCAR_PESSOA_POR_ID = "SELECT idPessoa, nome, sitCivil, sexo, dataNascimento, CPF, RG, telefone, celular, email, pagPessoal, msgInst, estado, ts FROM Pessoa P WHERE idPessoa = ? AND estado = TRUE";
 	private static final String BUSCAR_PESSOAS_PARA_LISTAR = "SELECT idPessoa FROM Pessoa P WHERE estado = true";
-	private static final String BUSCAR_ENDERECOS_POR_PESSOA = "SELECT E.idEndereco, E.rua, E.bairro, E.numero, E.cidade, E.uf, E.pais, E.cep, E.estado, E.ts FROM Endereco E INNER JOIN EnderecoPessoa EP ON EP.idEndereco = E.idEndereco WHERE EP.idPessoa = ?";
+	private static final String BUSCAR_ENDERECOS_POR_PESSOA = "SELECT E.idEndereco, E.rua, E.bairro, E.numero, E.cidade, E.uf, E.pais, E.cep, E.estado, E.ts FROM Endereco E INNER JOIN EnderecoPessoa EP ON EP.idEndereco = E.idEndereco WHERE EP.idPessoa = ? AND estado = TRUE";
 	private static final String BUSCAR_MORADORES_POR_ENDERECO = "SELECT EP.idPessoa, P.nome FROM EnderecoPessoa EP INNER JOIN Pessoa P ON P.idPessoa = EP.idPessoa WHERE idEndereco = ?";
-	private static final String BUSCAR_USUARIO_POR_PESSOA = "SELECT usuarioDe, aprovadoPor, login, senha, usuarioTipo, ultimoLogin, estado, ts FROM Usuario U WHERE usuarioDe = ?";
-	private static final String BUSCAR_EXPERIENCIA_POR_PESSOA = "SELECT idCompetenciaExperiencia, idPessoa, idCompetencia, nivel, tempoExp, observacoes, estado, ts FROM CompetenciaExperiencia C WHERE idPessoa = ?";
+	private static final String BUSCAR_USUARIO_POR_PESSOA = "SELECT usuarioDe, aprovadoPor, login, senha, usuarioTipo, ultimoLogin, estado, ts FROM Usuario U WHERE usuarioDe = ? AND estado = TRUE";
+	private static final String BUSCAR_EXPERIENCIA_POR_PESSOA = "SELECT idCompetenciaExperiencia, idPessoa, idCompetencia, nivel, tempoExp, observacoes, estado, ts FROM CompetenciaExperiencia C WHERE idPessoa = ?  AND estado = TRUE";
 
 	private static final String EDITA_PESSOA = "UPDATE Pessoa SET nome = ?, sitCivil = ?, sexo = ?, dataNascimento = ?, CPF = ?, RG = ?, telefone = ?, celular = ?, email = ?, pagPessoal = ?, msgInst = ?, estado = ? WHERE idPessoa = ?";
 	private static final String EDITA_EXPERIENCIA = "UPDATE CompetenciaExperiencia SET idPessoa = ?, idCompetencia = ?, nivel = ?, tempoExp = ?,observacoes = ?,estado = ? WHERE idCompetenciaExperiencia = ?";
-	private static final String EDITA_USUARIO = "UPDATE Usuario SET usuarioDe = ?,login = ?,senha = ?,usuarioTipo = ?,estado = ? WHERE idUsuario = ?";
+	private static final String EDITA_USUARIO = "UPDATE Usuario SET usuarioDe = ?,login = ?,senha = ?,usuarioTipo = ?,estado = ? WHERE idUsuario = ? AND estado = TRUE";
 
 	private static final String EXCLUIR_PESSOA = "UPDATE Pessoa SET estado = ? WHERE idPessoa = ?";
 	private static final String EXCLUIR_ENDERECO_PESSOA = "DELETE FROM EnderecoPessoa E WHERE idEndereco = ? AND idPessoa = ?";
 
 	private static final String BUSCAR_USUARIOS_APROVADOS_POR_RESPONSAVEL_PARA_LISTAR = "SELECT usuarioDe FROM Usuario U WHERE aprovadoPor = ?";
+	
+	private static final String ATUALIZAR_ULTIMO_LOGIN_USUARIO = "UPDATE Usuario SET ultimoLogin = ? WHERE idUsuario = ?";
+	private static final String DESATIVA_USUARIO = "UPDATE Usuario SET estado = ? WHERE login = ?";
+	private static final String VERIFICA_EXISTENCIA_LOGIN = "SELECT COUNT(*) FROM Usuario U WHERE login = ? AND estado = TRUE";
+	private static final String ATUALIZAR_SENHA_POR_LOGIN = "UPDATE Usuario SET senha = ? WHERE login = ?";
+	private static final String ATUALIZAR_TIPO_USUARIO = "UPDATE Usuario SET usuarioTipo = ? WHERE idUsuario = ?";
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -961,6 +967,167 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		
 		
 		return responsavel;
+	}
+
+	@Override
+	public boolean atualizaUltimoLoginUsuario(Usuario usuario, java.util.Date novaData) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean atualizado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(ATUALIZAR_ULTIMO_LOGIN_USUARIO);
+			ps.clearParameters();
+
+			ps.setString(1, new SimpleDateFormat("yyyy-MM-dd").format(novaData));
+			ps.setInt(2,usuario.getIdUsuario());
+
+			ps.executeUpdate();
+
+			atualizado = true;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			atualizado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return atualizado;
+	}
+
+	@Override
+	public boolean trocarSenhaUsuario(String login, String senhaAntiga,
+			String senhaNova) {
+		
+		Pessoa usuario = recuperarPessoaPorLogin(login);
+		
+		if(usuario.getUsuario().getSenha().equalsIgnoreCase(senhaAntiga)){
+			return trocarSenhaUsuario(login, senhaNova);
+		}else{
+			return false;
+		}
+		
+	}
+
+	@Override
+	public boolean desativaUsuario(String login) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean desativado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(DESATIVA_USUARIO);
+			ps.clearParameters();
+
+			ps.setBoolean(1, false);
+			ps.setString(2,login);
+
+			ps.executeUpdate();
+
+			desativado = true;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			desativado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return desativado;
+	}
+
+	@Override
+	public boolean trocaTipoUsuario(Usuario usuario, UsuarioTipo novoTipo) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean atualizado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(ATUALIZAR_TIPO_USUARIO);
+			ps.clearParameters();
+
+			ps.setString(1, novoTipo.getDescricao());
+			ps.setInt(2, usuario.getIdUsuario());
+
+			ps.executeUpdate();
+
+			atualizado = true;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			atualizado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return atualizado;
+	}
+	
+	@Override
+	public boolean verificaLoginExiste(String login) {
+		boolean existe = false;
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(VERIFICA_EXISTENCIA_LOGIN);
+			ps.clearParameters();
+			ps.setString(1, login);
+			rs = ps.executeQuery();
+			if(rs.next()){
+				int qtd = rs.getInt(1);
+				if(qtd > 0){
+					existe = true;
+				}
+			}
+		} catch (SQLException e) {
+			existe = false;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+		return existe;
+	}
+
+	@Override
+	public boolean trocarSenhaUsuario(String login, String senhaNova) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean atualizado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(ATUALIZAR_SENHA_POR_LOGIN);
+			ps.clearParameters();
+
+			ps.setString(1, senhaNova);
+			ps.setString(2,login);
+
+			ps.executeUpdate();
+
+			atualizado = true;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			atualizado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return atualizado;
 	}
 
 }

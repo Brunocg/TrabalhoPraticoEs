@@ -1,5 +1,6 @@
 package br.ufscar.dominio.interfaces;
 
+import java.util.Date;
 import java.util.List;
 
 import br.ufscar.dominio.CompetenciaExperiencia;
@@ -7,6 +8,7 @@ import br.ufscar.dominio.Endereco;
 import br.ufscar.dominio.Pessoa;
 import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.Usuario;
+import br.ufscar.dominio.UsuarioTipo;
 
 public interface IPessoaRepository {
 
@@ -52,5 +54,10 @@ public interface IPessoaRepository {
 	public abstract List<Endereco> gravaEndereco(List<Endereco> enderecos);
 	public abstract int gravaEndereco(Endereco endereco);
 	
-	
+	public abstract boolean atualizaUltimoLoginUsuario(Usuario usuario, Date novaData);
+	public abstract boolean trocarSenhaUsuario(String login, String senhaAntiga, String senhaNova);
+	public abstract boolean trocarSenhaUsuario(String login, String senhaNova);
+	public abstract boolean desativaUsuario(String login);
+	public abstract boolean trocaTipoUsuario(Usuario usuario, UsuarioTipo novoTipo);
+	public abstract boolean verificaLoginExiste(String login);
 }
