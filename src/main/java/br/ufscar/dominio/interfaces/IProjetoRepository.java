@@ -91,4 +91,9 @@ public interface IProjetoRepository {
 	public abstract List<Feedback> recuperarFeedbacksRecebidosPorResponsavel(
 			int idPessoa);
 
+	public abstract boolean gravaCompetenciaAtividades(ProjetoAtividade atividade,
+			Competencia competencia);
+
+	public abstract boolean excluirCompetenciaAtividades(ProjetoAtividade atividade);
+
 }

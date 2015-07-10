@@ -51,11 +51,10 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 	private static final String BUSCAR_PROJETO_POR_ID = "SELECT nome, tipo, prazo, observacoes, status, estado, ts FROM Projeto P WHERE idProjeto = ?";
 	private static final String BUSCAR_FEEDBACKS_PROJETO_PARA_LISTAR = "SELECT idFeedback FROM ProjetoFeedbacks P WHERE idProjeto = ?";
 	private static final String BUSCAR_FEEDBACK_POR_ID = "SELECT idProjetoAtividade, feedbackDe, feedbackPara, avaliacao, tpFeedback, observacoes, estado, ts FROM Feedback F WHERE idFeedback = ?";
-	//FIXME
-	private static final String BUSCAR_ATIVIDADES_POR_RESPONSAVEL_PARA_LISTAR = null;
-	private static final String BUSCAR_PROJETOS_POR_RESPNSAVEL_PARA_LISTAR = null;
-	private static final String BUSCAR_FEEDBACK_CRIADO_POR_RESPONSAVEL_PARA_LISTAR = null;
-	private static final String BUSCAR_FEEDBACK_RECEBIDO_POR_RESPONSAVEL_PARA_LISTAR = null;
+	private static final String BUSCAR_ATIVIDADES_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idProjetoAtividade FROM ProjetoAtividadeResponsaveis P WHERE idPessoa = ?";
+	private static final String BUSCAR_PROJETOS_POR_RESPNSAVEL_PARA_LISTAR = "SELECT idProjeto FROM ProjetoResponsaveis P WHERE idPessoa = ?";
+	private static final String BUSCAR_FEEDBACK_CRIADO_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idFeedback FROM Feedback F WHERE feedbackDe = ?";
+	private static final String BUSCAR_FEEDBACK_RECEBIDO_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idFeedback FROM Feedback F WHERE feedbackPara = ?";
 
 	/* (non-Javadoc)
 	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaProjeto(br.ufscar.dominio.Projeto)
@@ -305,7 +304,8 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 		return gravado;
 	}
 
-	private boolean gravaCompetenciaAtividades(ProjetoAtividade atividade,
+	@Override
+	public boolean gravaCompetenciaAtividades(ProjetoAtividade atividade,
 			Competencia competencia) {
 		boolean gravado = false;
 
@@ -717,7 +717,8 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 		return excluido;
 	}
 
-	private boolean excluirCompetenciaAtividades(ProjetoAtividade atividade) {
+	@Override
+	public boolean excluirCompetenciaAtividades(ProjetoAtividade atividade) {
 		boolean excluido = false;
 
 		Connection mySQLConnection = null;
@@ -1180,7 +1181,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 			rs = ps.executeQuery();
 			while(rs.next()){
 
-				atividadesList.add(recuperarAtividadeProjetoPorId(rs.getInt("idAtividade")));
+				atividadesList.add(recuperarAtividadeProjetoPorId(rs.getInt("idProjetoAtividade")));
 
 			}
 		} catch (SQLException e) {
@@ -1207,7 +1208,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 			rs = ps.executeQuery();
 			while(rs.next()){
 
-				feedbacksList.add(recuperarFeedbackPorId(rs.getInt("feedbackDe")));
+				feedbacksList.add(recuperarFeedbackPorId(rs.getInt("idFeedback")));
 
 			}
 		} catch (SQLException e) {

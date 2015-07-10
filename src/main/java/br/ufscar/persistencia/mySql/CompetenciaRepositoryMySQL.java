@@ -31,9 +31,9 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 	private static final String GRAVA_COMPETENCIA_CATEGORIA = "INSERT INTO CompetenciaCategoria (aprovadoPor,nome,estado,ts) VALUES (?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_RELACAO_CATEGORIA_SUB_CATEGORIA = "INSERT INTO CompetenciaSubCategoria (idCategoria,idSubCategoria) VALUES (?,?)";
 	private static final String GRAVAR_RELACAO_CATEGORIA_COMPETENCIA = "INSERT INTO CompetenciaPorCategoria (idCategoria,idCompetencia) VALUES (?,?)";
-	//FIXME
-	private static final String BUSCAR_COMPETENCIAS_APROVADAS_POR_RESPONSAVEL_PARA_LISTAR = null;
-	private static final String BUSCAR_COMPETENCIAS_CATEGORIA_APROVADAS_POR_RESPONSAVEL_PARA_LISTAR = null;
+
+	private static final String BUSCAR_COMPETENCIAS_APROVADAS_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idCompetencia FROM Competencia C WHERE aprovadorPor = ?";
+	private static final String BUSCAR_COMPETENCIAS_CATEGORIA_APROVADAS_POR_RESPONSAVEL_PARA_LISTAR = "SELECT nome FROM CompetenciaCategoria C WHERE aprovadorPor = ?";
 
 	/* (non-Javadoc)
 	 * @see br.ufscar.persistencia.mySql.teste#verificaExostenciaCompetencia(br.ufscar.dominio.Competencia)
