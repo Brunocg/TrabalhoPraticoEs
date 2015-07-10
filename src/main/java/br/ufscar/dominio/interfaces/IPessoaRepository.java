@@ -47,6 +47,8 @@ public interface IPessoaRepository {
 	
 	public abstract boolean gravaUsuario(Pessoa pessoa, Usuario usuario);
 	
+	public abstract boolean gravaUsuarioAcesso(UsuarioAcesso acesso);
+	
 	public abstract boolean gravaExperiencias(Pessoa pessoa, List<CompetenciaExperiencia> competenciasExperiencia);
 	public abstract boolean gravaExperiencias(Pessoa pessoa, CompetenciaExperiencia competenciaExperiencia);
 	

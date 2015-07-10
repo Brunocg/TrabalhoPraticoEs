@@ -42,6 +42,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String GRAVAR_ENDERECO_PESSOA = "INSERT INTO EnderecoPessoa (idEndereco,idPessoa,ts) VALUES (?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_EXPERIENCIA = "INSERT INTO CompetenciaExperiencia (idPessoa, idCompetencia, nivel, tempoExp,observacoes,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_USUARIO = "INSERT INTO Usuario (usuarioDe,login,senha,usuarioTipo,estado,ts) VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)";
+	private static final String GRAVAR_USUARIO_ACESSO = "INSERT INTO UsuarioAcesso (descricao, niveisDeAcesso) VALUES (?,?)";
 	
 	private static final String BUSCAR_PESSOA_POR_LOGIN = "SELECT usuarioDe FROM Usuario U WHERE login = ? AND estado = TRUE AND aprovadoPor != 0";
 	private static final String BUSCAR_PESSOA_POR_ID = "SELECT idPessoa, nome, sitCivil, sexo, dataNascimento, CPF, RG, telefone, celular, email, pagPessoal, msgInst, estado, ts FROM Pessoa P WHERE idPessoa = ? AND estado = TRUE";
@@ -1198,6 +1199,44 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		}
 
 		return acessosList;
+	}
+
+	@Override
+	public boolean gravaUsuarioAcesso(UsuarioAcesso acesso) {
+		boolean gravado = false;
+
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(GRAVAR_USUARIO_ACESSO);
+			ps.clearParameters();
+
+			ps.setString(1,acesso.getDescricao());
+			String niveisDeAcesso = "";
+			for (int nivel : acesso.getNiveisDeAcesso()) {
+				if(nivel == acesso.getNiveisDeAcesso()[acesso.getNiveisDeAcesso().length-1]){
+					niveisDeAcesso = niveisDeAcesso.concat(nivel + "");
+				}else{
+					niveisDeAcesso = niveisDeAcesso.concat(nivel + "-");
+				}
+			}
+			ps.setString(2,niveisDeAcesso);
+
+			ps.executeUpdate();
+
+			gravado = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			gravado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return gravado;
 	}
 	
 }
