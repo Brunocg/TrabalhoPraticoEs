@@ -1,6 +1,5 @@
 package br.ufscar.dominio.interfaces;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import br.ufscar.dominio.Competencia;
@@ -12,12 +11,12 @@ public interface ICompetenciaRepository {
 		public abstract boolean verificaExostenciaCompetenciaCategoria(CompetenciaCategoria competenciaCategoria);
 
 		public abstract boolean gravaCompetencia(Competencia competencia);
-		public abstract boolean gravaCompetencias(CompetenciaCategoria competenciaCategoria, List<Competencia> competencias) throws SQLException;
-		public abstract boolean gravaRelacaoCategoriaCompetencia(Competencia competencia, CompetenciaCategoria competenciaCategoria) throws SQLException;
+		public abstract boolean gravaCompetencias(CompetenciaCategoria competenciaCategoria, List<Competencia> competencias);
+		public abstract boolean gravaRelacaoCategoriaCompetencia(Competencia competencia, CompetenciaCategoria competenciaCategoria);
 
 		public abstract boolean gravaCompetenciaCategoria(CompetenciaCategoria competenciaCategoria);
-		public abstract boolean gravaSubCategorias(CompetenciaCategoria competenciaCategoria, List<CompetenciaCategoria> subCategorias) throws SQLException;
-		public abstract boolean gravaRelacaoCategoriSubCategoria(CompetenciaCategoria competenciaCategoria, CompetenciaCategoria subCategoria) throws SQLException;
+		public abstract boolean gravaSubCategorias(CompetenciaCategoria competenciaCategoria, List<CompetenciaCategoria> subCategorias);
+		public abstract boolean gravaRelacaoCategoriSubCategoria(CompetenciaCategoria competenciaCategoria, CompetenciaCategoria subCategoria);
 
 		public abstract CompetenciaCategoria recuperarCategoriaPeloNome(String nome);
 		public abstract List<CompetenciaCategoria> recuperarSubCategoriasPorCategoria(CompetenciaCategoria categoria);
@@ -25,9 +24,7 @@ public interface ICompetenciaRepository {
 		public abstract List<Competencia> recuperarCompetenciasPorCategoria(CompetenciaCategoria categoria);
 		public abstract Competencia recuperarCompetenciaPeloNome(String nome);
 		public abstract Competencia recuperarCompetenciaPeloId(int idCompetencia);
-		public abstract List<Competencia> recuperarCompetenciasAprovadasPorResponsavel(
-				int idPessoa);
-		public abstract List<CompetenciaCategoria> recuperarCompetenciaCategoriasAprovadasPorResponsavel(
-				int idPessoa);
+		public abstract List<Competencia> recuperarCompetenciasAprovadasPorResponsavel(int idPessoa);
+		public abstract List<CompetenciaCategoria> recuperarCompetenciaCategoriasAprovadasPorResponsavel(int idPessoa);
 
 }

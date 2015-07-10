@@ -167,7 +167,7 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 	@Override
 	public boolean gravaCompetencias(
 			CompetenciaCategoria competenciaCategoria,
-			List<Competencia> competencias) throws SQLException {
+			List<Competencia> competencias) {
 		boolean gravado = false;
 
 		if(competencias == null || competencias.isEmpty()){
@@ -203,7 +203,7 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 	 */
 	@Override
 	public boolean gravaRelacaoCategoriaCompetencia(Competencia competencia,
-			CompetenciaCategoria competenciaCategoria) throws SQLException {
+			CompetenciaCategoria competenciaCategoria){
 		boolean gravado = false;
 
 		Connection mySQLConnection = null;
@@ -224,6 +224,10 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 			ps.executeUpdate();
 
 			gravado = true;
+		}catch(SQLException e){
+			e.printStackTrace();
+			gravado = false;
+			ConnectionManager.rollBack();
 		}finally{
 			ConnectionManager.closeAll(ps);
 		}
@@ -237,7 +241,7 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 	@Override
 	public boolean gravaSubCategorias(
 			CompetenciaCategoria competenciaCategoria,
-			List<CompetenciaCategoria> subCategorias) throws SQLException {
+			List<CompetenciaCategoria> subCategorias){
 		boolean gravado = false;
 
 		if(subCategorias == null || subCategorias.isEmpty()){
@@ -274,7 +278,7 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 	@Override
 	public boolean gravaRelacaoCategoriSubCategoria(
 			CompetenciaCategoria competenciaCategoria,
-			CompetenciaCategoria subCategoria) throws SQLException {
+			CompetenciaCategoria subCategoria){
 		boolean gravado = false;
 
 		Connection mySQLConnection = null;
@@ -295,6 +299,10 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 			ps.executeUpdate();
 
 			gravado = true;
+		}catch(SQLException e){
+			e.printStackTrace();
+			gravado = false;
+			ConnectionManager.rollBack();
 		}finally{
 			ConnectionManager.closeAll(ps);
 		}
