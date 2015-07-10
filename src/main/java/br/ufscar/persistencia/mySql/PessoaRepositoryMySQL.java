@@ -56,8 +56,8 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	private static final String EXCLUIR_PESSOA = "UPDATE Pessoa SET estado = ? WHERE idPessoa = ?";
 	private static final String EXCLUIR_ENDERECO_PESSOA = "DELETE FROM EnderecoPessoa E WHERE idEndereco = ? AND idPessoa = ?";
-	//FIXME
-	private static final String BUSCAR_USUARIOS_APROVADOS_POR_RESPONSAVEL_PARA_LISTAR = null;
+
+	private static final String BUSCAR_USUARIOS_APROVADOS_POR_RESPONSAVEL_PARA_LISTAR = "SELECT usuarioDe FROM Usuario U WHERE aprovadoPor = ?";
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -938,7 +938,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			rs = ps.executeQuery();
 			while(rs.next()){
 
-				usuarios.add(recuperarUsuarioPorPessoa(rs.getInt("idPessoa")));
+				usuarios.add(recuperarUsuarioPorPessoa(rs.getInt("usuarioDe")));
 
 			}
 		} catch (SQLException e) {

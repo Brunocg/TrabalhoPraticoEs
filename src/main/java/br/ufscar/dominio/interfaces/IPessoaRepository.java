@@ -20,6 +20,11 @@ public interface IPessoaRepository {
 	
 	public abstract List<CompetenciaExperiencia> recuperarExperienciaPorPessoa(int idPessoa);
 
+	public abstract Responsavel recuperarResponsavelCompletoPorId(int idPessoa);
+	public abstract Responsavel recuperarResponsavelSimplesPorId(int idPessoa);
+	
+	public abstract List<Usuario> recuperarUsuariosAprovadosPorResponsavel(int idPessoa);
+
 	public abstract boolean editarPessoa(Pessoa pessoa);
 	
 	public abstract boolean editarExperiencias(Pessoa pessoa, List<CompetenciaExperiencia> competenciasExperiencia);
@@ -28,6 +33,9 @@ public interface IPessoaRepository {
 	public abstract boolean editaUsuario(Pessoa pessoa, Usuario usuario) ;
 
 	public abstract boolean excluirPessoa(Pessoa pessoa);
+	
+	public abstract boolean excluiEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos);
+	public abstract boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco);
 	
 	public abstract List<Pessoa> listarPessoas();
 	
@@ -44,12 +52,5 @@ public interface IPessoaRepository {
 	public abstract List<Endereco> gravaEndereco(List<Endereco> enderecos);
 	public abstract int gravaEndereco(Endereco endereco);
 	
-	public abstract boolean excluiEnderecosPessoa(Pessoa pessoa, List<Endereco> enderecos);
-	public abstract boolean excluiEnderecoPessoa(Pessoa pessoa, Endereco endereco);
-	
-	public abstract Responsavel recuperarResponsavelCompletoPorId(int idPessoa);
-	public abstract Responsavel recuperarResponsavelSimplesPorId(int idPessoa);
-	
-	public abstract List<Usuario> recuperarUsuariosAprovadosPorResponsavel(int idPessoa);
 	
 }

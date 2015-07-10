@@ -210,6 +210,31 @@ public class ProjetoRepositoryMemoria implements IProjetoRepository {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean gravaCompetenciaAtividades(ProjetoAtividade atividade,
+			Competencia competencia) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean excluirCompetenciaAtividades(ProjetoAtividade atividade) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean gravaFeedBack(Feedback feedback) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean alterarFeedBack(Feedback feedback) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 
 }
