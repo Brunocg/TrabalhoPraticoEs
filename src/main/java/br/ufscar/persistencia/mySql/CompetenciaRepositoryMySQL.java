@@ -34,6 +34,9 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 
 	private static final String BUSCAR_COMPETENCIAS_APROVADAS_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idCompetencia FROM Competencia C WHERE aprovadorPor = ?";
 	private static final String BUSCAR_COMPETENCIAS_CATEGORIA_APROVADAS_POR_RESPONSAVEL_PARA_LISTAR = "SELECT nome FROM CompetenciaCategoria C WHERE aprovadorPor = ?";
+	
+	private static final String APROVAR_COMPETENCIA = "UPDATE Competencia SET aprovadoPor = ? WHERE idCompetencia = ?";
+	private static final String APROVAR_COMPETENCIA_CATEGORIA = "UPDATE CompetenciaCategoria SET aprovadoPor = ? WHERE idCompetenciaCategoria = ?";
 
 	/* (non-Javadoc)
 	 * @see br.ufscar.persistencia.mySql.teste#verificaExostenciaCompetencia(br.ufscar.dominio.Competencia)
@@ -575,6 +578,68 @@ public class CompetenciaRepositoryMySQL implements ICompetenciaRepository {
 		}
 
 		return competenciasList;
+	}
+
+	@Override
+	public boolean aprovarCompetencia(Competencia competencia,
+			Responsavel aprovador) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean aprovado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(APROVAR_COMPETENCIA);
+			ps.clearParameters();
+
+			ps.setInt(1,aprovador.getIdPessoa());
+			ps.setInt(2,competencia.getIdCompetencia());
+
+			ps.executeUpdate();
+
+			aprovado = true;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			aprovado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return aprovado;
+	}
+
+	@Override
+	public boolean aprovarCompetenciaCategoria(
+			CompetenciaCategoria competenciaCategoria, Responsavel aprovador) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean aprovado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(APROVAR_COMPETENCIA_CATEGORIA);
+			ps.clearParameters();
+
+			ps.setInt(1,aprovador.getIdPessoa());
+			ps.setInt(2,competenciaCategoria.getIdCategoria());
+
+			ps.executeUpdate();
+
+			aprovado = true;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			aprovado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return aprovado;
 	}
 
 }
