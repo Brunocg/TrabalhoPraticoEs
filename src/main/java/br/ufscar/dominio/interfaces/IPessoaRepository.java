@@ -60,4 +60,5 @@ public interface IPessoaRepository {
 	public abstract boolean desativaUsuario(String login);
 	public abstract boolean trocaTipoUsuario(Usuario usuario, UsuarioTipo novoTipo);
 	public abstract boolean verificaLoginExiste(String login);
+	public abstract boolean aprovarUsuario(Usuario usuario, Responsavel aprovador);
 }

@@ -64,6 +64,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String VERIFICA_EXISTENCIA_LOGIN = "SELECT COUNT(*) FROM Usuario U WHERE login = ? AND estado = TRUE";
 	private static final String ATUALIZAR_SENHA_POR_LOGIN = "UPDATE Usuario SET senha = ? WHERE login = ?";
 	private static final String ATUALIZAR_TIPO_USUARIO = "UPDATE Usuario SET usuarioTipo = ? WHERE idUsuario = ?";
+	private static final String APROVAR_USUARIO = "UPDATE Usuario SET aprovadoPor = ? WHERE idUsuario = ?";
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -1130,4 +1131,36 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		return atualizado;
 	}
 
+	
+	@Override
+	public boolean aprovarUsuario(Usuario usuario,
+			Responsavel aprovador) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean aprovado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(APROVAR_USUARIO);
+			ps.clearParameters();
+
+			ps.setInt(1,aprovador.getIdPessoa());
+			ps.setInt(2,usuario.getIdUsuario());
+
+			ps.executeUpdate();
+
+			aprovado = true;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			aprovado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return aprovado;
+	}
+	
 }
