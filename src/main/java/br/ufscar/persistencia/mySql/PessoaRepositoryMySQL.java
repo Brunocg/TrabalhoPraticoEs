@@ -42,12 +42,12 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String GRAVAR_EXPERIENCIA = "INSERT INTO CompetenciaExperiencia (idPessoa, idCompetencia, nivel, tempoExp,observacoes,estado,ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 	private static final String GRAVAR_USUARIO = "INSERT INTO Usuario (usuarioDe,login,senha,usuarioTipo,estado,ts) VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)";
 	
-	private static final String BUSCAR_PESSOA_POR_LOGIN = "SELECT usuarioDe FROM Usuario U WHERE login = ? AND estado = TRUE";
+	private static final String BUSCAR_PESSOA_POR_LOGIN = "SELECT usuarioDe FROM Usuario U WHERE login = ? AND estado = TRUE AND aprovadoPor != 0";
 	private static final String BUSCAR_PESSOA_POR_ID = "SELECT idPessoa, nome, sitCivil, sexo, dataNascimento, CPF, RG, telefone, celular, email, pagPessoal, msgInst, estado, ts FROM Pessoa P WHERE idPessoa = ? AND estado = TRUE";
 	private static final String BUSCAR_PESSOAS_PARA_LISTAR = "SELECT idPessoa FROM Pessoa P WHERE estado = true";
 	private static final String BUSCAR_ENDERECOS_POR_PESSOA = "SELECT E.idEndereco, E.rua, E.bairro, E.numero, E.cidade, E.uf, E.pais, E.cep, E.estado, E.ts FROM Endereco E INNER JOIN EnderecoPessoa EP ON EP.idEndereco = E.idEndereco WHERE EP.idPessoa = ? AND estado = TRUE";
 	private static final String BUSCAR_MORADORES_POR_ENDERECO = "SELECT EP.idPessoa, P.nome FROM EnderecoPessoa EP INNER JOIN Pessoa P ON P.idPessoa = EP.idPessoa WHERE idEndereco = ?";
-	private static final String BUSCAR_USUARIO_POR_PESSOA = "SELECT usuarioDe, aprovadoPor, login, senha, usuarioTipo, ultimoLogin, estado, ts FROM Usuario U WHERE usuarioDe = ? AND estado = TRUE";
+	private static final String BUSCAR_USUARIO_POR_PESSOA = "SELECT usuarioDe, aprovadoPor, login, senha, usuarioTipo, ultimoLogin, estado, ts FROM Usuario U WHERE usuarioDe = ? AND estado = TRUE AND aprovadoPor != 0";
 	private static final String BUSCAR_EXPERIENCIA_POR_PESSOA = "SELECT idCompetenciaExperiencia, idPessoa, idCompetencia, nivel, tempoExp, observacoes, estado, ts FROM CompetenciaExperiencia C WHERE idPessoa = ?  AND estado = TRUE";
 
 	private static final String EDITA_PESSOA = "UPDATE Pessoa SET nome = ?, sitCivil = ?, sexo = ?, dataNascimento = ?, CPF = ?, RG = ?, telefone = ?, celular = ?, email = ?, pagPessoal = ?, msgInst = ?, estado = ? WHERE idPessoa = ?";
