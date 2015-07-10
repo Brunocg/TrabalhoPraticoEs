@@ -46,10 +46,6 @@ public class ProjetoAtividade {
 	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
 
 
-	public boolean finalizaAtividade(){
-		return true;
-	}
-	
 	public boolean naoTemCompetenciaCategoria() {
 		return competencia.isEmpty();
 	}

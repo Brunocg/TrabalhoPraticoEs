@@ -43,6 +43,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 	private static final String EDITAR_FEEDBACK = "UPDATE Feedback SET feedbackDe = ?, feedbackPara = ?, idProjetoAtividade = ?, avaliacao = ?, tpFeedback = ?, observacoes = ?, estado = ? WHERE idFeedback = ?";
 
 	private static final String ALTERAR_STATUS_PROJETO = "UPDATE Projeto SET status = ? WHERE idProjeto = ?";
+	private static final String ALTERAR_STATUS_PROJETO_ATIVIDADE = "UPDATE ProjetoAtividade SET status = ? WHERE idProjetoAtividade = ?";
 
 	private static final String BUSCAR_COMPETENCIAS_ATIVIDADE_PARA_LISTAR = "SELECT idCompetencia FROM ProjetoAtividadeCompetencias P WHERE idProjetoAtividade = ?";
 	private static final String BUSCAR_RESPONSAVEIS_PROJETO_PARA_LISTAR = "SELECT idPessoa FROM ProjetoResponsaveis P WHERE idProjeto = ?";
@@ -1326,17 +1327,47 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 	public boolean alterarStatusProjeto(Projeto projeto) {
 		Connection mySQLConnection = null;
 		PreparedStatement ps = null;
+		
+		boolean alterado = false;
+		
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+			
+			ps = mySQLConnection.prepareStatement(ALTERAR_STATUS_PROJETO);
+			ps.clearParameters();
+			
+			ps.setInt(1,projeto.getStatus());
+			ps.setInt(2,projeto.getIdProjeto());
+			
+			ps.executeUpdate();
+			
+			alterado = true;
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			alterado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+		
+		return alterado;
+	}
+	
+	@Override
+	public boolean alterarStatusProjetoAtividade(ProjetoAtividade atividade) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
 
 		boolean alterado = false;
 
 		try{
 			mySQLConnection = ConnectionManager.getConexao();
 
-			ps = mySQLConnection.prepareStatement(ALTERAR_STATUS_PROJETO);
+			ps = mySQLConnection.prepareStatement(ALTERAR_STATUS_PROJETO_ATIVIDADE);
 			ps.clearParameters();
 
-			ps.setInt(1,projeto.getStatus());
-			ps.setInt(2,projeto.getIdProjeto());
+			ps.setInt(1,atividade.getStatus());
+			ps.setInt(2,atividade.getIdAtividade());
 
 			ps.executeUpdate();
 
