@@ -218,7 +218,7 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	}
 
 	@Override
-	public boolean trocaTipoUsuario(Usuario usuario, UsuarioTipo novoTipo) {
+	public boolean trocarTipoUsuario(Usuario usuario, UsuarioTipo novoTipo) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -240,6 +240,12 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 			UsuarioTipo usuarioTipo) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean verificarExistenciaAcesso(UsuarioAcesso usuarioAcesso) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
