@@ -1,6 +1,7 @@
 package br.ufscar.persistencia.memoria;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +13,8 @@ import br.ufscar.dominio.Endereco;
 import br.ufscar.dominio.Pessoa;
 import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.Usuario;
+import br.ufscar.dominio.UsuarioAcesso;
+import br.ufscar.dominio.UsuarioTipo;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
 
@@ -181,6 +184,68 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	public List<Usuario> recuperarUsuariosAprovadosPorResponsavel(int idPessoa) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean gravaUsuarioAcesso(UsuarioAcesso acesso) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean atualizaUltimoLoginUsuario(Usuario usuario, Date novaData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean trocarSenhaUsuario(String login, String senhaAntiga,
+			String senhaNova) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean trocarSenhaUsuario(String login, String senhaNova) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean desativaUsuario(String login) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean trocarTipoUsuario(Usuario usuario, UsuarioTipo novoTipo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean verificaLoginExiste(String login) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean aprovarUsuario(Usuario usuario, Responsavel aprovador) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<UsuarioAcesso> recuperarUsuarioAcessosPorTipo(
+			int codigoTipoUsuario) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean verificarExistenciaAcesso(UsuarioAcesso usuarioAcesso) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

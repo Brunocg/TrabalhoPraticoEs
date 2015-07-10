@@ -43,10 +43,6 @@ public class Projeto {
 	
 	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
 
-	public boolean finalizaProjeto() {
-		return true;
-	}
-	
 	public boolean naoTemFeedbacksResponsaveisAtividades() {
 		return feedbacksResponsaveisAtividades.isEmpty();
 	}

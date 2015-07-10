@@ -39,22 +39,6 @@ public class Usuario {
 		return getSenha().equals(senha);
 	}
 	
-	public void atualizaUltimoLogin(Date novaData){
-		
-	}
-	
-	public boolean trocarSenha(String login, String senhaAntiga, String senhaNova){
-		return true;
-	}
-	
-	public boolean desativaUsuario(String login){
-		return true;
-	}
-	
-	public boolean trocaTipoUsuario(UsuarioTipo novoTipo){
-		return true;
-	}
-	
 	
 	//-------------------------------------------------------------------------Getters and Setters-------------------------------------------------------------------------
 	public int getIdUsuario() {

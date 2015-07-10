@@ -35,10 +35,6 @@ public class CompetenciaCategoria {
 	
 	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
 
-	public boolean aprovar(){
-		return true;
-	}
-	
 	public boolean naoTemCompetencias() {
 		return competencias.isEmpty();
 	}
@@ -54,7 +50,6 @@ public class CompetenciaCategoria {
 	public int quantasCompetencias() {
 		return competencias.size();
 	}
-	
 	
 	public boolean adicionarCompetencias(Competencia Competencia) {
 		return competencias.add(Competencia);

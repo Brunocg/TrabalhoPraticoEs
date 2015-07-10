@@ -235,6 +235,18 @@ public class ProjetoRepositoryMemoria implements IProjetoRepository {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean alterarStatusProjeto(Projeto projeto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean alterarStatusProjetoAtividade(ProjetoAtividade atividade) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 
 }

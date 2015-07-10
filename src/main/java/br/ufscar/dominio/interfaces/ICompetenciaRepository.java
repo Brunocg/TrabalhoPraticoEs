@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.ufscar.dominio.Competencia;
 import br.ufscar.dominio.CompetenciaCategoria;
+import br.ufscar.dominio.Responsavel;
 
 public interface ICompetenciaRepository {
 
@@ -27,4 +28,6 @@ public interface ICompetenciaRepository {
 		public abstract List<Competencia> recuperarCompetenciasAprovadasPorResponsavel(int idPessoa);
 		public abstract List<CompetenciaCategoria> recuperarCompetenciaCategoriasAprovadasPorResponsavel(int idPessoa);
 
+		public abstract boolean aprovarCompetencia(Competencia competencia, Responsavel aprovador);
+		public abstract boolean aprovarCompetenciaCategoria(CompetenciaCategoria competenciaCategoria, Responsavel aprovador);
 }
