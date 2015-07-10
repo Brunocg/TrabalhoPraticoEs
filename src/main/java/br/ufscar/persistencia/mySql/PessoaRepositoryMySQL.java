@@ -1164,7 +1164,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 
 	@Override
 	public List<UsuarioAcesso> recuperarUsuarioAcessosPorTipo(
-			UsuarioTipo usuarioTipo) {
+			int codigoTipoUsuario) {
 		List<UsuarioAcesso> acessosList = new ArrayList<UsuarioAcesso>();
 		Connection 			mySQLConnection = null;
 		PreparedStatement 	ps = null;
@@ -1173,7 +1173,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 			mySQLConnection = ConnectionManager.getConexao();
 			ps = mySQLConnection.prepareStatement(RECUPERAR_ACESSOS_POR_TIPO);
 			ps.clearParameters();
-			ps.setString(1, "%" + usuarioTipo.getUsuarioTipo() + "%");
+			ps.setString(1, "%" + codigoTipoUsuario + "%");
 			rs = ps.executeQuery();
 			while(rs.next()){
 

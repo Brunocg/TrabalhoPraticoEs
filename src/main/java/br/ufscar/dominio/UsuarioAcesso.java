@@ -28,8 +28,8 @@ public class UsuarioAcesso {
 	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
 
 
-	public List<UsuarioAcesso> getAcessos(UsuarioTipo usuarioTipo) {
-		return iPessoaRepository.recuperarUsuarioAcessosPorTipo(usuarioTipo);
+	public List<UsuarioAcesso> getAcessos(int codigoTipoUsuario) {
+		return iPessoaRepository.recuperarUsuarioAcessosPorTipo(codigoTipoUsuario);
 	}
 
 	

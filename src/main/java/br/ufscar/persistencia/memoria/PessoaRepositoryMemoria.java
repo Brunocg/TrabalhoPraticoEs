@@ -237,7 +237,7 @@ public class PessoaRepositoryMemoria implements IPessoaRepository  {
 
 	@Override
 	public List<UsuarioAcesso> recuperarUsuarioAcessosPorTipo(
-			UsuarioTipo usuarioTipo) {
+			int codigoTipoUsuario) {
 		// TODO Auto-generated method stub
 		return null;
 	}

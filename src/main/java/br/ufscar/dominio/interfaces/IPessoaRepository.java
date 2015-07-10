@@ -70,5 +70,5 @@ public interface IPessoaRepository {
 	public abstract boolean verificaLoginExiste(String login);
 	public abstract boolean verificarExistenciaAcesso(UsuarioAcesso usuarioAcesso);
 
-	public abstract List<UsuarioAcesso> recuperarUsuarioAcessosPorTipo(UsuarioTipo usuarioTipo);
+	public abstract List<UsuarioAcesso> recuperarUsuarioAcessosPorTipo(int codigoTipoUsuario);
 }
