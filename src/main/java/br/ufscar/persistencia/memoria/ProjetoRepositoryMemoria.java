@@ -223,6 +223,12 @@ public class ProjetoRepositoryMemoria implements IProjetoRepository {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean gravaFeedBack(Feedback feedback) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 
 }

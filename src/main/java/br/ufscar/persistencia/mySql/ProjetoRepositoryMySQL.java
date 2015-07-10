@@ -55,6 +55,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 	private static final String BUSCAR_PROJETOS_POR_RESPNSAVEL_PARA_LISTAR = "SELECT idProjeto FROM ProjetoResponsaveis P WHERE idPessoa = ?";
 	private static final String BUSCAR_FEEDBACK_CRIADO_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idFeedback FROM Feedback F WHERE feedbackDe = ?";
 	private static final String BUSCAR_FEEDBACK_RECEBIDO_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idFeedback FROM Feedback F WHERE feedbackPara = ?";
+	private static final String GRAVAR_FEEDBACK = "INSERT INTO Feedback (feedbackDe, feedbackPara, idProjetoAtividade, avaliacao, tpFeedback, observacoes, estado, ts) VALUES (?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 
 	/* (non-Javadoc)
 	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaProjeto(br.ufscar.dominio.Projeto)
@@ -1248,4 +1249,38 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 		return feedbacksList;
 	}
 
+	@Override
+	public boolean gravaFeedBack(Feedback feedback) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean gravado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(GRAVAR_FEEDBACK);
+			ps.clearParameters();
+			ps.setInt(1,feedback.getFeedbackDe().getIdPessoa());
+			ps.setInt(2,feedback.getFeedbackPara().getIdPessoa());
+			ps.setInt(3,feedback.getProjetoAtividade().getIdAtividade());
+			ps.setInt(4, feedback.getAvaliacao());
+			ps.setInt(5,feedback.getTpFeedback());
+			ps.setString(6,feedback.getObservacoes());
+			ps.setBoolean(7,true);
+
+			ps.executeUpdate();
+
+			gravado = true;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			gravado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return gravado;
+	}
+	
 }
