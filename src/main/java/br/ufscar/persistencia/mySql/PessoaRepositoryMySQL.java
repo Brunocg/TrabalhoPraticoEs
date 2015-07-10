@@ -21,6 +21,7 @@ import br.ufscar.dominio.Projeto;
 import br.ufscar.dominio.ProjetoAtividade;
 import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.Usuario;
+import br.ufscar.dominio.UsuarioAcesso;
 import br.ufscar.dominio.UsuarioTipo;
 import br.ufscar.dominio.interfaces.ICompetenciaRepository;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
@@ -65,6 +66,7 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	private static final String ATUALIZAR_SENHA_POR_LOGIN = "UPDATE Usuario SET senha = ? WHERE login = ?";
 	private static final String ATUALIZAR_TIPO_USUARIO = "UPDATE Usuario SET usuarioTipo = ? WHERE idUsuario = ?";
 	private static final String APROVAR_USUARIO = "UPDATE Usuario SET aprovadoPor = ? WHERE idUsuario = ?";
+	private static final String RECUPERAR_ACESSOS_POR_TIPO = "SELECT idUsuarioAcesso, descricao, niveisDeAcesso FROM UsuarioAcesso U WHERE niveisDeAcesso LIKE ?";
 
 	@Override
 	public boolean gravaPessoaBasico(Pessoa pessoa){
@@ -1161,6 +1163,41 @@ public class PessoaRepositoryMySQL implements IPessoaRepository  {
 		}
 
 		return aprovado;
+	}
+
+	@Override
+	public List<UsuarioAcesso> recuperarUsuarioAcessosPorTipo(
+			UsuarioTipo usuarioTipo) {
+		List<UsuarioAcesso> acessosList = new ArrayList<UsuarioAcesso>();
+		Connection 			mySQLConnection = null;
+		PreparedStatement 	ps = null;
+		ResultSet 			rs = null;
+		try {
+			mySQLConnection = ConnectionManager.getConexao();
+			ps = mySQLConnection.prepareStatement(RECUPERAR_ACESSOS_POR_TIPO);
+			ps.clearParameters();
+			ps.setString(1, "%" + usuarioTipo.getUsuarioTipo() + "%");
+			rs = ps.executeQuery();
+			while(rs.next()){
+
+				String descricao = rs.getString("descricao");
+				String[] niveisDeAcessoString = rs.getString("niveisDeAcesso").split("-");
+				int[] niveisDeAcesso = new int[niveisDeAcessoString.length];
+				for (int i = 0; i < niveisDeAcessoString.length; i++) {
+					niveisDeAcesso[i] = Integer.parseInt(niveisDeAcessoString[i]);
+				}
+				UsuarioAcesso usuarioAcesso = new UsuarioAcesso(descricao, niveisDeAcesso);
+				acessosList.add(usuarioAcesso);
+				
+			}
+		} catch (SQLException e) {
+			acessosList = null;
+			e.printStackTrace();
+		}finally {
+			ConnectionManager.closeAll(ps,rs);
+		}
+
+		return acessosList;
 	}
 	
 }

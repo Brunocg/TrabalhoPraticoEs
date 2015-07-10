@@ -2,10 +2,17 @@ package br.ufscar.dominio;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import br.ufscar.dominio.interfaces.IPessoaRepository;
+
 public class UsuarioAcesso {
 
 	private String descricao;
 	private int[] niveisDeAcesso;// codigo de quem tem acesso
+	
+	@Autowired
+	private IPessoaRepository iPessoaRepository;
 
 	public UsuarioAcesso() {
 		super();
@@ -21,9 +28,8 @@ public class UsuarioAcesso {
 	//-------------------------------------------------------------------------Metodos-------------------------------------------------------------------------
 
 
-	public List<UsuarioAcesso> getAcessos(int cod) {
-		// recupera do bd os acessos baseados no cod
-		return null;
+	public List<UsuarioAcesso> getAcessos(UsuarioTipo usuarioTipo) {
+		return iPessoaRepository.recuperarUsuarioAcessosPorTipo(usuarioTipo);
 	}
 
 	

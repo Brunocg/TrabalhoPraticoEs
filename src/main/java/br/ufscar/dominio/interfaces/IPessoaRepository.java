@@ -8,6 +8,7 @@ import br.ufscar.dominio.Endereco;
 import br.ufscar.dominio.Pessoa;
 import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.Usuario;
+import br.ufscar.dominio.UsuarioAcesso;
 import br.ufscar.dominio.UsuarioTipo;
 
 public interface IPessoaRepository {
@@ -61,4 +62,6 @@ public interface IPessoaRepository {
 	public abstract boolean trocaTipoUsuario(Usuario usuario, UsuarioTipo novoTipo);
 	public abstract boolean verificaLoginExiste(String login);
 	public abstract boolean aprovarUsuario(Usuario usuario, Responsavel aprovador);
+
+	public abstract List<UsuarioAcesso> recuperarUsuarioAcessosPorTipo(UsuarioTipo usuarioTipo);
 }
