@@ -31,6 +31,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 	private static final String GRAVAR_COMPETENCIA_ATIVIDADE = "INSERT INTO ProjetoAtividadeCompetencias (idProjetoAtividade, idCompetencia) VALUES (?,?)";
 	private static final String GRAVAR_ATIVIDADES_DO_PROJETO = "INSERT INTO ProjetoAtividades (idProjeto, idAtividade) VALUES (?,?)";
 	private static final String GRAVAR_PROJETO_RESPONSAVEL = "INSERT INTO ProjetoResponsaveis (idProjeto, idPessoa) VALUES (?,?)";
+	private static final String GRAVAR_FEEDBACK = "INSERT INTO Feedback (feedbackDe, feedbackPara, idProjetoAtividade, avaliacao, tpFeedback, observacoes, estado, ts) VALUES (?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 
 	private static final String EXCLUIR_ATIVIDADES_DO_PROJETO = "DELETE FROM ProjetoAtividades WHERE idProjeto = ?";
 	private static final String EXCLUIR_PROJETO_RESPONSAVEL = "DELETE FROM ProjetoResponsaveis WHERE idProjeto = ?";
@@ -39,6 +40,7 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 
 	private static final String EDITAR_PROJETO = "UPDATE Projeto SET nome = ?, tipo = ?, prazo = ?, observacoes = ?, status = ?, estado = ? WHERE idProjeto = ?";
 	private static final String EDITAR_ATIVIDADE = "UPDATE ProjetoAtividade SET nome = ?, descricao = ?, tipo = ?, prazo = ?, status = ?, estado = ? WHERE idProjetoAtividade = ?";
+	private static final String EDITAR_FEEDBACK = "UPDATE Feedback SET feedbackDe = ?, feedbackPara = ?, idProjetoAtividade = ?, avaliacao = ?, tpFeedback = ?, observacoes = ?, estado = ? WHERE idFeedback = ?";
 
 	private static final String BUSCAR_COMPETENCIAS_ATIVIDADE_PARA_LISTAR = "SELECT idCompetencia FROM ProjetoAtividadeCompetencias P WHERE idProjetoAtividade = ?";
 	private static final String BUSCAR_RESPONSAVEIS_PROJETO_PARA_LISTAR = "SELECT idPessoa FROM ProjetoResponsaveis P WHERE idProjeto = ?";
@@ -55,7 +57,6 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 	private static final String BUSCAR_PROJETOS_POR_RESPNSAVEL_PARA_LISTAR = "SELECT idProjeto FROM ProjetoResponsaveis P WHERE idPessoa = ?";
 	private static final String BUSCAR_FEEDBACK_CRIADO_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idFeedback FROM Feedback F WHERE feedbackDe = ?";
 	private static final String BUSCAR_FEEDBACK_RECEBIDO_POR_RESPONSAVEL_PARA_LISTAR = "SELECT idFeedback FROM Feedback F WHERE feedbackPara = ?";
-	private static final String GRAVAR_FEEDBACK = "INSERT INTO Feedback (feedbackDe, feedbackPara, idProjetoAtividade, avaliacao, tpFeedback, observacoes, estado, ts) VALUES (?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 
 	/* (non-Javadoc)
 	 * @see br.ufscar.persistencia.mySql.IProjetoRepository#gravaProjeto(br.ufscar.dominio.Projeto)
@@ -1281,6 +1282,42 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 		}
 
 		return gravado;
+	}
+	
+	@Override
+	public boolean alterarFeedBack(Feedback feedback) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean alterado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(EDITAR_FEEDBACK);
+			ps.clearParameters();
+
+			ps.setInt(1,feedback.getFeedbackDe().getIdPessoa());
+			ps.setInt(2,feedback.getFeedbackPara().getIdPessoa());
+			ps.setInt(3,feedback.getProjetoAtividade().getIdAtividade());
+			ps.setInt(4, feedback.getAvaliacao());
+			ps.setInt(5,feedback.getTpFeedback());
+			ps.setString(6,feedback.getObservacoes());
+			ps.setBoolean(7,true);
+			ps.setInt(8, feedback.getIdFeedback());
+
+			ps.executeUpdate();
+
+			alterado = true;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			alterado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return alterado;
 	}
 	
 }

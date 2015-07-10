@@ -30,6 +30,8 @@ public interface IProjetoRepository {
 	public abstract List<ProjetoAtividade> alterarAtividade(List<ProjetoAtividade> projetoAtividade);
 	public abstract boolean alterarAtividade(ProjetoAtividade atividade);
 
+	public abstract boolean alterarFeedBack(Feedback feedback);
+
 	public abstract boolean excluirAtividadesProjeto(Projeto projeto);
 	public abstract boolean excluirResponsaveisAtividade(ProjetoAtividade atividade);
 	public abstract boolean excluirCompetenciaAtividades(ProjetoAtividade atividade);
