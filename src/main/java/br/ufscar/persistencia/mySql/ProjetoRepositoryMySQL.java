@@ -42,6 +42,8 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 	private static final String EDITAR_ATIVIDADE = "UPDATE ProjetoAtividade SET nome = ?, descricao = ?, tipo = ?, prazo = ?, status = ?, estado = ? WHERE idProjetoAtividade = ?";
 	private static final String EDITAR_FEEDBACK = "UPDATE Feedback SET feedbackDe = ?, feedbackPara = ?, idProjetoAtividade = ?, avaliacao = ?, tpFeedback = ?, observacoes = ?, estado = ? WHERE idFeedback = ?";
 
+	private static final String ALTERAR_STATUS_PROJETO = "UPDATE Projeto SET status = ? WHERE idProjeto = ?";
+
 	private static final String BUSCAR_COMPETENCIAS_ATIVIDADE_PARA_LISTAR = "SELECT idCompetencia FROM ProjetoAtividadeCompetencias P WHERE idProjetoAtividade = ?";
 	private static final String BUSCAR_RESPONSAVEIS_PROJETO_PARA_LISTAR = "SELECT idPessoa FROM ProjetoResponsaveis P WHERE idProjeto = ?";
 	private static final String BUSCAR_RESPONSAVEIS_ATIVIDADE_PARA_LISTAR = "SELECT idPessoa FROM ProjetoAtividadeResponsaveis P WHERE idProjetoAtividade = ?";
@@ -1305,6 +1307,36 @@ public class ProjetoRepositoryMySQL implements IProjetoRepository {
 			ps.setString(6,feedback.getObservacoes());
 			ps.setBoolean(7,true);
 			ps.setInt(8, feedback.getIdFeedback());
+
+			ps.executeUpdate();
+
+			alterado = true;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			alterado = false;
+		}finally{
+			ConnectionManager.closeAll(ps);
+		}
+
+		return alterado;
+	}
+
+	@Override
+	public boolean alterarStatusProjeto(Projeto projeto) {
+		Connection mySQLConnection = null;
+		PreparedStatement ps = null;
+
+		boolean alterado = false;
+
+		try{
+			mySQLConnection = ConnectionManager.getConexao();
+
+			ps = mySQLConnection.prepareStatement(ALTERAR_STATUS_PROJETO);
+			ps.clearParameters();
+
+			ps.setInt(1,projeto.getStatus());
+			ps.setInt(2,projeto.getIdProjeto());
 
 			ps.executeUpdate();
 

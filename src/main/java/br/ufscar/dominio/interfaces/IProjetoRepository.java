@@ -60,4 +60,5 @@ public interface IProjetoRepository {
 	public abstract List<Feedback> recuperarFeedbacksCriadosPorResponsavel(int idPessoa);
 	public abstract List<Feedback> recuperarFeedbacksRecebidosPorResponsavel(int idPessoa);
 
+	public abstract boolean alterarStatusProjeto(Projeto projeto);
 }
