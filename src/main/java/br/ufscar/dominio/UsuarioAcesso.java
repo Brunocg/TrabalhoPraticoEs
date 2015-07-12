@@ -2,17 +2,16 @@ package br.ufscar.dominio;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import br.ufscar.dominio.interfaces.IPessoaRepository;
+import br.ufscar.persistencia.mySql.PessoaRepositoryMySQL;
 
 public class UsuarioAcesso {
 
 	private String descricao;
 	private int[] niveisDeAcesso;// codigo de quem tem acesso
 	
-	@Autowired
-	private IPessoaRepository iPessoaRepository;
+	//FIXME bruno tentei usar o autowire mas nao funcionou
+	private IPessoaRepository iPessoaRepository = new PessoaRepositoryMySQL();
 
 	public UsuarioAcesso() {
 		super();

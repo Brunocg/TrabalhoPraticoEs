@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import br.ufscar.dao.ConnectionManager;
 import br.ufscar.dominio.Competencia;
 import br.ufscar.dominio.Feedback;
@@ -18,6 +20,7 @@ import br.ufscar.dominio.ProjetoAtividade;
 import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.interfaces.IProjetoRepository;
 
+@Repository
 public class ProjetoRepositoryMySQL implements IProjetoRepository {
 
 	private static final String GRAVA_PROJETO = "INSERT INTO Projeto (nome, tipo, prazo, observacoes, status, estado, ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";
