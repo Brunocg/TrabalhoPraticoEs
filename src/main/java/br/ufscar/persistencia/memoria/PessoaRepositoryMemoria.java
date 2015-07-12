@@ -18,7 +18,7 @@ import br.ufscar.dominio.UsuarioTipo;
 import br.ufscar.dominio.interfaces.IPessoaRepository;
 
 
-//@Repository
+@Repository
 public class PessoaRepositoryMemoria implements IPessoaRepository  {
 	HashMap<Integer, Pessoa> pessoas = new HashMap<Integer, Pessoa>();
 	HashMap<Integer, Endereco> enderecos = new HashMap<Integer, Endereco>();

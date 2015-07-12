@@ -13,7 +13,7 @@ import br.ufscar.dominio.ProjetoAtividade;
 import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.interfaces.IProjetoRepository;
 
-//@Repository
+@Repository
 public class ProjetoRepositoryMemoria implements IProjetoRepository {
 	HashMap<Integer, Projeto> projetos = new HashMap<Integer, Projeto>();
 	

@@ -65,7 +65,7 @@ public class PessoaController {
 			r.getSession().setAttribute("logado", servico.loginEfetuado(login));
 			return new Response(true, null);
 		} else {
-			return new Response(false, null);
+			return new Response(false, login);
 		}		
 	}	
 	

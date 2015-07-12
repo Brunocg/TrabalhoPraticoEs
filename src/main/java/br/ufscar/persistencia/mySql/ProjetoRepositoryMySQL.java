@@ -20,7 +20,7 @@ import br.ufscar.dominio.ProjetoAtividade;
 import br.ufscar.dominio.Responsavel;
 import br.ufscar.dominio.interfaces.IProjetoRepository;
 
-@Repository
+//@Repository
 public class ProjetoRepositoryMySQL implements IProjetoRepository {
 
 	private static final String GRAVA_PROJETO = "INSERT INTO Projeto (nome, tipo, prazo, observacoes, status, estado, ts) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)";

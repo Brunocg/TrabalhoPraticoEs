@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufscar.aplicacao.ProjetoApplicationService;
+import br.ufscar.consulta.PessoaData;
 import br.ufscar.consulta.ProjetoData;
 import br.ufscar.util.Response;
 
@@ -20,6 +21,13 @@ public class ProjetoController {
 	
 	@Autowired
 	private ProjetoApplicationService servico;
+	
+	@RequestMapping(value = "/inserir", method = RequestMethod.POST)
+	@ResponseBody 
+	public Response inserir(@RequestBody ProjetoData projeto){
+		ProjetoData projetoData = servico.obterDataPeloId(servico.inserir(projeto));
+		return new Response(projetoData != null, projetoData);
+	}
 	
 	@RequestMapping("/obter")
 	@ResponseBody 

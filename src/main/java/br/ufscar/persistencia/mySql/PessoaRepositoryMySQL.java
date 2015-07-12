@@ -29,7 +29,7 @@ import br.ufscar.dominio.interfaces.IPessoaRepository;
 //import org.springframework.stereotype.Repository;
 
 
-@Repository
+//@Repository
 public class PessoaRepositoryMySQL implements IPessoaRepository  {
 	
 	private static final String GRAVAR_PESSOA = "INSERT INTO Pessoa (nome,sitCivil,sexo,dataNascimento,CPF,RG,telefone,celular,email,pagPessoal,msgInst,estado,ts) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
