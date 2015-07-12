@@ -1,6 +1,9 @@
 <head>
 	<meta charset="utf-8">
 </head>
+<script>
+
+</script>
 <div class="container-fluid">
 
     <!-- begin PAGE TITLE AREA -->
@@ -8,13 +11,13 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="page-title">
-                <h1>Gerente
-                    <small>Todos os gerentes</small>
-                    <a href="javascript:;" class="btn btn-default pull-right btn-novo" tipo="gerente"><i class="fa fa-plus"></i> Novo Gerente</a>
+                <h1>Especialidade
+                    <small>Todos as especialidades</small>
+                    <a href="javascript:;" class="btn btn-default pull-right btn-novo" tipo="gerente"><i class="fa fa-plus"></i> Nova Especialidade</a>
                 </h1>
                 <ol class="breadcrumb">
                     <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
-                    <li class="active">Listagem dos gerentes</li>
+                    <li class="active">Listagem das especialidades</li>
                 </ol>
             </div>
         </div>
@@ -31,16 +34,11 @@
 	        </div>
 	        <div class="portlet-body">
 	            
-			  	<table id="tablepessoa" class="table table-hover table-bordered">
+			  	<table id="tableGerente" class="table table-hover table-bordered">
 			        <thead>
 			            <tr>
 			                <th>Nome</th>
-			                <th>CPF</th>
-			                <th>Estado Civil</th>
-			                <th>Sexo</th>
-			                <th>Nasc.</th>
-			                <th>Estado</th>
-			                <th>Usuário</th>
+			                <th>Status</th>
 			                <th>Ações</th>
 			            </tr>
 			        </thead>
@@ -62,3 +60,5 @@
 
 </div>
 <!-- /.page-content -->
+
+<script>$(document).ready(function() {listar('pessoa');iniciarBotoes();});</script>

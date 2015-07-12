@@ -45,7 +45,7 @@ $(document).ready(function() {
 	});
 	$("#pessoaForm").on("submit", function(){
 		var $pessoa = getFormData($(this));
-		$usuario = {login:$("#login").val(), senha:$("#senha").val()};
+		$usuario = {login:$("#login").val(), senha:$("#senha").val(), tipo:{descricao:"Colaborador"}};
 		$pessoa.usuario = $usuario;
 		$.ajax({
 		    type: "POST",

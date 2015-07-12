@@ -9,10 +9,6 @@
 
     <title>Sistema de Gestão de Pessoas e Conhecimento</title>
 
-    <!-- PACE LOAD BAR PLUGIN - This creates the subtle load bar effect at the top of the page. -->
-    <link href="resources/css/plugins/pace/pace.css" rel="stylesheet">
-    <script src="resources/js/plugins/pace/pace.js"></script>
-
     <!-- GLOBAL STYLES - Include these on every page. -->
     <link href="resources/css/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,300italic,400italic,500italic,700italic' rel="stylesheet" type="text/css">
@@ -44,6 +40,10 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="resources/js/appController.js"></script>
     
+    <!-- PACE LOAD BAR PLUGIN - This creates the subtle load bar effect at the top of the page. -->
+    <link href="resources/css/plugins/pace/pace.css" rel="stylesheet">
+    <script src="resources/js/plugins/pace/pace.js"></script>
+    
 </head>
 <body>
 
@@ -58,7 +58,7 @@
                     <i class="fa fa-bars"></i> Menu
                 </button>
                 <div class="navbar-brand">
-                    <a href="index.html">
+                    <a href="home.html">
                     <img src="resources/img/flex-admin-logo.png" data-1x="resources/img/flex-admin-logo@1x.png" data-2x="resources/img/flex-admin-logo@2x.png" class="hisrc img-responsive" alt="">
                         <!-- <i class="fa fa-users"></i> GPC -->
                     </a>
@@ -71,7 +71,7 @@
                 <!-- begin LEFT SIDE WIDGETS -->
                 <ul class="nav navbar-left">
                     <li class="tooltip-sidebar-toggle">
-                        <a href="#" id="sidebar-toggle" data-toggle="tooltip" data-placement="right" title="Sidebar Toggle">
+                        <a href="javascript:;" id="sidebar-toggle" data-toggle="tooltip" data-placement="right" title="Sidebar Toggle">
                             <i class="fa fa-bars"></i>
                         </a>
                     </li>
@@ -85,35 +85,35 @@
                    
                     <!-- begin USER ACTIONS DROPDOWN -->
                     <li class="dropdown">
-                        <a href="#" class="tasks-link dropdown-toggle" data-toggle="dropdown">
+                        <a href="javascript:;" class="tasks-link dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user"></i>  <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
                             <li>
-                                <a href="profile.html">
+                                <a href="javascript:;">
                                     <i class="fa fa-user"></i> Meus Profile
                                 </a>
                             </li>
                             <li>
-                                <a href="mailbox.html">
+                                <a href="javascript:;">
                                     <i class="fa fa-envelope"></i> Minhas Mensagens
                                     <span class="badge green pull-right">4</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="javascript:;">
                                     <i class="fa fa-tasks"></i> Minhas Tarefas
                                     <span class="badge blue pull-right">10</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="#">
+                                <a href="javascript:;">
                                     <i class="fa fa-gear"></i> Configurações
                                 </a>
                             </li>
                             <li>
-                                <a class="logout_open" href="#logout">
+                                <a class="logout_open" href="javascript:;">
                                     <i class="fa fa-sign-out"></i> Logout &nbsp; 
                                     <strong><span class="first-name"></span> <span class="last-name"></span></strong>
                                 </a>
@@ -168,8 +168,8 @@
                         </a>
                     </li>
                     <li>
-                        <a class="active" href="perfil.html">
-                            <i class="fa fa-dashboard"></i> Perfil
+                        <a class="active btn-perfil" href="javascript:;">
+                            <i class="fa fa-user"></i> Perfil
                         </a>
                     </li>
                     <!-- end DASHBOARD LINK -->
@@ -180,12 +180,12 @@
                         </a>
                         <ul class="collapse nav" id="gerentes">
                             <li>
-                                <a class="btn-gerente-todos" href="javascript:;">
+                                <a class="btn-todos" tipo="gerente" href="javascript:;">
                                     <i class="fa fa-angle-double-right"></i> Todos
                                 </a>
                             </li>
                             <li>
-                                <a class="btn-gerente-novo" href="javascript:;">
+                                <a class="btn-novo" href="javascript:;" tipo="gerente">
                                     <i class="fa fa-angle-double-right"></i> Novo
                                 </a>
                             </li>
@@ -198,12 +198,12 @@
                         </a>
                         <ul class="collapse nav" id="colaboradores">
                             <li>
-                                <a href="flot.html">
+                                <a href="javascript:;" class="btn-todos" tipo="colaborador">
                                     <i class="fa fa-angle-double-right"></i> Todos
                                 </a>
                             </li>
                             <li>
-                                <a href="morris.html">
+                                <a href="javascript:;" class="btn-novo" tipo="colaborador">
                                     <i class="fa fa-angle-double-right"></i> Novo
                                 </a>
                             </li>
@@ -215,11 +215,15 @@
                         </a>
                         <ul class="collapse nav" id="moderadores">
                             <li>
-                                <a href="flot.html">
+                                <a href="javascript:;" class="btn-todos" tipo="moderador">
                                     <i class="fa fa-angle-double-right"></i> Todos
                                 </a>
                             </li>
-
+                            <li>
+                                <a href="javascript:;" class="btn-novo" tipo="moderador">
+                                    <i class="fa fa-angle-double-right"></i> Novo
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
@@ -229,12 +233,12 @@
                         </a>
                         <ul class="collapse nav" id="especialidades">
                             <li>
-                                <a href="flot.html">
+                                <a href="javascript:;" class="btn-todos" tipo="especialidade">
                                     <i class="fa fa-angle-double-right"></i> Todos
                                 </a>
                             </li>
                             <li>
-                                <a href="morris.html">
+                                <a href="javascript:;" class="btn-novo" tipo="especialidade">
                                     <i class="fa fa-angle-double-right"></i> Novo
                                 </a>
                             </li>
@@ -247,19 +251,19 @@
                         </a>
                         <ul class="collapse nav" id="projetos">
                             <li>
-                                <a href="flot.html">
+                                <a href="javascript:;" class="btn-todos" tipo="projeto">
                                     <i class="fa fa-angle-double-right"></i> Todos
                                 </a>
                             </li>
                             <li>
-                                <a href="morris.html">
+                                <a href="javascript:;" class="btn-novo" tipo="projeto">
                                     <i class="fa fa-angle-double-right"></i> Novo
                                 </a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a class="active" href="index.html">
+                        <a class="active" href="javascript:;">
                             <i class="fa fa-dashboard"></i> Gerenciar Contas
                         </a>
                     
@@ -295,7 +299,7 @@
  					<div class="col-lg-2 col-sm-6">
                         <div class="circle-tile">
                             <a href="javascript:;">
-                                <div class="circle-tile-heading red btn-gerente-todos">
+                                <div class="circle-tile-heading red btn-todos" tipo="gerente">
                                     <i class="fa fa-suitcase fa-fw fa-3x"></i>
                                 </div>
                             </a>
@@ -307,15 +311,15 @@
                                     3
                                     <span id="sparklineC"></span>
                                 </div>
-                                <a href="javascript:;" class="circle-tile-footer btn-gerente-todos">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
+                                <a href="javascript:;" class="circle-tile-footer btn-todos" tipo="gerente">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
                             </div>
                         </div>
                     </div>
                     
                     <div class="col-lg-2 col-sm-6">
                         <div class="circle-tile">
-                            <a href="#">
-                                <div class="circle-tile-heading dark-blue">
+                            <a href="javascript:;">
+                                <div class="circle-tile-heading dark-blue btn-todos" tipo="colaborador">
                                     <i class="fa fa-users fa-fw fa-3x"></i>
                                 </div>
                             </a>
@@ -327,14 +331,14 @@
                                     20
                                     <span id="sparklineA"></span>
                                 </div>
-                                <a href="#" class="circle-tile-footer">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
+                                <a href="javascript:;" class="circle-tile-footer btn-todos" tipo="colaborador">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-2 col-sm-6">
                         <div class="circle-tile">
-                            <a href="#">
-                                <div class="circle-tile-heading green">
+                            <a href="javascript:;">
+                                <div class="circle-tile-heading green btn-todos" tipo="moderador">
                                     <i class="fa fa-user fa-fw fa-3x"></i>
                                 </div>
                             </a>
@@ -345,15 +349,15 @@
                                 <div class="circle-tile-number text-faded">
                                     5
                                 </div>
-                                <a href="#" class="circle-tile-footer">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
+                                <a href="javascript:;" class="circle-tile-footer btn-todos" tipo="moderador">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
                             </div>
                         </div>
                     </div>
                     
                     <div class="col-lg-2 col-sm-6">
                         <div class="circle-tile">
-                            <a href="#">
-                                <div class="circle-tile-heading blue">
+                            <a href="javascript:;">
+                                <div class="circle-tile-heading blue btn-todos" tipo="projeto">
                                     <i class="fa fa-files-o fa-fw fa-3x"></i>
                                 </div>
                             </a>
@@ -365,15 +369,15 @@
                                     10
                                     <span id="sparklineB"></span>
                                 </div>
-                                <a href="#" class="circle-tile-footer">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
+                                <a href="javascript:;" class="circle-tile-footer btn-todos" tipo="projeto">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
                             </div>
                         </div>
                     </div>
                     
                     <div class="col-lg-2 col-sm-6">
                         <div class="circle-tile">
-                            <a href="#">
-                                <div class="circle-tile-heading orange">
+                            <a href="javascript:;">
+                                <div class="circle-tile-heading orange btn-todos" tipo="especialidade">
                                     <i class="fa fa-check-square-o fa-fw fa-3x"></i>
                                 </div>
                             </a>
@@ -384,14 +388,14 @@
                                 <div class="circle-tile-number text-faded">
                                     90
                                 </div>
-                                <a href="#" class="circle-tile-footer">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
+                                <a href="javascript:;" class="circle-tile-footer btn-todos" tipo="especialidade">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
                             </div>
                         </div>
                     </div>
                     
                     <div class="col-lg-2 col-sm-6">
                         <div class="circle-tile">
-                            <a href="#">
+                            <a href="javascript:;">
                                 <div class="circle-tile-heading purple">
                                     <i class="fa fa-lock fa-fw fa-3x"></i>
                                 </div>
@@ -404,7 +408,7 @@
                                     2 
                                     <span id="sparklineD"></span>
                                 </div>
-                                <a href="#" class="circle-tile-footer">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
+                                <a href="javascript:;" class="circle-tile-footer">Gerenciar <i class="fa fa-chevron-circle-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -430,11 +434,11 @@
     <!-- /#wrapper -->
 
     <!-- GLOBAL SCRIPTS -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="resources/js/plugins/bootstrap/bootstrap.min.js"></script>
     <script src="resources/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
     <script src="resources/js/plugins/popupoverlay/jquery.popupoverlay.js"></script>
     <script src="resources/js/plugins/popupoverlay/defaults.js"></script>
+    
     <!-- Logout Notification Box -->
     <div id="logout">
         <div class="logout-message">
@@ -466,25 +470,25 @@
     <!-- HubSpot Messenger -->
     <script src="resources/js/plugins/messenger/messenger.min.js"></script>
     <script src="resources/js/plugins/messenger/messenger-theme-flat.js"></script>
-    <!-- Date Range Picker -->
+    <!-- Date Range Picker --
     <script src="resources/js/plugins/daterangepicker/moment.js"></script>
-    <script src="resources/js/plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Morris Charts -->
+    <script src="resources/js/plugins/daterangepicker/daterangepicker.js"></script>--
+    <!-- Morris Charts --
     <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="resources/js/plugins/morris/morris.js"></script>
-    <!-- Flot Charts -->
+    <!-- Flot Charts --
     <script src="resources/js/plugins/flot/jquery.flot.js"></script>
     <script src="resources/js/plugins/flot/jquery.flot.resize.js"></script>
-    <!-- Sparkline Charts -->
+    <!-- Sparkline Charts --
     <script src="resources/js/plugins/sparkline/jquery.sparkline.min.js"></script>
     <!-- Moment.js -->
     <script src="resources/js/plugins/moment/moment.min.js"></script>
-    <!-- jQuery Vector Map -->
+    <!-- jQuery Vector Map --
     <script src="resources/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
     <script src="resources/js/plugins/jvectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
     <script src="resources/js/demo/map-demo-data.js"></script>
-    <!-- Easy Pie Chart -->
-    <script src="resources/js/plugins/easypiechart/jquery.easypiechart.min.js"></script>
+    <!-- Easy Pie Chart --
+    <script src="resources/js/plugins/easypiechart/jquery.easypiechart.min.js"></script>-->
     <!-- DataTables -->
     <script src="resources/js/plugins/datatables/jquery.dataTables.js"></script>
     <script src="resources/js/plugins/datatables/datatables-bs3.js"></script>

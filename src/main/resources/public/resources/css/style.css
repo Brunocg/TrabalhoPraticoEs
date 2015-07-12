@@ -222,17 +222,17 @@ a:focus {
 
 .navbar-top .navbar-toggle {
     margin-top: 6px;
-    margin-bottom: auto;
+    /*margin-bottom: auto;
     border-color: #999;
     outline: none;
-    color: #333;
-    background-color: #fff;
+    background-color: #fff;*/
+    color: #fff;
 }
 
 .navbar-top .navbar-toggle:active,
 .navbar-top .navbar-toggle:focus,
 .navbar-top .navbar-toggle:hover {
-    background-color: #fff;
+    background-color: #2C3E50;
 }
 
 .navbar-top .dropdown-toggle {
